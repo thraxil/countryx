@@ -59,7 +59,6 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'django.contrib.admin',
     'genocideprevention.sim',
-    'genocideprevention.utils',
 )
 
 THUMBNAIL_SUBDIR = "thumbs"

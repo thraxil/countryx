@@ -1,7 +1,7 @@
 from django.db import models
 
 class Role(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -12,7 +12,7 @@ class State(models.Model):
     name = models.CharField(max_length=40)
 
     def __unicode__(self):
-        return "S%s_T%s_%s" % (self.state_no, self.turn, self.name)
+        return "T%s_S%s_%s" % (self.turn, self.state_no, self.name)
     
 class StateChange(models.Model):
     state = models.ForeignKey(State, related_name="%(class)s_related_current")
@@ -28,7 +28,7 @@ class StateChange(models.Model):
 class StateVariable(models.Model):
     state = models.ForeignKey(State)
     name = models.CharField(max_length=20)
-    value = models.CharField(max_length=1000)
+    value = models.CharField(max_length=1500)
     
     def __unicode__(self):
         return "[%s] %s: %s" % (self.state, self.name, self.value)
