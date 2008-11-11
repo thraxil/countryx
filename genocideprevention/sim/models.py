@@ -41,4 +41,29 @@ class StateRoleChoice(models.Model):
 
     def __unicode__(self):
         return "[%s] %s: %s. %s" % (self.state, self.role, self.choice, self.desc)
+    
+class Group(models.Model):
+    name = models.CharField(max_length=20)
+    current_state = models.ForeignKey(State)
+    
+    def __unicode__(self):
+        return "%s: at state %s" % (self.name, self.current_state)
+    
+class Player(models.Model):
+    group = models.ForeignKey(Group)
+    uni = models.CharField(max_length=10)
+    role = models.ForeignKey(Role)
+    
+    def __unicode__(self):
+        return "%s: (%s %s)" % (self.group, self.uni, self.role.name)
+    
+class PlayerTurn(models.Model):
+    player = models.ForeignKey(Player)
+    state = models.ForeignKey(State)
+    choice = models.IntegerField()
+    date_submitted = models.DateTimeField('date submitted')
 
+    def __unicode__(self):
+        return "%s: Selected: %s from state %s" % (self.player, self.state.turn, self.choice)
+    
+    

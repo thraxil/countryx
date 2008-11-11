@@ -181,8 +181,6 @@ class Command(BaseCommand):
                 #process each of the three expected worksheets
                 print "Processing spreadsheet %s" % state 
                 self.processWorksheets(key, state)
-                
-    
         
     def handle(self, *app_labels, **options):
         from django.db.models import get_app, get_apps, get_models
@@ -200,4 +198,7 @@ class Command(BaseCommand):
         
         # process the spreadsheets
         self.processSpreadsheets()
+        
+        # some tweaks, post processing
+        self.postprocess()
     
