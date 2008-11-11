@@ -47,7 +47,7 @@ class Group(models.Model):
     current_state = models.ForeignKey(State)
     
     def __unicode__(self):
-        return "%s: at state %s" % (self.name, self.current_state)
+        return "%s" % (self.name)
     
 class Player(models.Model):
     group = models.ForeignKey(Group)
@@ -55,7 +55,7 @@ class Player(models.Model):
     role = models.ForeignKey(Role)
     
     def __unicode__(self):
-        return "%s: (%s %s)" % (self.group, self.uni, self.role.name)
+        return "%s: [%s, %s]" % (self.uni, self.role.name, self.group)
     
 class PlayerTurn(models.Model):
     player = models.ForeignKey(Player)

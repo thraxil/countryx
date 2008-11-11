@@ -198,7 +198,4 @@ class Command(BaseCommand):
         
         # process the spreadsheets
         self.processSpreadsheets()
-        
-        # some tweaks, post processing
-        self.postprocess()
     

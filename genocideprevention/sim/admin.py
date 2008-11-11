@@ -20,3 +20,12 @@ class StateAdmin(admin.ModelAdmin):
     inlines = [StateVariableInline, StateRoleChoiceInline, StateChangeInline]
       
 admin.site.register(State, StateAdmin)
+
+class PlayerInline(admin.TabularInline):
+    model = Player
+    extra = 4
+
+class GroupAdmin(admin.ModelAdmin):
+    inlines = [PlayerInline]
+
+admin.site.register(Group, GroupAdmin)
