@@ -1,0 +1,67 @@
+from django.template import Context, loader
+from genocideprevention.sim.models import *
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+
+def __current_conditions(group):
+    conditions = []
+    conditions.append(group.current_state.statevariable_set.get(name='Levels of Violence'))
+    conditions.append(group.current_state.statevariable_set.get(name='Country\'s Economy'))
+    conditions.append(group.current_state.statevariable_set.get(name='Prestige'))
+    conditions.append(group.current_state.statevariable_set.get(name='Awareness'))
+    conditions.append(group.current_state.statevariable_set.get(name='Political Discourse'))
+    conditions.append(group.current_state.statevariable_set.get(name='Weapons Flow'))
+    return conditions
+
+# Create your views here.
+def index(request):
+    t = loader.get_template('sim/index.html')
+
+    # @todo -- the uni will come from the player's login information
+    uni = 'sld2131'
+    
+    # get this uni's current groups
+    # the player could have multiple games going on, so except multiple objects
+    player_list = Player.objects.filter(uni='sld2131')
+    
+    c = Context({
+       'players': player_list,
+    })
+    
+    return HttpResponse(t.render(c))
+
+def narrative(request, group_id, player_id):
+    t = loader.get_template('sim/narrative.html')
+    
+    group = Group.objects.get(id=group_id)
+    player = group.player_set.get(id=player_id)
+    
+    conditions = __current_conditions(group)
+    
+    c = Context({
+       'group': group,
+       'player': player,
+       'country_condition': group.current_state.statevariable_set.get(name='Country Condition').value,
+       'conditions': conditions,
+    })
+    
+    return HttpResponse(t.render(c))
+
+def decision(request, group_id, player_id):
+    t = loader.get_template('sim/decision.html')
+    
+    group = Group.objects.get(id=group_id)
+    player = group.player_set.get(id=player_id)
+    
+    conditions = __current_conditions(group)
+    
+    choices = StateRoleChoice.objects.filter(state=group.current_state, role=player.role)
+    
+    c = Context({
+       'group': group,
+       'player': player,
+       'conditions': conditions,
+       'choices': choices
+    })
+    
+    return HttpResponse(t.render(c))
+    

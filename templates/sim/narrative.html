@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ block.super }}
+    <br /><br />
+    Narrative Turn Page<br />
+    <br /><br />
+    Group: {{ group.name }}<br />
+    Player: {{ player.role.name }} ({{ player.uni }})<br /><br />
+    
+    <b>Country Condition</b>:<br />
+    {{ country_condition }}<br />
+    <br />
+    <b>Current Variables</b>:<br />
+	<ul>
+		{% for condition in conditions %}
+			<li>{{ condition.name }}: {{ condition.value }}</li>
+		{% endfor %}
+	</ul>
+	
+	<b>Player Descriptions</b><br />
+	Not available<br /><br />
+	<a href="/sim/decision/{{player.group.id}}/{{player.id}}">Continue</a>
+    
+{% endblock %}
