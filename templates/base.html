@@ -14,8 +14,15 @@
 <div id="wrapper">
 <div id="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div>
 <h1 id="masthead"><span>Genocide Prevention {% block masthead %}{% endblock %}</span></h1>
-<div id="nav">{% block nav %}<a href="/about/">About</a> | <a href="/help/">Help</a> | <a href="/siterequirements/">Site Requirements</a> | <a href="/credits/">Credits</a> | 
-{% endblock %}</div>
+<div id="nav">
+	{% block nav %}
+		<a href="/about/">About</a> | 
+		<a href="/help/">Help</a> | 
+		<a href="/siterequirements/">Site Requirements</a> | 
+		<a href="/credits/">Credits</a> | 
+		<a href="/sim/logout/">Logout</a>
+	{% endblock %}
+</div>
 
 {% block content %}{% endblock %}
 </div>

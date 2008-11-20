@@ -8,12 +8,12 @@ admin.autodiscover()
 site_media_root = os.path.join(os.path.dirname(__file__),"media")
 
 urlpatterns = patterns('',
-                       # Example:
-                       # (r'^genocideprevention/', include('genocideprevention.foo.urls')),
-                       (r'^$', direct_to_template, {'template': 'index.html'}),
+                       (r'^$', 'genocideprevention.views.index'),
+                       (r'^login', 'genocideprevention.views.login'),
                        ('^accounts/',include('djangowind.urls')),
                        (r'^admin/(.*)', admin.site.root),
+                       (r'^sim/', include('genocideprevention.sim.urls')),
+                       (r'^foo/', include('genocideprevention.foo.urls')),
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': site_media_root}),
                        (r'^uploads/(?P<path>.*)$','django.views.static.serve',{'document_root' : settings.MEDIA_ROOT}),
-                       (r'^sim/', include('genocideprevention.sim.urls')),
 )

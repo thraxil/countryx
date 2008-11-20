@@ -1,12 +1,49 @@
-from django.db import models
+from django.db import models, connection
 
 class Role(models.Model):
+    """
+    A role allows a player to assume a specific persona in the game.
+    Roles are associated with State Changes and Role Choices
+
+    # Create a valid role object
+    >>> role = Role.objects.create(name="Foo")
+    >>> role
+    <Role: Foo>
+    
+    # Test a create with a name that's too long
+    >>> role = Role.objects.create(name="012345678901234567890A")
+    Traceback (most recent call last):
+    ...
+    DataError: value too long for type character varying(20)
+    <BLANKLINE>
+    >>> connection.connection.rollback() #postgres transactions need to be explicitly cleared
+    
+    # Test a duplicate create
+    >>> role = Role.objects.create(name="Foo")
+    Traceback (most recent call last):
+    ...
+    IntegrityError: duplicate key value violates unique constraint "sim_role_name_key"
+    <BLANKLINE>
+    >>> connection.connection.rollback() #postgres transactions need to be explicitly cleared
+    """
+    
     name = models.CharField(max_length=20, unique=True)
 
     def __unicode__(self):
         return self.name
 
 class State(models.Model):
+    """
+    A state represents a current country condition. Each state has a set of 
+    representative values (violence, esteem, etc), choices that each player
+    role can follow and the list of states these choices can lead to.
+    
+    #Create a state
+    >>> state = State.objects.create(name="Test", turn=1, state_no=1)
+    >>> state
+    <State: T1_S1_Test>
+    """
+    
     turn = models.IntegerField()
     state_no = models.IntegerField()
     name = models.CharField(max_length=40)
