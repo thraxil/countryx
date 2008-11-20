@@ -9,7 +9,7 @@ class Command(BaseCommand):
     args = '[appname ...]'
     colors = ["#008080", "#0000FF", "#FF00FF", "#008000", "#00FF00", "#800000", "#000080", "#800080", "#FF0000"]
 
-    def recurseState(self, state):
+    def recurse_state(self, state):
         if state not in self.states:
             self.states[state] = {}
         
@@ -60,7 +60,7 @@ class Command(BaseCommand):
         # iterate the StateChange table
         state = State.objects.get(name='Start', turn=1, state_no=1)
 
-        self.recurseState(state)
+        self.recurse_state(state)
             
         print '}'
 

@@ -18,6 +18,7 @@ import re
 from psycopg2 import IntegrityError
 
 class Command(BaseCommand):
+    
     option_list = BaseCommand.option_list + (
         make_option('--user', dest='user', help='GMail user id'),
         make_option('--pwd', dest='pwd', help='GMail password'),
@@ -25,15 +26,15 @@ class Command(BaseCommand):
     
     help = 'Import base game data from Google spreadsheets'
     
-    def __initGoogleDataClient(self, email, password):
+    def init_google_client(self, email, password):
         
         #initialize the spreadsheet service
         self.gd_client = gdata.spreadsheet.service.SpreadsheetsService()
 
-        if (email == None or email == ''):
+        if (not email or email == ''):
             print "Please enter a valid email address"
             return False
-        if (password == None or password == ''):
+        if (not password or password == ''):
             print "Please enter a valid password"
             return False
         
@@ -43,7 +44,7 @@ class Command(BaseCommand):
         self.gd_client.ProgrammaticLogin()
         return True
         
-    def __prepareDatabase(self):
+    def prepare_database(self):
         # delete old data from the tables
         print "Deleting old simulation data..."
         StateChange.objects.all().delete()
@@ -56,12 +57,12 @@ class Command(BaseCommand):
         print "   States deleted"
         
         # setup required roles
-        self.__getOrCreateRole('President')
-        self.__getOrCreateRole('FirstWorldEnvoy')
-        self.__getOrCreateRole('SubRegionalRep')
-        self.__getOrCreateRole('OppositionLeadership')   
+        self.get_or_create_role('President')
+        self.get_or_create_role('FirstWorldEnvoy')
+        self.get_or_create_role('SubRegionalRep')
+        self.get_or_create_role('OppositionLeadership')   
             
-    def __getOrCreateState(self, text):
+    def get_or_create_state(self, text):
         substrings = text.split("_")
                 
         name = substrings[2].replace('\n', '')
@@ -77,14 +78,14 @@ class Command(BaseCommand):
         
         return state
     
-    def __getOrCreateRole(self, roleName):
+    def get_or_create_role(self, roleName):
         try:
             role = Role.objects.get(name=roleName)
         except Role.DoesNotExist:
             role = Role.objects.create(name=roleName)
         return role
             
-    def processConditions(self, sheetKey, worksheetId, state):
+    def process_conditions(self, sheetKey, worksheetId, state):
         print "process conditions for state: %s" % state
         feed = self.gd_client.GetListFeed(sheetKey, worksheetId)
                 
@@ -95,11 +96,11 @@ class Command(BaseCommand):
             var.state = state
             var.value = entry.custom["value"].text
             var.name = entry.custom["name"].text
-            if (var.name <> None):
+            if (var.name):
                 var.save()
                 print "%s" % (var)
         
-    def processChoices(self, sheetKey, worksheetId, state):
+    def process_choices(self, sheetKey, worksheetId, state):
         print "process choices for state: %s" % state
         feed = self.gd_client.GetListFeed(sheetKey, worksheetId)
         choices = []
@@ -108,7 +109,7 @@ class Command(BaseCommand):
         for i, entry in enumerate(feed.entry):
             #each row has at least three viable key values: role, choiceno, desc
             #these will each translate into a StateRoleChoice object
-            if (entry.custom["role"].text <> None):
+            if (entry.custom["role"].text):
                 roleName = entry.custom["role"].text
                 roleName = roleName.replace('(', '')
                 roleName = roleName.replace(')', '')
@@ -119,7 +120,7 @@ class Command(BaseCommand):
                 
             choiceno = entry.custom["choiceno"].text
             choicedesc = entry.custom["desc"].text
-            if (role <> None and choiceno <> None and choicedesc <> None):
+            if (role and choiceno and choicedesc):
                 c = StateRoleChoice()
                 c.state = state
                 c.choice = choiceno
@@ -128,12 +129,12 @@ class Command(BaseCommand):
                 c.save() 
                 print '%s' % c
             
-    def processTransitions(self, sheetKey, worksheetId, state): 
+    def process_transitions(self, sheetKey, worksheetId, state): 
         print "process transitions for state %s" % state 
         feed = self.gd_client.GetListFeed(sheetKey, worksheetId)
         
         for i, entry in enumerate(feed.entry):
-            if (entry.custom["resultingstate"].text <> None):
+            if (entry.custom["resultingstate"].text):
                 #each row has 5 key values, P, E, R, O (roles) and the resulting state
                 #these will each translate into a StateRoleChoice object
                 transition = StateChange()
@@ -142,11 +143,11 @@ class Command(BaseCommand):
                 transition.opposition = entry.custom["o"].text
                 transition.president = entry.custom["p"].text
                 transition.regional = entry.custom["r"].text
-                transition.nextState = self.__getOrCreateState(entry.custom["resultingstate"].text)
+                transition.nextState = self.get_or_create_state(entry.custom["resultingstate"].text)
                 transition.save()
                 print "%s" % transition
                
-    def processWorksheets(self, sheetKey, state):  
+    def process_worksheets(self, sheetKey, state):  
         feed = self.gd_client.GetWorksheetsFeed(sheetKey)
         
         if (len(feed.entry) <> 3):
@@ -158,20 +159,20 @@ class Command(BaseCommand):
             worksheetId = id_parts[len(id_parts) - 1]
     
             if (entry.title.text == "Conditions"):
-                self.processConditions(sheetKey, worksheetId, state)
+                self.process_conditions(sheetKey, worksheetId, state)
             elif (entry.title.text == "Choices"):
-                self.processChoices(sheetKey, worksheetId, state)
+                self.process_choices(sheetKey, worksheetId, state)
             elif (entry.title.text == "Transitions"):
-                self.processTransitions(sheetKey, worksheetId, state)  
+                self.process_transitions(sheetKey, worksheetId, state)  
         
-    def processSpreadsheets(self):
+    def process_spreadsheets(self):
         feed = self.gd_client.GetSpreadsheetsFeed()
         for i, entry in enumerate(feed.entry):
             match = re.search("t\d{1}_s\d{1}_*", entry.title.text, re.IGNORECASE)
             if (match):
                 
                 #parse out a new state object
-                state = self.__getOrCreateState(entry.title.text)
+                state = self.get_or_create_state(entry.title.text)
                 
                 # parse out the sheet's identifying key
                 # this is a bit of a hack, could use an XML parser to make this nicer
@@ -180,22 +181,22 @@ class Command(BaseCommand):
                               
                 #process each of the three expected worksheets
                 print "Processing spreadsheet %s" % state 
-                self.processWorksheets(key, state)
+                self.process_worksheets(key, state)
         
     def handle(self, *app_labels, **options):
         from django.db.models import get_app, get_apps, get_models
         
         args = 'Usage: python manage.py import --user user --pwd password]'
         
-        if (not self.__initGoogleDataClient(options.get('user'), options.get('pwd'))):
+        if (not self.init_google_client(options.get('user'), options.get('pwd'))):
             print args
             return
         else:
             print "Retrieving data for: ", self.gd_client.email
     
         # delete the old data, and make sure the roles are created
-        self.__prepareDatabase()
+        self.prepare_database()
         
         # process the spreadsheets
-        self.processSpreadsheets()
+        self.process_spreadsheets()
     
