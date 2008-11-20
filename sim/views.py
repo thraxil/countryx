@@ -2,20 +2,10 @@ from django.template import Context, loader
 from genocideprevention.sim.models import *
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.template import Context, loader
-from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
-from django.contrib.sites.models import Site
-from django.conf import settings
-from django import forms
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import authenticate, login, logout
-
-class LoginForm(forms.Form):
-    username = forms.CharField(label=_("Username"), max_length=30)
-    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
 def root(request):
     if (not request.user.is_authenticated()):
-        return HttpResponseRedirect('/sim/login/')
+        return HttpResponseRedirect('/accounts/login/')
     else:
         return index(request)
 
