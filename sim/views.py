@@ -5,7 +5,7 @@ from django.template import Context, loader
 
 def root(request):
     if (not request.user.is_authenticated()):
-        return HttpResponseRedirect('/accounts/login/')
+        return HttpResponseRedirect('login/')
     else:
         return index(request)
 
