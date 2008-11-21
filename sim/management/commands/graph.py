@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 stack.append(transition.nextState)
         
         for s in stack:        
-            self.recurseState(s)
+            self.recurse_state(s)
             
     def __cluster(self, turn, cluster, label):
         
