@@ -2,22 +2,14 @@ from django.template import Context, loader
 from genocideprevention.sim.models import *
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.template import Context, loader
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render_to_response
 
+@login_required
 def root(request):
-    if (not request.user.is_authenticated()):
-        return HttpResponseRedirect('login/')
-    else:
-        return index(request)
+   return render_to_response("sim/index.html",dict(user=request.user))
 
-def index(request):
-    t = loader.get_template('sim/index.html')
-    
-    c = Context({
-       'user': request.user,
-    })
-    
-    return HttpResponse(t.render(c))
-
+@login_required
 def narrative(request, group_id, player_id):
     t = loader.get_template('sim/narrative.html')
     
@@ -35,6 +27,7 @@ def narrative(request, group_id, player_id):
     
     return HttpResponse(t.render(c))
 
+@login_required
 def decision(request, group_id, player_id):
     t = loader.get_template('sim/decision.html')
     
@@ -63,5 +56,4 @@ def __current_conditions(group):
     conditions.append(group.current_state.statevariable_set.get(name='Political Discourse'))
     conditions.append(group.current_state.statevariable_set.get(name='Weapons Flow'))
     return conditions
-
    
