@@ -22,7 +22,7 @@ class Role(models.Model):
     >>> role = Role.objects.create(name="Foo")
     Traceback (most recent call last):
     ...
-    IntegrityError: duplicate key value violates unique constraint "sim_role_name_key"
+    IntegrityError: ...
     <BLANKLINE>
     >>> connection.connection.rollback() #postgres transactions need to be explicitly cleared
     """
