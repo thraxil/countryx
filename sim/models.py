@@ -30,6 +30,43 @@ class State(models.Model):
 
     def __unicode__(self):
         return "T%s_S%s_%s" % (self.turn, self.state_no, self.name)
+
+    def _countedges(self,myfield,otherfield,extra=''):
+        tablename = StateChange._meta.db_table
+        cursor = connection.cursor()
+        cursor.execute('SELECT "%s",count("%s") FROM "%s" WHERE "%s"=%d %s GROUP BY "%s"' % (
+            otherfield,otherfield, tablename, myfield,self.id, extra, otherfield
+            ))
+        return cursor.rowcount
+    def to_count(self,extra=''):
+        return self._countedges(
+            StateChange._meta.get_field('state').column,
+            StateChange._meta.get_field('nextState').column,
+            extra
+            )
+    def from_count(self,extra=''):
+        return self._countedges(
+            StateChange._meta.get_field('nextState').column,
+            StateChange._meta.get_field('state').column,
+            extra
+            )
+    def influence(self,role,func,count):
+        rv = []
+        for choice in range(1,4):
+            rv.append(count-func('AND %s=%d' % (role,choice)))
+        return rv
+    def edge_metadata(self):
+        metadata = {'to':self.to_count(),
+                    'from':self.from_count(),
+                    'influence_from':{},
+                    'influence_to':{}}
+        for role in ('president','envoy','regional','opposition'):
+            #metadata['influence_from'][role] = metadata['from']*3 - self.influence(role,self.from_count)
+            #metadata['influence_to'][role] = metadata['to']*3 - self.influence(role,self.to_count)
+            metadata['influence_from'][role] = self.influence(role, self.from_count, metadata['from'])
+            metadata['influence_to'][role] = self.influence(role, self.to_count, metadata['to'])
+            
+        return metadata
     
 class StateChange(models.Model):
     state = models.ForeignKey(State, related_name="%(class)s_related_current")
