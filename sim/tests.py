@@ -3,6 +3,7 @@ from django.test import TestCase
 from genocideprevention.sim.models import *
 
 class ViewTestCase(TestCase):
+    fixtures = ["test_data.json"]
 
     def test_index_not_logged_in(self):
         # Issue a GET request for the index page
