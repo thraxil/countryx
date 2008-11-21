@@ -5,25 +5,6 @@ class Role(models.Model):
     A role allows a player to assume a specific persona in the game.
     Roles are associated with State Changes and Role Choices
 
-    # Create a valid role object
-    >>> role = Role.objects.create(name="Foo")
-    >>> role
-    <Role: Foo>
-    
-    # Test a create with a name that's too long
-    >>> role = Role.objects.create(name="012345678901234567890A")
-    Traceback (most recent call last):
-    ...
-    DataError: value too long for type character varying(20)
-    <BLANKLINE>
-    >>> connection.connection.rollback() #postgres transactions need to be explicitly cleared
-    
-    # Test a duplicate create
-    >>> role = Role.objects.create(name="Foo")
-    Traceback (most recent call last):
-    ...
-    IntegrityError: ...
-    >>> connection.connection.rollback() #postgres transactions need to be explicitly cleared
     """
     
     name = models.CharField(max_length=20, unique=True)
