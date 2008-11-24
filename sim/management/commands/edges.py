@@ -36,10 +36,10 @@ class Command(BaseCommand):
         
         states = State.objects.filter(turn=turn).order_by("state_no")
         for state in states:
-            print '/*'
+            print '      "%s";' % (state)
+            print '/*ID:%d' % state.id
             print state.edge_metadata()
             print '*/'
-            print '      "%s";' % (state)
         
         print '   }'
         print ''

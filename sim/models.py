@@ -38,6 +38,22 @@ class State(models.Model):
             otherfield,otherfield, tablename, myfield,self.id, extra, otherfield
             ))
         return cursor.rowcount
+    def influence_from(self, role):
+        tablename = StateChange._meta.db_table
+        myfield = StateChange._meta.get_field('nextState').column
+        otherfield = StateChange._meta.get_field('state').column
+        cursor = connection.cursor()
+        cursor.execute('SELECT "%s",count("%s") FROM "%s" WHERE "%s"=%d %s GROUP BY "%s"' % (
+            otherfield,otherfield, tablename, myfield,self.id, '', otherfield
+            ))
+        rv = []
+        for row in cursor.fetchall():
+            cursor.execute('SELECT count("%s") FROM "%s" WHERE "%s"=%d AND "%s"=%d GROUP BY "%s"' % (
+                role, tablename, myfield,self.id, otherfield,row[0],  role
+                ))
+            rv.append(3-cursor.rowcount)
+        return rv
+            
     def to_count(self,extra=''):
         return self._countedges(
             StateChange._meta.get_field('state').column,
@@ -63,7 +79,7 @@ class State(models.Model):
         for role in ('president','envoy','regional','opposition'):
             #metadata['influence_from'][role] = metadata['from']*3 - self.influence(role,self.from_count)
             #metadata['influence_to'][role] = metadata['to']*3 - self.influence(role,self.to_count)
-            metadata['influence_from'][role] = self.influence(role, self.from_count, metadata['from'])
+            metadata['influence_from'][role] = self.influence_from(role)
             metadata['influence_to'][role] = self.influence(role, self.to_count, metadata['to'])
             
         return metadata
