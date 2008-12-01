@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{{ block.super }}
+	<br /><br />
+	Administrator Page<br />
+	Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})<br /><br />
+
+	<table cellpadding="5">
+		<tr><th>Course Title</th><th>Term</th><th>Administrators</th></tr>
+		{% for section in sections %}
+			<tr><td><a href="/sim/section/{{section.id}}/">{{section.name}}</a></td><td>{{section.term}} {{section.year}}</td>
+			<td>
+				{% for admin in section.sectionadministrator_set.all %}
+					{{admin.user.first_name}} {{admin.user.last_name}} ({{admin.user.username}})
+				{% endfor %}
+			</td>
+			</tr>
+		{% endfor %}
+	
+	</table>
+	
+{% endblock %}

@@ -1,12 +1,14 @@
 from django.db import models, connection
+from django.contrib.auth.models import User
+from django.db.models import signals
+from django.dispatch import dispatcher
+import datetime
 
 class Role(models.Model):
     """
     A role allows a player to assume a specific persona in the game.
     Roles are associated with State Changes and Role Choices
-
     """
-    
     name = models.CharField(max_length=20, unique=True)
 
     def __unicode__(self):
@@ -38,6 +40,7 @@ class State(models.Model):
             otherfield,otherfield, tablename, myfield,self.id, extra, otherfield
             ))
         return cursor.rowcount
+    
     def influence_from(self, role):
         tablename = StateChange._meta.db_table
         myfield = StateChange._meta.get_field('nextState').column
@@ -60,17 +63,20 @@ class State(models.Model):
             StateChange._meta.get_field('nextState').column,
             extra
             )
+    
     def from_count(self,extra=''):
         return self._countedges(
             StateChange._meta.get_field('nextState').column,
             StateChange._meta.get_field('state').column,
             extra
             )
+    
     def influence(self,role,func,count):
         rv = []
         for choice in range(1,4):
             rv.append(count-func('AND %s=%d' % (role,choice)))
         return rv
+    
     def edge_metadata(self):
         metadata = {'to':self.to_count(),
                     'from':self.from_count(),
@@ -111,24 +117,60 @@ class StateRoleChoice(models.Model):
 
     def __unicode__(self):
         return "[%s] %s: %s. %s" % (self.state, self.role, self.choice, self.desc)
-    
-class Group(models.Model):
+
+###############################################################################
+###############################################################################
+
+class Section(models.Model):
     name = models.CharField(max_length=20)
-    current_state = models.ForeignKey(State)
+    term = models.CharField(max_length=20)
+    year = models.IntegerField()
+
+    def __unicode__(self):
+        return "%s %s %s" % (self.name, self.term, self.year)
+
+class SectionAdministrator(models.Model):
+    user = models.ForeignKey(User)
+    section = models.ForeignKey(Section)
+    
+    def __unicode__(self):
+        return "%s" % (self.user)
+    
+###############################################################################
+###############################################################################
+
+class SectionGroup(models.Model):
+    name = models.CharField(max_length=20)
+    section = models.ForeignKey(Section)
     
     def __unicode__(self):
         return "%s" % (self.name)
     
-class Player(models.Model):
-    group = models.ForeignKey(Group)
-    uni = models.CharField(max_length=10)
+def sectiongroup_post_save(sender, instance, signal, *args, **kwargs):
+    # Create the initial state in the SectionGroupState table
+    state = State.objects.get(name="Start", turn=1, state_no=1)
+    SectionGroupState.objects.create(state=state, group=instance, date_updated=datetime.date.today())
+    
+models.signals.post_save.connect(sectiongroup_post_save, sender=SectionGroup)
+    
+class SectionGroupState(models.Model):
+    state = models.ForeignKey(State)
+    group = models.ForeignKey(SectionGroup)
+    date_updated = models.DateTimeField('date updated')
+    
+    def __unicode__(self):
+        return "%s %s" % (self.state, self.date_updated)
+        
+class SectionGroupPlayer(models.Model):
+    user = models.ForeignKey(User)
+    group = models.ForeignKey(SectionGroup)
     role = models.ForeignKey(Role)
     
     def __unicode__(self):
-        return "%s: [%s, %s]" % (self.uni, self.role.name, self.group)
+        return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
     
-class PlayerTurn(models.Model):
-    player = models.ForeignKey(Player)
+class SectionGroupPlayerTurn(models.Model):
+    player = models.ForeignKey(SectionGroupPlayer)
     state = models.ForeignKey(State)
     choice = models.IntegerField()
     date_submitted = models.DateTimeField('date submitted')
@@ -136,4 +178,17 @@ class PlayerTurn(models.Model):
     def __unicode__(self):
         return "%s: Selected: %s from state %s" % (self.player, self.state.turn, self.choice)
     
+###############################################################################
+###############################################################################
+from django.contrib.sites.models import Site
     
+class FooGroup(models.Model):
+    name = models.CharField(max_length=20)
+    
+class FooPlayer(models.Model):
+    user = models.ForeignKey(User)
+    role = models.ForeignKey(Role)
+    group = models.ForeignKey(FooGroup)
+    
+    def __unicode__(self):
+        return "%s: [%s, %s]" % (self.user, self.role.name)

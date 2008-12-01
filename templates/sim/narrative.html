@@ -6,7 +6,8 @@
     Narrative Turn Page<br />
     <br /><br />
     Group: {{ group.name }}<br />
-    Player: {{ player.role.name }} ({{ player.uni }})<br /><br />
+    Player: {{ player.role.name }} ({{ player.user.username }})<br />
+    State: {{ state }}<br /><br />
     
     <b>Country Condition</b>:<br />
     {{ country_condition }}<br />
@@ -20,6 +21,6 @@
 	
 	<b>Player Descriptions</b><br />
 	Not available<br /><br />
-	<a href="/sim/decision/{{player.group.id}}/{{player.id}}">Continue</a>
+	<a href="/sim/decision/{{player.group.id}}/{{player.user.id}}">Continue</a>
     
 {% endblock %}

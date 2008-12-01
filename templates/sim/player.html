@@ -1,31 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-	{{ block.super }}
-	<br /><br />
-	Users & Group Page<br />
-	<i>Note: landing page assumes that we've just logged in with uni sld2131. Who is the president in the "Initial" group, along with 3 other students</i>
-	<br /><br />
-	{% for player in players %}
-		Group: {{ player.group.name }}<br />
-		Player: {{ player.role.name }} ({{ player.uni }})<br /><br />
-		
-		{% for teammate in player.group.player_set.all %}
-			{{ teammate.uni }}: {{ teammate.role.name }}<br />
-		{% endfor %}
-	
-		<br /><br />
-		
-		{% if player.playerturn_set.all %}
-			<table border="1">
-				<tr><td>Decision Turn</td><td>Date Submitted</td><td>Individual Feedback</td><td>Group Feedback</td><td>Action</td></tr>
-				{% for t in player.playerturn_set.all %}
-					<tr><td>{{t.state.turn}}</td><td>{{t.date_submitted}}</td><td/><td/><td><a href="">view</a></td></tr> 
-				{% endfor %}
-			</table>
-		{% endif %}
-		
-		<a href="narrative/{{player.group.id}}/{{player.id}}">Continue</a>
-	{% endfor %}
-	
+    {{ block.super }}
+    
+    <br /><br />
+    User & Groups Page<br />
+    Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})
+    <br /><br />
+        
+    {% if not groups %}
+    	You currently are not participating in any games. Please contact the administrator
+    	<br />
+    {% else %}
+    
+	    {% for group in groups %}
+	    	Group: {{ group.name }}<br />
+	    	
+	    	{% for player in group.sectiongroupplayer_set.all  %}
+	    	    {% ifequal player.user user %}
+	    	    	<b>{{ player.user.username }}: {{ player.role.name }}</b><br />
+	    	    {% else %}
+	    	    	{{ player.user.username }}: {{ player.role.name }}<br />
+	    	    {% endifequal %}
+	    	{% endfor %}
+	    	
+	        {% for player in group.sectiongroupplayer_set.all  %}
+	    	    {% ifequal player.user user %}
+	    	        {% for turn in player.sectiongroupplayerturn_set.all %}
+	    	        	{{ turn.choice }}{{ turn.date_submitted }}
+	    	        {% endfor %}
+	    	    {% endifequal %}
+	    	{% endfor %}
+	    	
+	    	<a href="/sim/narrative/{{group.id}}/{{user.id}}">Continue</a>
+	    {% endfor %}
+	 {% endif %}      
 {% endblock %}

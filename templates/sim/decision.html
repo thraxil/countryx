@@ -6,7 +6,8 @@
 	Decision Turn Page<br />
 	<br /><br />
 	Group: {{ group.name }}<br />
-	Player: {{ player.role.name }} ({{ player.uni }})<br /><br />
+	Player: {{ player.role.name }} ({{ player.user.username }})<br />
+	State: {{ state }}<br /><br />
 	
 	<b>Current Variables</b>:<br />
 	<ul>
@@ -20,7 +21,5 @@
 			{{c.choice}} {{ c.desc }}<br />
 		{% endfor %}
 	</ol>	
-		
-	
 	
 {% endblock %}
