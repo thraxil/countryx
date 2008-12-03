@@ -11,16 +11,20 @@
     {% for group in section.sectiongroup_set.all %}
     	<b>Group {{ group.name }}</b><br />
     	<table>
-    		<tr><th>Decision Turn</th><th>Name</th></tr>
+    		<tr><td>Decision Turn</td><td>Name</td></tr>
     		{% for groupstate in group.sectiongroupstate_set.all %}
 	    		<tr>
 	    			<td>#{{ groupstate.state.turn }}</td>
 	    			<td>{{ groupstate.state.name }}</td>
+	    			<td>Submitted</td>
 	    		</tr>
 	    	{% endfor %}
 	    		
 	    	{% for player in group.sectiongroupplayer_set.all  %}
-	    		<td/><td><a href="/sim/faculty/player/{{section.id}}/{{group.id}}/{{player.user.id}}">{{ player.user.username }}: {{ player.role.name }}</a></td></tr>
+	    		<tr>
+	    			<td/>
+	    			<td><a href="/sim/faculty/player/{{section.id}}/{{group.id}}/{{player.user.id}}">{{ player.user.username }}: {{ player.role.name }}</a></td>
+	    		</tr>
 	    	{% endfor %}
     	</table>
     	<br /><br />

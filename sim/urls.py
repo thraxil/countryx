@@ -7,5 +7,5 @@ urlpatterns = patterns('',
                        (r'^narrative/(?P<group_id>\d+)/(?P<user_id>\d+)/$', 'genocideprevention.sim.views.narrative'),
                        (r'^decision/(?P<group_id>\d+)/(?P<user_id>\d+)/$', 'genocideprevention.sim.views.decision'),
                        (r'^faculty/section/(?P<section_id>\d+)/$', 'genocideprevention.sim.views.faculty_section'),
-                       (r'^faculty/player/(?P<section_id>\d+)/(?P<group_id>\d+)/(?P<user_id>\d+)/$', 'genocideprevention.sim.views.faculty_player'),
+                       (r'^faculty/player/(?P<section_id>\d+)/(?P<group_id>\d+)/(?P<player_id>\d+)/$', 'genocideprevention.sim.views.faculty_player'),
 )

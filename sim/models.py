@@ -180,7 +180,7 @@ class SectionGroupPlayerTurn(models.Model):
     reasoning = models.TextField()
     feedback = models.TextField()
     faculty = models.ForeignKey(SectionAdministrator, related_name="%(class)s_related_faculty")
-
+    
     def __unicode__(self):
         return "%s: Selected: %s from state %s" % (self.player, self.state.turn, self.choice)
     

@@ -26,10 +26,10 @@ def faculty_index(request):
 def faculty_section(request, section_id):
     return render_to_response("sim/faculty_section.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
 
-def faculty_player(request, section_id, group_id, user_id, updated):
+def faculty_player(request, section_id, group_id, player_id, updated=False):
     section = Section.objects.get(id=section_id)
     group = SectionGroup.objects.get(id=group_id)
-    player = group.sectiongroupplayer_set.get(user__id=user_id)
+    player = group.sectiongroupplayer_set.get(user__id=player_id)
     current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
     choices = StateRoleChoice.objects.filter(state=current_state, role=player.role)
     player_turn = SectionGroupPlayerTurn.objects.filter(player=player, state=current_state)
@@ -39,20 +39,20 @@ def faculty_player(request, section_id, group_id, user_id, updated):
         if (form.is_valid()):
             # Process the data in form.cleaned_data
             player_turn.feedback = form.cleaned_data['feedback']
-            player_turn.faculty = SectionAdministrator.objects.get(form.cleaned_data['faculty_id'])
+            player_turn.faculty = SectionAdministrator.objects.get(section=section, user__id=form.cleaned_data['faculty_id'])
             player_turn.save()
             
-            redirect_url = 'sim/player/%s/%s/%s/%s' % (section_id, group_id, user_id, 1)
+            redirect_url = 'sim/player/%s/%s/%s/%s' % (section_id, group_id, player_id, 1)
             return HttpResponseRedirect(redirect_url)
     else:
-        form = FeedbackForm()
+        form = FeedbackForm(initial={'faculty_id': request.user.id})
         
     return render_to_response("sim/faculty_player.html", 
         dict(user=request.user, section=section, group=group, player=player, choices=choices, player_turn=player_turn, form=form, updated=updated))
     
 class FeedbackForm(forms.Form):
-    feedback = forms.Textarea()
-    faculty_id = forms.IntegerField()
+    feedback = forms.CharField(widget=forms.Textarea)
+    faculty_id = forms.IntegerField(widget=forms.HiddenInput)    
     
 ###############################################################################
 ###############################################################################
