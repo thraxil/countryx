@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ block.super }}
+    Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})<br /><br />
+    <br /><br />
+    Course Page:<br />
+    {{section.name}} {{section.term}} {{section.year}}<br />
+    <br /><br />
+     
+    {% for group in section.sectiongroup_set.all %}
+    	<b>Group {{ group.name }}</b><br />
+    	<table>
+    		<tr><th>Decision Turn</th><th>Name</th></tr>
+    		{% for groupstate in group.sectiongroupstate_set.all %}
+	    		<tr>
+	    			<td>#{{ groupstate.state.turn }}</td>
+	    			<td>{{ groupstate.state.name }}</td>
+	    		</tr>
+	    	{% endfor %}
+	    		
+	    	{% for player in group.sectiongroupplayer_set.all  %}
+	    		<td/><td><a href="/sim/faculty/player/{{section.id}}/{{group.id}}/{{player.user.id}}">{{ player.user.username }}: {{ player.role.name }}</a></td></tr>
+	    	{% endfor %}
+    	</table>
+    	<br /><br />
+    {% endfor %}
+{% endblock %}

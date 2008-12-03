@@ -144,12 +144,15 @@ class SectionGroup(models.Model):
     section = models.ForeignKey(Section)
     
     def __unicode__(self):
-        return "%s" % (self.name)
+        return "%s: Group %s" % (self.section, self.name)
     
 def sectiongroup_post_save(sender, instance, signal, *args, **kwargs):
-    # Create the initial state in the SectionGroupState table
-    state = State.objects.get(name="Start", turn=1, state_no=1)
-    SectionGroupState.objects.create(state=state, group=instance, date_updated=datetime.date.today())
+    states = SectionGroupState.objects.filter(group=instance)
+    
+    if (len(states) < 1):
+        # Create the initial state in the SectionGroupState table
+        state = State.objects.get(name="Start", turn=1, state_no=1)
+        SectionGroupState.objects.create(state=state, group=instance, date_updated=datetime.date.today())
     
 models.signals.post_save.connect(sectiongroup_post_save, sender=SectionGroup)
     
@@ -170,10 +173,13 @@ class SectionGroupPlayer(models.Model):
         return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
     
 class SectionGroupPlayerTurn(models.Model):
-    player = models.ForeignKey(SectionGroupPlayer)
+    player = models.ForeignKey(SectionGroupPlayer, related_name="%(class)s_related_player")
     state = models.ForeignKey(State)
     choice = models.IntegerField()
     date_submitted = models.DateTimeField('date submitted')
+    reasoning = models.TextField()
+    feedback = models.TextField()
+    faculty = models.ForeignKey(SectionAdministrator, related_name="%(class)s_related_faculty")
 
     def __unicode__(self):
         return "%s: Selected: %s from state %s" % (self.player, self.state.turn, self.choice)
