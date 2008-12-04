@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{{ block.super }}
+	<br /><br />
+	Decision Turn Page<br />
+	<br /><br />
+	Group: {{ group.name }}<br />
+	Player: {{ player.role.name }} ({{ player.user.username }})<br />
+	State: {{ state }}<br /><br />
+	
+	<b>Current Variables</b>:<br />
+	<ul>
+		{% for condition in conditions %}
+			<li>{{ condition.name }}: {{ condition.value }}</li>
+		{% endfor %}
+	</ul>
+	
+	<b>Choices</b>:<br />
+	<form action="/sim/decision/{{player.group.id}}/{{player.user.id}}" method='POST'>
+		<div class="fieldWrapper">
+	        {{ form.reasoning.errors }}
+	        <label for="id_reasoning">Your reasoning</label><br />
+	        {{ form.reasoning }}
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.reasoning.errors }}
+	        <label for="id_reasoning">Your reasoning</label><br />
+	        {{ form.reasoning }}
+	    </div>
+ 		<input type="submit" value="Submit"/>
+	</form>
+	</ol>	
+	
+{% endblock %}
