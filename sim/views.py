@@ -84,28 +84,6 @@ def narrative(request, group_id, user_id):
     
     return HttpResponse(t.render(c))
 
-#@login_required
-#def decision(request, group_id, user_id):
-#    t = loader.get_template('sim/decision.html')
-#    
-#    group = SectionGroup.objects.get(id=group_id)
-#    player = group.sectiongroupplayer_set.get(user__id=user_id)
-#    
-#    current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-#    conditions = __current_conditions(current_state)
-#    
-#    choices = StateRoleChoice.objects.filter(state=current_state, role=player.role)
-#    
-#    c = Context({
-#       'group': group,
-#       'player': player,
-#       'state': current_state,
-#       'conditions': conditions,
-#       'choices': choices
-#    })
-#    
-#    return HttpResponse(t.render(c))
-
 @login_required
 def decision(request, group_id, user_id):
     group = SectionGroup.objects.get(id=group_id)
