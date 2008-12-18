@@ -1,3 +1,4 @@
 from settings_shared import *
 
-DATABASE_USER='genocideprevention'
+DATABASE_USER='postgres'
+DATABASE_PASSWORD='postgres'

@@ -10,6 +10,7 @@ class Role(models.Model):
     Roles are associated with State Changes and Role Choices
     """
     name = models.CharField(max_length=20, unique=True)
+    description = models.TextField()
 
     def __unicode__(self):
         return self.name
@@ -104,7 +105,7 @@ class StateChange(models.Model):
 class StateVariable(models.Model):
     state = models.ForeignKey(State)
     name = models.CharField(max_length=20)
-    value = models.CharField(max_length=1500)
+    value = models.TextField()
     
     def __unicode__(self):
         return "[%s] %s: %s" % (self.state, self.name, self.value)
@@ -171,30 +172,19 @@ class SectionGroupPlayer(models.Model):
     
     def __unicode__(self):
         return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
-    
+        
 class SectionGroupPlayerTurn(models.Model):
     player = models.ForeignKey(SectionGroupPlayer, related_name="%(class)s_related_player")
     state = models.ForeignKey(State)
-    choice = models.IntegerField()
-    date_submitted = models.DateTimeField('date submitted')
-    reasoning = models.TextField()
-    feedback = models.TextField()
-    faculty = models.ForeignKey(SectionAdministrator, related_name="%(class)s_related_faculty")
+    choice = models.IntegerField(null=True)
+    reasoning = models.TextField(null=True)
+    submit_date = models.DateTimeField('final date submitted', null=True)
+    feedback = models.TextField(null=True)
+    faculty = models.ForeignKey(SectionAdministrator, related_name="%(class)s_related_faculty", null=True)
+    feedback_date = models.DateTimeField('feedback submitted', null=True)
     
     def __unicode__(self):
         return "%s: Selected: %s from state %s" % (self.player, self.state.turn, self.choice)
     
-###############################################################################
-###############################################################################
-from django.contrib.sites.models import Site
-    
-class FooGroup(models.Model):
-    name = models.CharField(max_length=20)
-    
-class FooPlayer(models.Model):
-    user = models.ForeignKey(User)
-    role = models.ForeignKey(Role)
-    group = models.ForeignKey(FooGroup)
-    
-    def __unicode__(self):
-        return "%s: [%s, %s]" % (self.user, self.role.name)
+    def is_submitted(self):
+        return self.submit_date != None

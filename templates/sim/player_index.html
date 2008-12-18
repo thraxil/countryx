@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sim/base_sim.html" %}
 
 {% block content %}
     {{ block.super }}
@@ -32,7 +32,7 @@
 	    	    {% endifequal %}
 	    	{% endfor %}
 	    	
-	    	<a href="/sim/player/narrative/{{group.id}}/{{user.id}}">Continue</a>
+	    	<a href="/sim/player/game/{{group.id}}/{{user.id}}">Continue</a>
 	    	<hr />
 	    {% endfor %}
 	 {% endif %}      

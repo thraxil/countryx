@@ -95,6 +95,7 @@ class Command(BaseCommand):
             var = StateVariable()
             var.state = state
             var.value = entry.custom["value"].text
+           
             var.name = entry.custom["name"].text
             if (var.name):
                 var.save()

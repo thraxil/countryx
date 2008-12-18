@@ -1,0 +1,78 @@
+{% extends "sim/base_sim.html" %}
+
+{% block css %}
+{{ block.super }}
+<style type='text/css'>
+  @import "/sim/media/css/game.css";
+</style>
+{% endblock %}
+
+{% block js %} 
+   {{ block.super }}
+   <script type="text/javascript" src="/sim/media/js/game.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="main">
+       <table>
+         <tr style="vertical-align: top">
+            <td>
+               <!--  Player Column -->
+               {% for player in group.sectiongroupplayer_set.all  %}
+	               <table>
+	                 <tr><td colspan="2"><div class="player">{{ player.role.name }}</div></td></tr>
+	                  <tr>
+	                     <td>
+	                        <div id="{{player.role.name}}_image" class="player_image"><img src="/sim/media/images/silhouette.jpg"></div>
+	                        <div id="{{player.role.name}}_description" class="player_description invisible">{{ player.role.description }}</div>
+	                     </td>
+	                     <td>
+	                        <div class="character_choice" onclick="toggleCharacterProfile(this, '{{player.role.name}}')">Character<br />Profile</div>
+	                        {% ifnotequal player.user user %}
+	                          <div class="character_choice" onclick="requestOfflineNegotiations(this)">Request<br />Offline<br />Negotiation</div>
+	                        {% endifnotequal %}
+	                        {% group.%}
+	                        <div class="character_choice">Decision<br />Pending</div>
+	                     </td>
+	                  </tr>
+	               </table>
+	            {% endfor %}
+            </td>
+            <td>
+               <!--  Country Conditions / Text & Graph -->
+               <div id="errorMsg" class="error invisible"></div>
+               <div id="successMsg" class="success invisible"></div>
+                  
+               <div class="country_conditions">
+                  <div class="country_state">Current Country Conditions: {{ state }}</div>
+                  <div class="country_conditions_textarea scrollable">{{ country_condition }}</div>
+               </div>
+              
+               <div class="country_conditions_graph">
+                  {% for condition in conditions %}
+			            {{ condition.name }}: {{ condition.value }}<br />
+			         {% endfor %}
+               </div>
+            </td>
+            <td>
+               <!--  Choices / Clock -->
+               <div>
+                  {% for c in choices %}
+                     <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
+                  {% endfor %}
+                  <div id="reasoning_form" style="display: none">
+	                  <textarea id="reasoning" class="reasoning">Enter your reasoning here</textarea>
+	                  <input id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
+	                  <input id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
+	                  <input id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/> 
+	               </div>
+               </div>
+            </td>
+         </tr>
+    </table>
+</div>    
+{% endblock %}
