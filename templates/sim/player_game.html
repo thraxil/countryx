@@ -78,12 +78,9 @@
             <td>
                <!--  Column 2 -->
                <!--  Country Conditions / Text & Graph -->
-               <div id="errorMsg" class="error invisible"></div>
-               <div id="successMsg" class="success invisible"></div>
-                  
                <div class="country_conditions">
                   <div class="country_state">Current Country Conditions: {{ state }}</div>
-                  <div class="country_conditions_textarea scrollable">{{ country_condition }}</div>
+                  <div class="country_conditions_textarea scrollable">{% autoescape off %}{{ country_condition }}{% endautoescape %}</div>
                </div>
               
                <div class="country_conditions_graph">
@@ -93,6 +90,9 @@
                </div>
             </td>
             <td>
+               <div id="errorMsg" class="error invisible"></div>
+               <div id="successMsg" class="success invisible"></div>
+               
                <!-- Column 3 -->
                <!--  Choices / Clock -->
                <div>

@@ -3,7 +3,7 @@ gCurrentChoice = 0
 function debug(string)
 {
    if (true)
-      log("DEBUG " + string)
+      log(string)
 }
 
 function toggleCharacterProfile(control, characterName)
@@ -48,7 +48,6 @@ function choose(control, choice)
 {
    if (gCurrentChoice == 0)
    {
-      debug("choose: " + gCurrentChoice + " >> " + choice)
       gCurrentChoice = choice
       effect = 'blind'
       
@@ -81,13 +80,13 @@ function saveChoiceSuccess(response)
    if (doc.result == 0)
    {
       $('errorMsg').innerHTML = "An error occurred while saving your choices. Please try again."
-      toggle($('errorMsg'), 'blind')
+      setStyle($('errorMsg'), {'display': 'block'})
    }
    else if (doc.result == 1)
    {
       // draft -- leave the screen the way it was
       $('successMsg').innerHTML = "Your choices have been saved."
-      toggle($('successMsg'), 'blind')
+      setStyle($('successMsg'), {'display': 'block'})
       $('submit_state_desc').innerHTML = "Decision Pending"
    }
    else if (doc.result == 2)
@@ -96,7 +95,7 @@ function saveChoiceSuccess(response)
 
       // submit -- leave the screen the way it was
       $('successMsg').innerHTML = "Your choices have been submitted."
-      toggle($('successMsg'), 'blind')
+      setStyle($('successMsg'), {'display': 'block'})
       
       $(gCurrentChoice).onclick = ''
       setNodeAttribute($('reasoning'), 'readonly', 'true')
@@ -111,7 +110,7 @@ function saveChoiceError(err)
 {
    debug("chooseError: " + err)
    $('errorMsg').innerHTML = err
-   toggle($('errorMsg'), 'blind')
+   setStyle($('errorMsg'), {'display': 'block'})
 }
 
 function saveChoice(control, finalsubmit)
@@ -121,7 +120,7 @@ function saveChoice(control, finalsubmit)
    if (finalsubmit && $('reasoning').value.length < 1)
    {
       $('errorClient').innerHTML = "Please enter your reasoning before submitting a final answer."
-      toggle($('errorClient'), 'blind')
+      setStyle($('errorClient'), {'display': 'block'})
    }
    else if (finalsubmit && !confirm("Are you sure you're ready to submit your choice and reasoning? Your responses are final once you hit OK"))
    {
@@ -129,15 +128,13 @@ function saveChoice(control, finalsubmit)
    }
    else if (gCurrentChoice == 0)
    {
-      alert("Current Choice is 0?")
+      alert("DEBUG: Current Choice is 0")
    }
    else
    {
       parts = location.href.split('/')
       groupid = parts[parts.length - 2]
       url = 'http://' + location.hostname + ':' + location.port + "/sim/player/choose/"
-      
-      debug("group id: " + groupid)
       
       deferred = doXHR(url, 
             { 

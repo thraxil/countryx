@@ -69,14 +69,13 @@
 {
 	background-color: #fff;
 	color: #000;
-	height: 300px;
-   vertical-align: middle; 
+	vertical-align: middle; 
 }
 
 .country_conditions_textarea
 {
-   width: 95%;
-   height: 95%;
+   width: 400px;
+   height: 300px;
    font-size: 12px;
    font-family: "lucida grande",Verdana,Helvetica,Arial,sans-serif;
    padding: 10px 10px 10px 10px;
