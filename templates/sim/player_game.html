@@ -96,15 +96,50 @@
                <!-- Column 3 -->
                <!--  Choices / Clock -->
                <div>
-                  {% for c in choices %}
-                     <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
-                  {% endfor %}
-                  <div id="reasoning_form" style="display: none">
-	                  <textarea id="reasoning" class="reasoning">Enter your reasoning here</textarea>
-	                  <input id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
-	                  <input id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
-	                  <input id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/> 
-	               </div>
+                  <div id="current_choice" class="invisible">{{ saved_turn.choice }}</div>
+                  {% ifequal 0 submit_state %}
+                     Status: <div id="submit_state_desc" class="player_rolename">No Action Taken</div< 
+                     <!--  not yet selected -->
+                     {% for c in choices %}
+                        <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
+                     {% endfor %}
+                     <div id="reasoning_form" style="display: none">
+	                     <div id="errorClient" class="error invisible"></div>
+	                     <textarea id="reasoning" class="reasoning">Enter your reasoning here</textarea>
+	                     <input id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
+	                     <input id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
+	                     <input id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
+	                  </div>
+                  {% endifequal %}
+               
+                  {% ifequal 1 submit_state %}
+                     Status: <div id="submit_state_desc" class="player_rolename">Decision Pending</div<
+                     <!--  in draft -->
+                     {% for c in choices %}
+                        {% ifequal c.choice saved_choice.choice %}
+                           <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
+                        {% else %}
+                           <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
+                        {% endifequal %}
+                     {% endfor %}
+                     <div id="reasoning_form" style="display: block">
+                        <div id="errorClient" class="error invisible"></div>
+                        <textarea id="reasoning" class="reasoning">{{ saved_turn.reasoning }}</textarea>
+                        <input id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
+                        <input id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
+                        <input id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
+                     </div>
+                  {% endifequal %}
+                  
+                  {% ifequal 2 submit_state %}
+                     Status: <div id="submit_state_desc" class="player_rolename">Final Submit</div>
+                     <!--  submitted -->    
+                     <div id="{{saved_choice.choice}}" class="player_choice">{{ saved_choice.desc }}</div><br />
+	                  <div id="reasoning_form" style="display: block">
+	                     <div id="errorClient" class="error invisible"></div>
+	                     <textarea id="reasoning" class="reasoning" readonly="true">{{ saved_turn.reasoning }}</textarea>
+	                  </div>
+                  {% endifequal %}
                </div>
             </td>
          </tr>

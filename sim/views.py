@@ -70,6 +70,22 @@ def game(request, group_id):
     group = SectionGroup.objects.get(id=group_id)
     current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
     player = group.sectiongroupplayer_set.get(user__id=request.user.id)
+    
+    # Player's current submit state for this turn
+    # 0 -- No action taken for this turn
+    # 1 -- Draft Submitted
+    # 2 -- Final Submission
+    try:
+        saved_turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
+        saved_choice = StateRoleChoice.objects.get(state=current_state, role=player.role, choice=saved_turn.choice)
+        if (saved_turn.submit_date == None):
+            submit_state = 1
+        else:    
+            submit_state = 2
+    except:
+        submit_state = 0
+        saved_turn = None
+        saved_choice = None
         
     c = Context({
        'user': request.user,
@@ -79,6 +95,9 @@ def game(request, group_id):
        'country_condition': current_state.statevariable_set.get(name='Country Condition').value,
        'conditions': __current_conditions(current_state),
        'choices': StateRoleChoice.objects.filter(state=current_state, role=player.role),
+       'submit_state': submit_state,
+       'saved_turn': saved_turn,
+       'saved_choice': saved_choice 
     })
     
     t = loader.get_template('sim/player_game.html')
@@ -114,12 +133,16 @@ def choose(request):
                turn.submit_date = datetime.datetime.now()
             turn.save() 
              
-            response['result'] = 1
-            response['message'] = "Choice has been saved"
+            if (final):
+                response['result'] = 2
+                response['message'] = "Your choice and reasoning have been submitted"
+            else:
+                response['result'] = 1
+                response['message'] = "Draft has been saved"
     except:
         response['result'] = 0
         response['message'] = "An unexpected error occurred. Please try again"
-               
+        
     return HttpResponse(simplejson.dumps(response), 'application/json')
                 
 def __current_conditions(state):
