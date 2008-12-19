@@ -88,14 +88,14 @@ class GameTestCases(TestCase):
         self.assertEquals(ctx.get('saved_turn'), turn)
         self.assertEquals(ctx.get('saved_choice'), StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
                 
-    def _test_ajax_not_loggedin(self):
+    def test_ajax_not_loggedin(self):
         c = self.client
         response = c.post('/sim/player/choose/', {'groupid': 1, 'choiceid': 1, 'final': 0, 'reasoning': ''})
         self.assertRedirects(response, expected_url="/accounts/login/?next=/sim/player/choose/", status_code=302, target_status_code=200)
         self.assertEquals(response.template, None)
         self.assertEquals(response.content, '')
         
-    def _test_choose_savedraft_invalid(self):
+    def test_choose_savedraft_invalid(self):
         c = self.client
         self._login(c, 'playerA', 'aaaa')
         
@@ -106,7 +106,7 @@ class GameTestCases(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(doc['result'], 0)
     
-    def _test_choose_savedraft_valid(self):
+    def test_choose_savedraft_valid(self):
         c = self.client
         self._login(c, 'playerA', 'aaaa')
         
@@ -127,7 +127,7 @@ class GameTestCases(TestCase):
         self.assertEquals(turn.submit_date, None)
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')
         
-    def _test_choose_submit(self):
+    def test_choose_submit(self):
         c = self.client
         self._login(c, 'playerA', 'aaaa')
         
