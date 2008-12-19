@@ -1,2 +1,2 @@
-#from login import *
+from login import *
 from game import *
