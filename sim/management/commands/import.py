@@ -95,9 +95,9 @@ class Command(BaseCommand):
             var = StateVariable()
             var.state = state
             var.value = entry.custom["value"].text
-           
             var.name = entry.custom["name"].text
             if (var.name):
+                var.value = var.value.replace("\n", "<br /><br />")
                 var.save()
                 print "%s" % (var)
         
