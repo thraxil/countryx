@@ -11,19 +11,9 @@
 
 .invisible { display: none; }
 
-.character_choice
-{
-   background-color: #CCCCCC;
-	text-align: center;
-	cursor: pointer;
-	font-size: 10px;
-	width: 75px;
-	height: 40px;
-	border: black 1px solid;
-	color: black;
-}
+/** Column 1  **/
 
-.player
+.player_rolename
 {
 	background-color: #000;
    color: #fff;
@@ -38,8 +28,16 @@
    width: 150px;
    height: 100px;
    border: white 1px solid;
-   border-spacing: 2px;
-   padding: 2px;
+}
+
+.your_description
+{
+   background-color: #000;
+   color: #fff;
+   font-size: 10px;
+   width: 235px;
+   height: 100px;
+   border: white 1px solid;
 }
 
 .player_image
@@ -52,6 +50,20 @@
    border-spacing: 2px;
    padding: 2px;
 }
+
+.character_choice
+{
+   background-color: #CCCCCC;
+   text-align: center;
+   cursor: pointer;
+   font-size: 10px;
+   width: 75px;
+   height: 40px;
+   border: black 1px solid;
+   color: black;
+}
+
+/** Column 2 **/
 
 .country_conditions
 {

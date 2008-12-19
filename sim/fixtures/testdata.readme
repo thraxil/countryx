@@ -1,0 +1,31 @@
+Retrieved the data thus. Using syntax for all applications
+./manage.py dumpdata > sim/fixtures/test_data.json
+
+General Data Overview
+
+Users
+-----------------------
+ccnmtl silverpair
+testfaculty faculty
+
+
+playerA aaaa
+playerB bbbb
+playerC cccc
+playerD dddd
+testuser test
+
+State/Sim Data
+-----------------------
+Everything is there
+
+Sections/Groups
+-----------------------
+Test Spring 2009
+> admins -- ccnmtl/testfaculty
+> group -- A
+playerA - President
+playerB - FirstWordEnvoy
+playerC - SubRegionalRep
+playerD - OppositionLeadership
+

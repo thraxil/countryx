@@ -66,29 +66,22 @@ def __player_index(request):
     return render_to_response("sim/player_index.html", dict(user=request.user, groups=groups))
 
 @login_required
-def game(request, group_id, user_id):
-    t = loader.get_template('sim/player_game.html')
-    
+def game(request, group_id):
     group = SectionGroup.objects.get(id=group_id)
-    player = group.sectiongroupplayer_set.get(user__id=user_id)
-    
     current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-    conditions = __current_conditions(current_state)
-    
-    desc = current_state.statevariable_set.get(name='Country Condition').value
-    
-    choices = StateRoleChoice.objects.filter(state=current_state, role=player.role)
+    player = group.sectiongroupplayer_set.get(user__id=request.user.id)
         
     c = Context({
        'user': request.user,
        'group': group,
-       'player': player,
+       'you': player,
        'state': current_state,
-       'country_condition': desc,
-       'conditions': conditions,
-       'choices': choices,
+       'country_condition': current_state.statevariable_set.get(name='Country Condition').value,
+       'conditions': __current_conditions(current_state),
+       'choices': StateRoleChoice.objects.filter(state=current_state, role=player.role),
     })
     
+    t = loader.get_template('sim/player_game.html')
     return HttpResponse(t.render(c))
 
 @login_required
@@ -198,4 +191,43 @@ def __current_conditions(state):
 #    def __init__(self, choice_list, *args, **kw):
 #        forms.Form.__init__(self, *args, **kw) 
 #        self.choice.queryset = choice_list
+
+#def status(request):
+#    response = {}
+#    
+#    try:
+#        groupid = request.POST.get('groupid', None)
+#        player = group.sectiongroupplayer_set.get(user__id=request.user_id)
+#        current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
+#        
+#        response['players'] = []
+#        
+#        # Status
+#        # -- No action taken for this turn
+#        # -- Draft Submitted
+#        # -- Final Submission
+#    
+#        for player in group.sectiongroupplayer_set.all():
+#            player = {}
+#            player['role'] = player.role.name
+#            
+#            # get the turn
+#            try:
+#                turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
+#                if (turn.submit_date == None):
+#                    player['status'] = 1
+#                else:
+#                    player['status'] = 2
+#            except:
+#                player['status'] = 0
+#            
+#            players.push(player)
+#            
+#        response['result'] = 1
+#        response['message'] = "Player statuses retrieved succesfully"
+#    except:
+#        response['result'] = 0
+#        response['message'] = "An unexpected error occurred. Please try again"
+#     
+#    return HttpResponse(simplejson.dumps(response), 'application/json')
    

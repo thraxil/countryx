@@ -182,6 +182,8 @@ class SectionGroupPlayerTurn(models.Model):
     feedback = models.TextField(null=True)
     faculty = models.ForeignKey(SectionAdministrator, related_name="%(class)s_related_faculty", null=True)
     feedback_date = models.DateTimeField('feedback submitted', null=True)
+    class Meta:
+        get_latest_by = 'submit_date'
     
     def __unicode__(self):
         return "%s: Selected: %s from state %s" % (self.player, self.state.turn, self.choice)

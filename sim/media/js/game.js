@@ -1,4 +1,5 @@
 gCurrentChoice = 0
+gFinalSubmit = false
 
 function debug(string)
 {
@@ -107,3 +108,30 @@ function saveChoice(control, finalsubmit)
          });
    deferred.addCallbacks(saveChoiceSuccess, saveChoiceError);
 }
+
+function onLoadSuccess(doc)
+{
+   
+}
+
+function onLoadError(err)
+{
+   
+}
+
+function initializeGame()
+{
+   clearMessages()
+   
+   parts = location.href.split('/')
+   groupid = parts[parts.length - 3]
+   url = 'http://' + location.hostname + ':' + location.port + "/sim/player/status/"
+   
+   deferred = doXHR(url, 
+         { 
+            method: 'POST', 
+            sendContent: queryString({'groupid': groupid, 'choiceid': gCurrentChoice, 'final': finalsubmit, 'reasoning': $('reasoning').value})
+         });
+   deferred.addCallbacks(saveChoiceSuccess, saveChoiceError);
+}
+MochiKit.Signal.connect(window, "onload", initializeGame);

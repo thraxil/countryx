@@ -12,19 +12,33 @@
    <script type="text/javascript" src="/sim/media/js/game.js"></script>
 {% endblock %}
 
-
 {% block content %}
-
 {{ block.super }}
 
 <div class="main">
-       <table>
-         <tr style="vertical-align: top">
-            <td>
-               <!--  Player Column -->
-               {% for player in group.sectiongroupplayer_set.all  %}
-	               <table>
-	                 <tr><td colspan="2"><div class="player">{{ player.role.name }}</div></td></tr>
+   <table>
+      <tr style="vertical-align: top">
+         <!--  Column 1 -- Player -->
+         <td >
+            <!--  You -->               
+            {% for player in group.sectiongroupplayer_set.all  %}
+               {% ifequal you player %}
+                  <table>
+                     <tr><td colspan="2"><div class="player_rolename">Your Player: {{ player.role.name }}</div></td></tr>
+                     <tr>
+                        <td colspan="2">
+                           <div id="{{player.role.name}}_description" class="your_description">{{ player.role.description }}</div>
+                        </td>
+                     </tr>
+                  </table>
+               {% endifequal %}
+            {% endfor %}
+               
+            <!--  Everyone Else -->
+            {% for player in group.sectiongroupplayer_set.all  %}
+               {% ifnotequal you player %}
+                  <table>
+                     <tr><td colspan="2"><div class="player_rolename">{{ player.role.name }}</div></td></tr>
 	                  <tr>
 	                     <td>
 	                        <div id="{{player.role.name}}_image" class="player_image"><img src="/sim/media/images/silhouette.jpg"></div>
@@ -32,17 +46,37 @@
 	                     </td>
 	                     <td>
 	                        <div class="character_choice" onclick="toggleCharacterProfile(this, '{{player.role.name}}')">Character<br />Profile</div>
-	                        {% ifnotequal player.user user %}
-	                          <div class="character_choice" onclick="requestOfflineNegotiations(this)">Request<br />Offline<br />Negotiation</div>
-	                        {% endifnotequal %}
-	                        {% group.%}
-	                        <div class="character_choice">Decision<br />Pending</div>
+	                        <div class="character_choice" onclick="requestOfflineNegotiations(this)">Request<br />Offline<br />Negotiation</div>
+	                        <div id="{{player.role.name}}_choice" class="character_choice">
+		                        <!--  forced into this convoluted if/else structure due to django's 
+		                              sorta limited template manipulation syntax.
+		                              limitation on assigning variables in templates -->
+		                        <!--  any turns atall? -->
+		                        {% if player.sectiongroupplayerturn_related_player.latest %}
+		                           <!--  is there a turn for this state? --> 
+		                           {% ifequal state player.sectiongroupplayerturn_related_player.latest.state %}
+		                              <!-- is this their final choice? -->
+		                              {% ifequal None player.sectiongroupplayerturn_related_player.latest.submit_date %}
+		                                 Decision<br/>Pending
+		                              {% else %}
+		                                 Submitted
+		                              {% endifequal %}
+		                           {% else %}
+		                              No Action Taken
+		                           {% endifequal %}
+		                           
+		                        {% else %}
+		                            No Action Taken
+		                        {% endif %}
+	                        </div>
 	                     </td>
 	                  </tr>
-	               </table>
-	            {% endfor %}
+                  </table>
+               {% endifnotequal %}
+            {% endfor %}
             </td>
             <td>
+               <!--  Column 2 -->
                <!--  Country Conditions / Text & Graph -->
                <div id="errorMsg" class="error invisible"></div>
                <div id="successMsg" class="success invisible"></div>
@@ -59,6 +93,7 @@
                </div>
             </td>
             <td>
+               <!-- Column 3 -->
                <!--  Choices / Clock -->
                <div>
                   {% for c in choices %}
