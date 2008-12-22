@@ -5,17 +5,18 @@
 	<br /><br />
 	Administrator Page -- Updated<br />
 	Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})<br /><br />
-	{{ hostname }}:{{port}}
 
 	<table cellpadding="5">
 		<tr><th>Course Title</th><th>Term</th><th>Administrators</th></tr>
 		{% for section in sections %}
-			<tr><td><a href="/sim/faculty/section/{{section.id}}/">{{section.name}}</a></td><td>{{section.term}} {{section.year}}</td>
+			<tr><td>{{section.name}}</td><td>{{section.term}} {{section.year}}</td>
 			<td>
 				{% for admin in section.sectionadministrator_set.all %}
 					{{admin.user.first_name}} {{admin.user.last_name}} ({{admin.user.username}})
 				{% endfor %}
 			</td>
+			
+			<td><a href="/sim/faculty/section/{{section.id}}/">View Groups</a></td>
 			</tr>
 		{% endfor %}
 	

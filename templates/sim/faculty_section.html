@@ -1,32 +1,59 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {{ block.super }}
-    Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})<br /><br />
-    <br /><br />
-    Course Page:<br />
-    {{section.name}} {{section.term}} {{section.year}}<br />
-    <br /><br />
-     
-    {% for group in section.sectiongroup_set.all %}
-    	<b>Group {{ group.name }}</b><br />
-    	<table>
-    		<tr><td>Decision Turn</td><td>Name</td></tr>
-    		{% for groupstate in group.sectiongroupstate_set.all %}
-	    		<tr>
-	    			<td>#{{ groupstate.state.turn }}</td>
-	    			<td>{{ groupstate.state.name }}</td>
-	    			<td>Submitted</td>
-	    		</tr>
-	    	{% endfor %}
-	    		
-	    	{% for player in group.sectiongroupplayer_set.all  %}
-	    		<tr>
-	    			<td/>
-	    			<td><a href="/sim/faculty/player/{{section.id}}/{{group.id}}/{{player.user.id}}">{{ player.user.username }}: {{ player.role.name }}</a></td>
-	    		</tr>
-	    	{% endfor %}
-    	</table>
-    	<br /><br />
-    {% endfor %}
+   {{ block.super }}
+   Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})<br /><br />
+   <br />
+   Course Page:<br />
+   {{section.name}} {{section.term}} {{section.year}}<br />
+   <br />
+    
+   <b>Turn Schedule</b><br />
+   Turn 1: 11/01/08<br />
+   Turn 2: 12/01/08<br />
+   Turn 3: 1/01/09<br />
+   Turn 4: 2/01/09<br />
+   <br />
+   <br />
+    
+   <table>
+      <tr><th>Group</th><th>Turn</th><th> State</th><th>Players</th><th>Status</th></tr>
+      <tr>
+         {% for group in section.sectiongroup_set.all %}
+            <td>{{ group.name }}</td>
+    	      <td>{{ group.sectiongroupstate_set.latest.state.turn }}</td>
+    	      <td>{{ group.sectiongroupstate_set.latest.state.name }}</td>
+    	   
+	         {% for player in group.sectiongroupplayer_set.all %}
+	         	<td>
+	         	   <a href="/sim/faculty/player/{{section.id}}/{{group.id}}/{{player.user.id}}">{{ player.user.username }}: {{ player.role.name }}</a>
+	         	</td>
+	         	<td>
+	         	   {%
+	         	   {% if player.sectiongroupplayerturn_related_player.latest %}
+                     <!--  is there a turn for this state? --> 
+                                 {% ifequal state player.sectiongroupplayerturn_related_player.latest.state %}
+                                    <!-- is this their final choice? -->
+                                    {% ifequal None player.sectiongroupplayerturn_related_player.latest.submit_date %}
+                                       Decision<br/>Pending
+                                    {% else %}
+                                       Submitted
+                                    {% endifequal %}
+                                 {% else %}
+                                    No Action Taken
+                                 {% endifequal %}
+                                 
+                              {% else %}
+                                  No Action Taken
+                              {% endif %}
+	         	
+	         	
+	         	   <a href="/sim/faculty/player/{{section.id}}/{{group.id}}/{{player.user.id}}">{{ player.user.username }}: {{ player.role.name }}</a>
+               </td>   
+	         	</tr><tr><td/><td/><td/>
+		    	{% endfor %}
+		   {% endfor %}
+      </tr>
+   </table>
+   
 {% endblock %}

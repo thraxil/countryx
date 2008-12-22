@@ -48,26 +48,15 @@
 	                        <div class="character_choice" onclick="toggleCharacterProfile(this, '{{player.role.name}}')">Character<br />Profile</div>
 	                        <div class="character_choice" onclick="requestOfflineNegotiations(this)">Request<br />Offline<br />Negotiation</div>
 	                        <div id="{{player.role.name}}_choice" class="character_choice">
-		                        <!--  forced into this convoluted if/else structure due to django's 
-		                              sorta limited template manipulation syntax.
-		                              limitation on assigning variables in templates -->
-		                        <!--  any turns atall? -->
-		                        {% if player.sectiongroupplayerturn_related_player.latest %}
-		                           <!--  is there a turn for this state? --> 
-		                           {% ifequal state player.sectiongroupplayerturn_related_player.latest.state %}
-		                              <!-- is this their final choice? -->
-		                              {% ifequal None player.sectiongroupplayerturn_related_player.latest.submit_date %}
-		                                 Decision<br/>Pending
-		                              {% else %}
-		                                 Submitted
-		                              {% endifequal %}
-		                           {% else %}
-		                              No Action Taken
-		                           {% endifequal %}
-		                           
-		                        {% else %}
-		                            No Action Taken
-		                        {% endif %}
+		                        {% ifequal player.status 0 %}
+		                           No ActionTaken
+		                        {% endifequal %}
+		                        {% ifequal player.status 1 %}
+                                 Decision Pending
+                              {% endifequal %}
+                              {% ifequal player.status 2 %}
+                                 Submitted
+                              {% endifequal %}
 	                        </div>
 	                     </td>
 	                  </tr>

@@ -24,7 +24,7 @@ class State(models.Model):
     #Create a state
     >>> state = State.objects.create(name="Test", turn=1, state_no=1)
     >>> state
-    <State: T1_S1_Test>
+    <State: Turn 1: Test>
     """
     
     turn = models.IntegerField()
@@ -32,7 +32,7 @@ class State(models.Model):
     name = models.CharField(max_length=40)
 
     def __unicode__(self):
-        return "T%s_S%s_%s" % (self.turn, self.state_no, self.name)
+        return "Turn %s: %s" % (self.turn, self.name)
 
     def _countedges(self,myfield,otherfield,extra=''):
         tablename = StateChange._meta.db_table
@@ -161,9 +161,15 @@ class SectionGroupState(models.Model):
     state = models.ForeignKey(State)
     group = models.ForeignKey(SectionGroup)
     date_updated = models.DateTimeField('date updated')
+    class Meta:
+        get_latest_by = 'date_updated'
     
     def __unicode__(self):
         return "%s %s" % (self.state, self.date_updated)
+
+PLAYER_STATUS_NOACTION = 0
+PLAYER_STATUS_PENDING = 1
+PLAYER_STATUS_SUBMITTED = 2
         
 class SectionGroupPlayer(models.Model):
     user = models.ForeignKey(User)
@@ -172,6 +178,20 @@ class SectionGroupPlayer(models.Model):
     
     def __unicode__(self):
         return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
+
+    def status(self):
+        action = PLAYER_STATUS_NOACTION
+        
+        current_state = self.group.sectiongroupstate_set.latest()
+        if (self.sectiongroupplayerturn_related_player.all().count() > 0):
+            turn = self.sectiongroupplayerturn_related_player.latest()
+            if turn and turn.state == self.group.sectiongroupstate_set.latest().state:
+                if turn.submit_date:
+                    action = PLAYER_STATUS_SUBMITTED
+                else:
+                    action = PLAYER_STATUS_PENDING
+                 
+        return action
         
 class SectionGroupPlayerTurn(models.Model):
     player = models.ForeignKey(SectionGroupPlayer, related_name="%(class)s_related_player")
@@ -190,3 +210,5 @@ class SectionGroupPlayerTurn(models.Model):
     
     def is_submitted(self):
         return self.submit_date != None
+
+        
