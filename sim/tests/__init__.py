@@ -1,2 +1,2 @@
-from login import *
-from game import *
+from test_login import *
+from test_game import *

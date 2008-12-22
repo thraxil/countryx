@@ -32,6 +32,9 @@ class GameTestCases(TestCase):
         self.assertEquals(ctx.get('saved_turn'), None)
         self.assertEquals(ctx.get('saved_choice'), None)
         
+        player = group.sectiongroupplayer_set.get(user__id=user.id)
+        self.assertEquals(player.status(), PLAYER_STATUS_NOACTION)
+        
     def test_game_decisionpending(self):
         self._login(self.client, 'playerA', 'aaaa')
         
@@ -60,6 +63,9 @@ class GameTestCases(TestCase):
         self.assertEquals(ctx.get('saved_turn'), turn)
         self.assertEquals(ctx.get('saved_choice'), StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
         
+        player = group.sectiongroupplayer_set.get(user__id=user.id)
+        self.assertEquals(player.status(), PLAYER_STATUS_PENDING)
+        
     def test_game_finalsubmit(self):
         self._login(self.client, 'playerA', 'aaaa')
         
@@ -87,6 +93,9 @@ class GameTestCases(TestCase):
         turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
         self.assertEquals(ctx.get('saved_turn'), turn)
         self.assertEquals(ctx.get('saved_choice'), StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
+        
+        player = group.sectiongroupplayer_set.get(user__id=user.id)
+        self.assertEquals(player.status(), PLAYER_STATUS_SUBMITTED)
                 
     def test_ajax_not_loggedin(self):
         c = self.client
