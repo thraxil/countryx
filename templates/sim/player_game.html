@@ -48,13 +48,13 @@
 	                        <div class="character_choice" onclick="toggleCharacterProfile(this, '{{player.role.name}}')">Character<br />Profile</div>
 	                        <div class="character_choice" onclick="requestOfflineNegotiations(this)">Request<br />Offline<br />Negotiation</div>
 	                        <div id="{{player.role.name}}_choice" class="character_choice">
-		                        {% ifequal player.status 0 %}
+		                        {% ifequal player.status 1 %}
 		                           No ActionTaken
 		                        {% endifequal %}
-		                        {% ifequal player.status 1 %}
+		                        {% ifequal player.status 2 %}
                                  Decision Pending
                               {% endifequal %}
-                              {% ifequal player.status 2 %}
+                              {% ifequal player.status 4 %}
                                  Submitted
                               {% endifequal %}
 	                        </div>
@@ -86,7 +86,7 @@
                <!--  Choices / Clock -->
                <div>
                   <div id="current_choice" class="invisible">{{ saved_turn.choice }}</div>
-                  {% ifequal 0 submit_state %}
+                  {% ifequal 1 submit_state %}
                      Status: <div id="submit_state_desc" class="player_rolename">No Action Taken</div< 
                      <!--  not yet selected -->
                      {% for c in choices %}
@@ -101,7 +101,7 @@
 	                  </div>
                   {% endifequal %}
                
-                  {% ifequal 1 submit_state %}
+                  {% ifequal 2 submit_state %}
                      Status: <div id="submit_state_desc" class="player_rolename">Decision Pending</div<
                      <!--  in draft -->
                      {% for c in choices %}
@@ -120,7 +120,7 @@
                      </div>
                   {% endifequal %}
                   
-                  {% ifequal 2 submit_state %}
+                  {% ifequal 4 submit_state %}
                      Status: <div id="submit_state_desc" class="player_rolename">Final Submit</div>
                      <!--  submitted -->    
                      <div id="{{saved_choice.choice}}" class="player_choice">{{ saved_choice.desc }}</div><br />

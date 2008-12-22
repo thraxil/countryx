@@ -140,6 +140,12 @@ class SectionAdministrator(models.Model):
 ###############################################################################
 ###############################################################################
 
+GROUP_PLAYER_COUNT = 4
+
+GROUP_STATUS_NOACTION = 1
+GROUP_STATUS_PENDING =  2   
+GROUP_STATUS_SUBMITTED = 4
+
 class SectionGroup(models.Model):
     name = models.CharField(max_length=20)
     section = models.ForeignKey(Section)
@@ -147,6 +153,29 @@ class SectionGroup(models.Model):
     def __unicode__(self):
         return "%s: Group %s" % (self.section, self.name)
     
+    def status(self):
+        status = 0
+        players = self.sectiongroupplayer_set.all()
+        for player in players:
+            status += player.status()
+            
+        if (status == PLAYER_STATUS_NOACTION * GROUP_PLAYER_COUNT):
+            return GROUP_STATUS_NOACTION
+        elif (status == PLAYER_STATUS_SUBMITTED * GROUP_PLAYER_COUNT): 
+            return GROUP_STATUS_SUBMITTED
+        else:
+            return GROUP_STATUS_PENDING
+        
+    def maybeUpdateState(self):
+        # are all my players submitted for the current turn?
+        current_state = sectiongroupstate_set.latest().state
+        players = SectionGroupPlayerTurn.objects.filter(player__group=self, state=current_state, submit_date__isnull=False)
+        if players.count() == 4:
+            # everyone has submitted their answers for this turn.
+            # update the game state, and let people advance.
+            print "not doing anything here yet"
+        
+        
 def sectiongroup_post_save(sender, instance, signal, *args, **kwargs):
     states = SectionGroupState.objects.filter(group=instance)
     
@@ -167,9 +196,9 @@ class SectionGroupState(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.state, self.date_updated)
 
-PLAYER_STATUS_NOACTION = 0
-PLAYER_STATUS_PENDING = 1
-PLAYER_STATUS_SUBMITTED = 2
+PLAYER_STATUS_NOACTION  = 1
+PLAYER_STATUS_PENDING   = 2
+PLAYER_STATUS_SUBMITTED = 4
         
 class SectionGroupPlayer(models.Model):
     user = models.ForeignKey(User)

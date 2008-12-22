@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from genocideprevention.sim.models import *
 import simplejson
+import datetime
 
 class GameTestCases(TestCase):
     fixtures = ["test_data.json"]
@@ -17,6 +18,8 @@ class GameTestCases(TestCase):
         user = User.objects.get(username='playerA')
         group = SectionGroup.objects.get(id=1)
         
+        self.assertEquals(group.status(), GROUP_STATUS_NOACTION)
+        
         self._login(self.client, 'playerA', 'aaaa')
         response = self.client.get('/sim/player/game/1/')
         
@@ -28,13 +31,14 @@ class GameTestCases(TestCase):
         self.assertEquals(ctx.get('group'), group)
         self.assertEquals(ctx.get('you'), SectionGroupPlayer.objects.get(user=user))
         
-        self.assertEquals(ctx.get('submit_state'), 0)
+        self.assertEquals(ctx.get('submit_state'), PLAYER_STATUS_NOACTION)
         self.assertEquals(ctx.get('saved_turn'), None)
         self.assertEquals(ctx.get('saved_choice'), None)
         
         player = group.sectiongroupplayer_set.get(user__id=user.id)
         self.assertEquals(player.status(), PLAYER_STATUS_NOACTION)
-        
+        self.assertEquals(group.status(), GROUP_STATUS_NOACTION)
+                
     def test_game_decisionpending(self):
         self._login(self.client, 'playerA', 'aaaa')
         
@@ -57,7 +61,7 @@ class GameTestCases(TestCase):
         self.assertEquals(ctx.get('group'), group)
         self.assertEquals(ctx.get('you'), player)
         
-        self.assertEquals(ctx.get('submit_state'), 1)
+        self.assertEquals(ctx.get('submit_state'), PLAYER_STATUS_PENDING)
         
         turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
         self.assertEquals(ctx.get('saved_turn'), turn)
@@ -65,7 +69,8 @@ class GameTestCases(TestCase):
         
         player = group.sectiongroupplayer_set.get(user__id=user.id)
         self.assertEquals(player.status(), PLAYER_STATUS_PENDING)
-        
+        self.assertEquals(group.status(), GROUP_STATUS_PENDING)
+          
     def test_game_finalsubmit(self):
         self._login(self.client, 'playerA', 'aaaa')
         
@@ -87,8 +92,7 @@ class GameTestCases(TestCase):
         self.assertEquals(ctx.get('user'), user)
         self.assertEquals(ctx.get('group'), group)
         self.assertEquals(ctx.get('you'), player)
-        
-        self.assertEquals(ctx.get('submit_state'), 2)
+        self.assertEquals(ctx.get('submit_state'), PLAYER_STATUS_SUBMITTED)
         
         turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
         self.assertEquals(ctx.get('saved_turn'), turn)
@@ -96,6 +100,7 @@ class GameTestCases(TestCase):
         
         player = group.sectiongroupplayer_set.get(user__id=user.id)
         self.assertEquals(player.status(), PLAYER_STATUS_SUBMITTED)
+        self.assertEquals(group.status(), GROUP_STATUS_PENDING)
                 
     def test_ajax_not_loggedin(self):
         c = self.client

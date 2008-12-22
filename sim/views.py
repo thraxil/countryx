@@ -66,7 +66,7 @@ def __player_index(request):
     return render_to_response("sim/player_index.html", dict(user=request.user, groups=groups))
 
 @login_required
-def game(request, group_id):
+def player_game(request, group_id):
     group = SectionGroup.objects.get(id=group_id)
     current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
     player = group.sectiongroupplayer_set.get(user__id=request.user.id)
@@ -96,7 +96,7 @@ def game(request, group_id):
     return HttpResponse(t.render(c))
 
 @login_required
-def choose(request):
+def player_choose(request):
     response = {}
     try:
         groupid = request.POST.get('groupid', None)
@@ -131,6 +131,8 @@ def choose(request):
             else:
                 response['result'] = 1
                 response['message'] = "Draft has been saved"
+                
+        group.maybeUpdateState()
     except:
         response['result'] = 0
         response['message'] = "An unexpected error occurred. Please try again"
