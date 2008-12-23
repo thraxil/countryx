@@ -29,16 +29,14 @@ class GameTestCases(TestCase):
         ctx = response.context[0]
         self.assertEquals(ctx.get('user'), user)
         self.assertEquals(ctx.get('group'), group)
-        self.assertEquals(ctx.get('you'), SectionGroupPlayer.objects.get(user=user))
         
-        self.assertEquals(ctx.get('submit_state'), PLAYER_STATUS_NOACTION)
-        self.assertEquals(ctx.get('saved_turn'), None)
-        self.assertEquals(ctx.get('saved_choice'), None)
+        your_player = ctx.get('you')
+        self.assertEquals(your_player['model'], SectionGroupPlayer.objects.get(user=user))
         
-        player = group.sectiongroupplayer_set.get(user__id=user.id)
-        self.assertEquals(player.status(), PLAYER_STATUS_NOACTION)
-        self.assertEquals(group.status(), GROUP_STATUS_NOACTION)
-                
+        self.assertEquals(your_player['submit_status'], PLAYER_STATUS_NOACTION)
+        self.assertEquals(your_player['saved_turn'], None)
+        self.assertEquals(your_player['saved_choice'], None)
+        
     def test_game_decisionpending(self):
         self._login(self.client, 'playerA', 'aaaa')
         
@@ -59,17 +57,15 @@ class GameTestCases(TestCase):
         ctx = response.context[0]
         self.assertEquals(ctx.get('user'), user)
         self.assertEquals(ctx.get('group'), group)
-        self.assertEquals(ctx.get('you'), player)
         
-        self.assertEquals(ctx.get('submit_state'), PLAYER_STATUS_PENDING)
+        your_player = ctx.get('you')
+        self.assertEquals(your_player['model'], player)
+        
+        self.assertEquals(your_player['submit_status'], PLAYER_STATUS_PENDING)
         
         turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
-        self.assertEquals(ctx.get('saved_turn'), turn)
-        self.assertEquals(ctx.get('saved_choice'), StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
-        
-        player = group.sectiongroupplayer_set.get(user__id=user.id)
-        self.assertEquals(player.status(), PLAYER_STATUS_PENDING)
-        self.assertEquals(group.status(), GROUP_STATUS_PENDING)
+        self.assertEquals(your_player['saved_turn'], turn)
+        self.assertEquals(your_player['saved_choice'], StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
           
     def test_game_finalsubmit(self):
         self._login(self.client, 'playerA', 'aaaa')
@@ -91,17 +87,15 @@ class GameTestCases(TestCase):
         ctx = response.context[0]
         self.assertEquals(ctx.get('user'), user)
         self.assertEquals(ctx.get('group'), group)
-        self.assertEquals(ctx.get('you'), player)
-        self.assertEquals(ctx.get('submit_state'), PLAYER_STATUS_SUBMITTED)
+        
+        your_player = ctx.get('you')
+        self.assertEquals(your_player['model'], player)
+        self.assertEquals(your_player['submit_status'], PLAYER_STATUS_SUBMITTED)
         
         turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
-        self.assertEquals(ctx.get('saved_turn'), turn)
-        self.assertEquals(ctx.get('saved_choice'), StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
-        
-        player = group.sectiongroupplayer_set.get(user__id=user.id)
-        self.assertEquals(player.status(), PLAYER_STATUS_SUBMITTED)
-        self.assertEquals(group.status(), GROUP_STATUS_PENDING)
-                
+        self.assertEquals(your_player['saved_turn'], turn)
+        self.assertEquals(your_player['saved_choice'], StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
+               
     def test_ajax_not_loggedin(self):
         c = self.client
         response = c.post('/sim/player/choose/', {'groupid': 1, 'choiceid': 1, 'final': 0, 'reasoning': ''})
@@ -146,7 +140,6 @@ class GameTestCases(TestCase):
         self._login(c, 'playerA', 'aaaa')
         
         payload = "groupid=1&choiceid=1&final=1&reasoning=Enter%20your%20reasoning%20here"
-            
         response = c.post('/sim/player/choose/', payload, content_type="text/xml")
         
         doc = simplejson.loads(response.content)
@@ -175,4 +168,24 @@ class GameTestCases(TestCase):
         turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
         self.assertEquals(turn.choice, 1)
         self.assert_(turn.submit_date != None)
-        self.assertEquals(turn.reasoning, 'Enter your reasoning here')
+        self.assertEquals(turn.reasoning, 'Enter your reasoning here')       
+        
+    def test_game_view_past_turn(self):
+        c = self.client
+        self._login(c, 'playerE', 'eeee')
+        
+        # view turn 1 in a game that's already at turn 2
+        response = self.client.get('/sim/player/game/2/1/')
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "sim/player_game.html")
+        
+        ctx = response.context[0]
+        
+        your_player = ctx.get("you")
+        self.assertEquals(your_player['submit_status'], PLAYER_STATUS_SUBMITTED)
+        
+        players = ctx.get('players')
+        for p in players:
+            self.assertEquals(p['submit_status'], PLAYER_STATUS_SUBMITTED)
+        
+        

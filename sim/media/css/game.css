@@ -4,12 +4,33 @@
 	color: #fff;
 }
 
-.scrollable
+.tabs
 {
-   overflow:auto;
+	width: 100%;
+	text-align: center;
+	padding: 3px;
 }
 
-.invisible { display: none; }
+.tab
+{
+   color: gray;
+   background-color: white;
+   border: thin solid gray;
+   width: 400px;
+   text-align: center;
+   padding: 3px;
+}
+
+.activetab
+{
+   color: #302226;
+   background-color: white;
+   border: thick solid #302226;
+   width: 400px;
+   text-align: center;
+   padding: 3;
+}
+
 
 /** Column 1  **/
 

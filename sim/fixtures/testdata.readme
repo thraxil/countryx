@@ -13,6 +13,10 @@ playerA aaaa
 playerB bbbb
 playerC cccc
 playerD dddd
+playerE eeee
+playerF ffff
+playerG gggg
+playerH hhhh
 testuser test
 
 State/Sim Data
@@ -22,10 +26,19 @@ Everything is there
 Sections/Groups
 -----------------------
 Test Spring 2009
+
 > admins -- ccnmtl/testfaculty
-> group -- A
+
+> group -- A -- T1_S1_Start
 playerA - President
-playerB - FirstWordEnvoy
+playerB - FirstWorldEnvoy
 playerC - SubRegionalRep
 playerD - OppositionLeadership
+
+
+> group -- B -- T1_S1_Start, T2_S8_SupportInsurgents
+playerE -- President
+playerF -- FirstWorldEnvoy
+playerG -- SubRegionalRep
+playerH -- OppositionLeadership
 

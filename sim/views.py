@@ -66,30 +66,49 @@ def __player_index(request):
     return render_to_response("sim/player_index.html", dict(user=request.user, groups=groups))
 
 @login_required
-def player_game(request, group_id):
+def player_game(request, group_id, turn_id=0):
     group = SectionGroup.objects.get(id=group_id)
-    current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-    player = group.sectiongroupplayer_set.get(user__id=request.user.id)
-    submit_state = player.status()
     
-    try:
-        saved_turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
-        saved_choice = StateRoleChoice.objects.get(state=current_state, role=player.role, choice=saved_turn.choice)
-    except:
-        saved_turn = None
-        saved_choice = None
+    if turn_id == 0:
+        working_state = group.sectiongroupstate_set.latest().state
+    else:
+        working_state = group.sectiongroupstate_set.get(state__turn=turn_id).state
+    
+    tabs = []
+    for i in range(1, 5):
+        t = { 'id': i, 'activetab': (working_state.turn == i), 'viewable': False }
+        try:
+            group.sectiongroupstate_set.get(state__turn=i).state
+            t['viewable'] = True
+        except:
+            pass
+        tabs.append(t)
         
+    # setup set of special attributes for current user
+    your_player = { 'model': group.sectiongroupplayer_set.get(user__id=request.user.id), 'saved_turn': None, 'saved_choice': None }
+    try:
+        your_player['submit_status'] = your_player['model'].status(working_state)
+        your_player['choices'] = StateRoleChoice.objects.filter(state=working_state, role=your_player['model'].role)
+        your_player['saved_turn'] = SectionGroupPlayerTurn.objects.get(player=your_player['model'], state=working_state)
+        your_player['saved_choice'] = StateRoleChoice.objects.get(state=working_state, role=your_player['model'].role, choice=your_player['saved_turn'].choice)
+    except:
+        pass
+    
+    # setup player list attributes
+    players = []
+    for p in group.sectiongroupplayer_set.all():
+        if (p != your_player['model']):
+            players.append({ 'model' : p, 'submit_status': p.status(working_state) })
+                        
     c = Context({
        'user': request.user,
        'group': group,
-       'you': player,
-       'state': current_state,
-       'country_condition': current_state.statevariable_set.get(name='Country Condition').value,
-       'conditions': __current_conditions(current_state),
-       'choices': StateRoleChoice.objects.filter(state=current_state, role=player.role),
-       'submit_state': submit_state,
-       'saved_turn': saved_turn,
-       'saved_choice': saved_choice 
+       'state': working_state,
+       'country_condition': working_state.statevariable_set.get(name='Country Condition').value,
+       'conditions': __current_conditions(working_state),
+       'tabs': tabs,
+       'players': players,
+       'you': your_player,
     })
     
     t = loader.get_template('sim/player_game.html')
@@ -106,7 +125,7 @@ def player_choose(request):
         
         group = SectionGroup.objects.get(id=groupid)
         player = group.sectiongroupplayer_set.get(user__id=request.user.id)
-        current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
+        current_state = group.sectiongroupstate_set.latest().state
             
         # create or update the player's choice
         try:
@@ -131,8 +150,6 @@ def player_choose(request):
             else:
                 response['result'] = 1
                 response['message'] = "Draft has been saved"
-                
-        group.maybeUpdateState()
     except:
         response['result'] = 0
         response['message'] = "An unexpected error occurred. Please try again"

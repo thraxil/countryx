@@ -91,3 +91,11 @@ ul.tabbernav li.tabberactive a:hover
  padding:0;
  border: 0;
 }
+
+
+.scrollable
+{
+   overflow:auto;
+}
+
+.invisible { display: none; }

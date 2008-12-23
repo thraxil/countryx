@@ -25,4 +25,23 @@ class ModelTestCases(TestCase):
             else:
                 self.assertEquals(GROUP_STATUS_SUBMITTED, group.status())
             count += 1
+            
+    def test_player_status(self):
+        group = SectionGroup.objects.get(id=2)
+        player = SectionGroupPlayer.objects.get(user__username='playerE')
+        
+        states = group.sectiongroupstate_set.all().order_by('state__turn')
+        
+        self.assertEquals(PLAYER_STATUS_SUBMITTED, player.status(states[0].state))
+        self.assertEquals(PLAYER_STATUS_NOACTION, player.status(states[1].state))
+        
+        # create a draft for states[1]
+        turn = SectionGroupPlayerTurn.objects.create(player=player, state=states[1].state, choice=1, reasoning="foobar")
+        self.assertEquals(PLAYER_STATUS_PENDING, player.status(states[1].state))
+        
+        turn.submit_date=datetime.datetime.now()
+        turn.save()
+        self.assertEquals(PLAYER_STATUS_SUBMITTED, player.status(states[1].state))
+        
+            
         

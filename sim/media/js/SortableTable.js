@@ -187,7 +187,9 @@ update(SortableManager.prototype, {
 sortableManager = new SortableManager();
 
 addLoadEvent(function () {
-    sortableManager.initWithTable('sortable_table');
+   table = $('sortable_table')
+   if (table)
+      sortableManager.initWithTable(table);
 });
 
 // rewrite the view-source links

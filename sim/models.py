@@ -154,10 +154,12 @@ class SectionGroup(models.Model):
         return "%s: Group %s" % (self.section, self.name)
     
     def status(self):
+        current_state = self.sectiongroupstate_set.latest().state
+        
         status = 0
         players = self.sectiongroupplayer_set.all()
         for player in players:
-            status += player.status()
+            status += player.status(current_state)
             
         if (status == PLAYER_STATUS_NOACTION * GROUP_PLAYER_COUNT):
             return GROUP_STATUS_NOACTION
@@ -174,17 +176,6 @@ class SectionGroup(models.Model):
             # everyone has submitted their answers for this turn.
             # update the game state, and let people advance.
             print "not doing anything here yet"
-        
-        
-def sectiongroup_post_save(sender, instance, signal, *args, **kwargs):
-    states = SectionGroupState.objects.filter(group=instance)
-    
-    if (len(states) < 1):
-        # Create the initial state in the SectionGroupState table
-        state = State.objects.get(name="Start", turn=1, state_no=1)
-        SectionGroupState.objects.create(state=state, group=instance, date_updated=datetime.date.today())
-    
-models.signals.post_save.connect(sectiongroup_post_save, sender=SectionGroup)
     
 class SectionGroupState(models.Model):
     state = models.ForeignKey(State)
@@ -208,17 +199,19 @@ class SectionGroupPlayer(models.Model):
     def __unicode__(self):
         return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
 
-    def status(self):
+   
+    def status(self, current_state):
         action = PLAYER_STATUS_NOACTION
         
-        current_state = self.group.sectiongroupstate_set.latest()
         if (self.sectiongroupplayerturn_related_player.all().count() > 0):
-            turn = self.sectiongroupplayerturn_related_player.latest()
-            if turn and turn.state == self.group.sectiongroupstate_set.latest().state:
+            try:
+                turn = self.sectiongroupplayerturn_related_player.get(state=current_state)
                 if turn.submit_date:
                     action = PLAYER_STATUS_SUBMITTED
                 else:
                     action = PLAYER_STATUS_PENDING
+            except SectionGroupPlayerTurn.DoesNotExist:
+                pass
                  
         return action
         

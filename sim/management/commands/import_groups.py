@@ -15,6 +15,9 @@ class Command(BaseCommand):
 			group = SectionGroup.objects.get(name=groupname, section=section)
 		except SectionGroup.DoesNotExist:
 			group = SectionGroup.objects.create(name=groupname, section=section)
+			start_state = State.objects.get(turn=1, state=1)
+			SectionGroupState.objects.create(group=group, state=start_state)
+			
 		return group
 		
 	def get_game_role(self, roleName):
