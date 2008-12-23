@@ -1,6 +1,7 @@
 table.datagrid {
     width: 75%;
     border-collapse: collapse;
+    font-size: 12px;
 }
 
 table.datagrid thead th { 

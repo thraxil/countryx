@@ -25,11 +25,45 @@ def __faculty_index(request):
     return render_to_response("sim/faculty_index.html", dict(sections=sections, user=request.user, port=request.META['SERVER_PORT'], hostname=request.META['SERVER_NAME']))
 
 @login_required
-def faculty_section(request, section_id):
+def faculty_section_group(request, section_id):
+    return render_to_response("sim/faculty_section.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
+
+def faculty_section_student(request, section_id):
     return render_to_response("sim/faculty_section.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
 
 @login_required
-def faculty_player(request, section_id, group_id, player_id, updated=False):
+def faculty_group_detail(request, group_id):
+    group = SectionGroup.objects.get(id=group_id)
+    
+    turns = []
+    # for each completed state, list the players and their choices
+    group_states = group.sectiongroupstate_set.order_by('-date_updated')
+    for gs in group_states:
+        # for each player, setup their actions
+        player_turns = []
+        
+        players = group.sectiongroupplayer_set.all()
+        for p in players:
+            try:
+                turn = SectionGroupPlayerTurn.objects.get(player=p, state=gs.state)
+            except SectionGroupPlayerTurn.DoesNotExist:
+                turn = None
+                
+            player_turns.append( { 'model': p, 'turn': turn, 'submit_status': p.status(gs.state) } )
+        
+        turns.append( { 'group_state': gs, 'players': player_turns } )
+       
+    ctx = Context({
+       'user': request.user,
+       'group': group,
+       'turns': turns
+    })
+    
+    template = loader.get_template('sim/faculty_group.html')
+    return HttpResponse(template.render(ctx))
+    
+@login_required
+def faculty_player_detail(request, section_id, group_id, player_id, updated=False):
     section = Section.objects.get(id=section_id)
     group = SectionGroup.objects.get(id=group_id)
     player = group.sectiongroupplayer_set.get(user__id=player_id)

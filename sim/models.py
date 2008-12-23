@@ -154,20 +154,8 @@ class SectionGroup(models.Model):
         return "%s: Group %s" % (self.section, self.name)
     
     def status(self):
-        current_state = self.sectiongroupstate_set.latest().state
-        
-        status = 0
-        players = self.sectiongroupplayer_set.all()
-        for player in players:
-            status += player.status(current_state)
+        return self.sectiongroupstate_set.latest().status()
             
-        if (status == PLAYER_STATUS_NOACTION * GROUP_PLAYER_COUNT):
-            return GROUP_STATUS_NOACTION
-        elif (status == PLAYER_STATUS_SUBMITTED * GROUP_PLAYER_COUNT): 
-            return GROUP_STATUS_SUBMITTED
-        else:
-            return GROUP_STATUS_PENDING
-        
     def maybeUpdateState(self):
         # are all my players submitted for the current turn?
         current_state = sectiongroupstate_set.latest().state
@@ -186,6 +174,19 @@ class SectionGroupState(models.Model):
     
     def __unicode__(self):
         return "%s %s" % (self.state, self.date_updated)
+    
+    def status(self):
+        status = 0
+        players = self.group.sectiongroupplayer_set.all()
+        for player in players:
+            status += player.status(self.state)
+            
+        if (status == PLAYER_STATUS_NOACTION * GROUP_PLAYER_COUNT):
+            return GROUP_STATUS_NOACTION
+        elif (status == PLAYER_STATUS_SUBMITTED * GROUP_PLAYER_COUNT): 
+            return GROUP_STATUS_SUBMITTED
+        else:
+            return GROUP_STATUS_PENDING
 
 PLAYER_STATUS_NOACTION  = 1
 PLAYER_STATUS_PENDING   = 2
