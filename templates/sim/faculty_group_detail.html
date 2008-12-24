@@ -9,12 +9,22 @@
 
 {% block content %}
    {{ block.super }}
-   Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})<br /><br />
-   Group: {{group.name}}<br />
    <br />
+    <table class="datagrid" style="width: 800px">
+      <thead>
+         <tr>
+            <th style="width: 200px"><a href="/sim/faculty/groups/{{section.id}}/">{{section}}</a></th>
+            <th style="width: 200px">Group &mdash; {{ group.name }}</th>
+            <th />
+         </tr>
+      </thead>   
+   </table>
+   <br />
+   
    {% for t in turns %}
-      Turn {{t.group_state.state.turn}} {{t.group_state.state.name}}<br />
-      Status:        
+      <a name="turn{{t.group_state.state.turn}}"/>
+      <h2>Turn {{t.group_state.state.turn}} {{t.group_state.state.name}}</h2>
+      Group Status:        
 	      {% ifequal t.group_state.status 1 %}
 	         No Action Taken
 	      {% endifequal %}
@@ -26,6 +36,8 @@
 	      {% endifequal %}
       <br />
       Updated: {{ t.group_state.date_updated }}<br />
+      Conditions: 
+      <div class="scrollable_text">{% autoescape off %}{{ t.country_condition }}{% endautoescape %}</div>
       <br />
       
       <table id="sortable_table" class="datagrid">
@@ -34,9 +46,10 @@
             <th mochi:format="str">First Name</th>
             <th mochi:format="str">Last Name</th>
             <th mochi:format="str">Uni</th>
+            <th mochi:format="str">Role</th>
             <th mochi:format="str">Status</th>
             <th mochi:format="date">Date Submitted</th>
-            <th mochi:format="int">Choice</th>
+            <th mochi:format="str">Feedback</th>
             <th>Action</th>
          </tr>
       </thead>
@@ -51,6 +64,7 @@
                <td>{{ p.model.user.first_name }}</td>
                <td>{{ p.model.user.last_name }}</td>
                <td>{{ p.model.user.username }}</td>
+               <td>{{ p.model.role.name }}</td>
                <td>
                   {% ifequal p.submit_status 1 %}
                      No Action Taken
@@ -64,10 +78,17 @@
                </td>
 		         {% if p.turn %}
 		            <td>{{ p.turn.submit_date }}</td>
-		            <td>{{ p.turn.choice }}</td>
-		             {% else %}
-		             </td></td>            
+		            <td>
+		               {% if p.turn.feedback %}
+		                  Completed<br />{{ p.turn.feedback_date }}<br />by {{ p.turn.faculty.user }}
+		               {% else %}
+		                  Pending
+		               {% endif %}
+		            </td>
+		         {% else %}
+		             <td/><td/>            
 		         {% endif %}
+		         <td><a href="/sim/faculty/player/{{ group.id }}/{{ p.model.id }}/{{t.group_state.state.id}}/">Detail</a></td>
 		      </tr>
 		    {% endfor %}
 		 </tbody>

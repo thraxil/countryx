@@ -1,0 +1,86 @@
+{% extends "sim/base_sim.html" %}
+
+{% block css %}
+{{ block.super }}
+<style type='text/css'>
+  @import "/sim/media/css/faculty.css";
+</style>
+{% endblock %}
+
+{% block content %}
+   {{ block.super }}
+   
+   <table class="datagrid" style="width: 900px">
+      <thead>
+         <tr>
+            <th style="width: 200px"><a href="/sim/faculty/groups/{{section.id}}/">{{section}}</a></th>
+            <th style="width: 150px"><a href="/sim/faculty/group/{{group.id}}/">Group &mdash; {{ group.name }}</th>
+            <th style="width: 150px"><a href="/sim/faculty/group/{{group.id}}#turn{{state.turn}}">Turn {{ state.turn }} &mdash; {{ state.name }}</a></th>
+            <th>{{ player.role.name }} &mdash; {{ player.user.first_name }} {{ player.user.last_name }} {{ player.user.username }}</th>
+         </tr>
+      </thead>   
+   </table>
+   
+   <table class="datagrid">
+      <tr>
+         <td>
+            <!--  Player information -->
+			   Player Status:        
+			      {% ifequal submit_status 1 %}
+			         No Action Taken
+			      {% endifequal %}
+			      {% ifequal submit_status 2 %}
+			         In Progress
+			      {% endifequal %}
+			      {% ifequal submit_status 4 %}
+			         Completed Turn
+			      {% endifequal %}
+			   <br />
+			   {% if turn %}
+			      Updated: {{ turn.submit_date }}<br />
+			   {% endif %}
+			   <br />
+			   Country Conditions: 
+			   <div class="scrollable_text">{% autoescape off %}{{ country_condition }}{% endautoescape %}</div>
+			   <br />
+		
+				Player Choices:<br />
+				{% for c in choices %}
+				   {% ifequal c.choice turn.choice %}
+				     * <b>{{c.choice}} {{ c.desc }}</b><br />
+				   {% else %}
+				     {{c.choice}} {{ c.desc }}<br />
+				   {% endifequal %}
+				{% endfor %}
+				
+				{% ifequal submit_status 4 %}
+               <br />
+               <br />
+               Player Reasoning:
+               <div class="scrollable_text">{% autoescape off %}{{ turn.reasoning }}{% endautoescape %}</div>
+               <br /><br />
+            {% endifequal %}
+			</td>
+			<td style="vertical-align: top; padding-left: 20px;">
+				{% ifequal submit_status 4 %}
+				   <form action="/sim/faculty/player/{{group.id}}/{{player.id}}/{{state.id}}/" method="POST">
+						<div class="fieldWrapper">
+						   {% if form.feedback.errors %}
+					         <div class="error">Please enter some feedback before submitting.</div>
+					      {% endif %}
+					      {% if updated %}
+					         <div class="success">Your changes have been saved</div>
+					      {% endif %}
+					      <label for="id_feedback">Feedback:</label><br />
+					         {{ form.feedback }}
+					      </div>
+						   <div class="fieldWrapper">
+					         {{ form.faculty_id }}
+				    	   </div>
+				  	<input type="submit" value="Submit" />
+					</form>
+			   {% endifequal %}
+			</td>
+		</tr>
+	</table>		
+{% endblock %}

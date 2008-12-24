@@ -10,9 +10,6 @@
 {% block content %}
 	{{ block.super }}
 	<br /><br />
-	Administrator Page -- Updated<br />
-	Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})<br /><br />
-
 	<table class="datagrid" cellpadding="5">
 		<tr><th>Course Title</th><th>Term</th><th>Administrators</th></tr>
 		{% for section in sections %}
@@ -20,12 +17,12 @@
 				<td>{{section.name}}</td><td>{{section.term}} {{section.year}}</td>
 				<td>
 					{% for admin in section.sectionadministrator_set.all %}
-						{{admin.user.first_name}} {{admin.user.last_name}} ({{admin.user.username}})
+						{{admin.user.first_name}} {{admin.user.last_name}} ({{admin.user.username}})<br />
 					{% endfor %}
 				</td>
 				
-				<td><a href="/sim/faculty/section/group/{{section.id}}/">View by Groups</a></td>
-				<td><a href="/sim/faculty/section/player/{{section.id}}/">View by Student</a></td>
+				<td><a href="/sim/faculty/groups/{{section.id}}/">View by Groups</a></td>
+				<td><a href="/sim/faculty/players/{{section.id}}/">View by Player</a></td>
 			</tr>
 		{% endfor %}
 	

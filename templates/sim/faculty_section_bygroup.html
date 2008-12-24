@@ -9,10 +9,18 @@
 
 {% block content %}
    {{ block.super }}
-   Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})<br /><br />
-   {{section.name}} {{section.term}} {{section.year}}<br />
    <br />
-    
+    <table class="datagrid" style="width: 800px">
+      <thead>
+         <tr>
+            <th style="width: 200px">{{section}}</th>
+            <th />
+            <th />
+         </tr>
+      </thead>   
+   </table>
+   <br />
+   <br />
    <b>Turn Schedule</b><br />
    Turn 1: 11/01/08<br />
    Turn 2: 12/01/08<br />
@@ -53,7 +61,7 @@
 	                     Completed Turn
 	                  {% endifequal %}
 	             </td>
-	             <td><a href="/sim/faculty/groupdetail/{{ group.id }}/">View Detail</a></td>
+	             <td><a href="/sim/faculty/group/{{ group.id }}/">View Detail</a></td>
 	          </tr>
 	      {% endfor %}
 	   </tbody>

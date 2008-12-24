@@ -10,7 +10,7 @@ import simplejson
 
 @login_required
 def root(request):
-    # is the user a student or an administrator?
+    # is the user a player or an administrator?
     qs = SectionAdministrator.objects.filter(user=request.user)
     if (len(qs) > 0):
         return __faculty_index(request)
@@ -25,17 +25,18 @@ def __faculty_index(request):
     return render_to_response("sim/faculty_index.html", dict(sections=sections, user=request.user, port=request.META['SERVER_PORT'], hostname=request.META['SERVER_NAME']))
 
 @login_required
-def faculty_section_group(request, section_id):
-    return render_to_response("sim/faculty_section.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
+def faculty_section_bygroup(request, section_id):
+    return render_to_response("sim/faculty_section_bygroup.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
 
-def faculty_section_student(request, section_id):
-    return render_to_response("sim/faculty_section.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
+def faculty_section_byplayer(request, section_id):
+    return render_to_response("sim/faculty_section_byplayer.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
 
 @login_required
 def faculty_group_detail(request, group_id):
     group = SectionGroup.objects.get(id=group_id)
     
     turns = []
+    
     # for each completed state, list the players and their choices
     group_states = group.sectiongroupstate_set.order_by('-date_updated')
     for gs in group_states:
@@ -50,44 +51,64 @@ def faculty_group_detail(request, group_id):
                 turn = None
                 
             player_turns.append( { 'model': p, 'turn': turn, 'submit_status': p.status(gs.state) } )
-        
-        turns.append( { 'group_state': gs, 'players': player_turns } )
+            
+        conditions = gs.state.statevariable_set.get(name='Country Condition').value
+        turns.append( { 'group_state': gs, 'players': player_turns, 'country_condition': conditions } )
        
     ctx = Context({
        'user': request.user,
        'group': group,
-       'turns': turns
+       'turns': turns,
+       'section': group.section,
     })
     
-    template = loader.get_template('sim/faculty_group.html')
+    template = loader.get_template('sim/faculty_group_detail.html')
     return HttpResponse(template.render(ctx))
     
 @login_required
-def faculty_player_detail(request, section_id, group_id, player_id, updated=False):
-    section = Section.objects.get(id=section_id)
+def faculty_player_detail(request, group_id, player_id, state_id, updated=False):
     group = SectionGroup.objects.get(id=group_id)
-    player = group.sectiongroupplayer_set.get(user__id=player_id)
-    current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-    choices = StateRoleChoice.objects.filter(state=current_state, role=player.role)
-    player_turn = None
+    player = SectionGroupPlayer.objects.get(id=player_id)
+    state = State.objects.get(id=state_id)
+    feedback = None
+    
+    try:
+        turn = SectionGroupPlayerTurn.objects.get(player=player, state=state)
+        feedback = turn.feedback
+    except SectionGroupPlayerTurn.DoesNotExist:
+        turn = None
         
     if (request.method == 'POST'):
         form = FeedbackForm(request.POST)
         if (form.is_valid()):
             # Process the data in form.cleaned_data
-            player_turn = SectionGroupPlayerTurn.objects.filter(player=player, state=current_state)
-            player_turn.feedback = form.cleaned_data['feedback']
-            player_turn.faculty = SectionAdministrator.objects.get(section=section, user__id=form.cleaned_data['faculty_id'])
-            player_turn.save()
-            
-            redirect_url = 'sim/faculty/player/%s/%s/%s/%s' % (section_id, group_id, player_id, 1)
+            turn.feedback = form.cleaned_data['feedback']
+            turn.feedback_date = datetime.datetime.now()
+            turn.faculty = SectionAdministrator.objects.get(section=group.section, user__id=form.cleaned_data['faculty_id'])
+            turn.save()
+                        
+            redirect_url = '/sim/faculty/player/%s/%s/%s/1/' % (group_id, player_id, state_id)
             return HttpResponseRedirect(redirect_url)
     else:
-        form = FeedbackForm(initial={'faculty_id': request.user.id})
-        
-    return render_to_response("sim/faculty_player.html", 
-        dict(user=request.user, section=section, group=group, player=player, choices=choices, player_turn=player_turn, form=form, updated=updated))
+        form = FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback })
+
+    ctx = Context({
+       'user': request.user,
+       'group': group,
+       'section': group.section,
+       'player': player,
+       'state': state,
+       'turn': turn,
+       'submit_status': player.status(state),
+       'choices': StateRoleChoice.objects.filter(state=state, role=player.role),
+       'country_condition': state.statevariable_set.get(name='Country Condition').value,
+       'form': form,
+       'updated': updated
+    })
     
+    template = loader.get_template('sim/faculty_player_detail.html')
+    return HttpResponse(template.render(ctx))
+  
 class FeedbackForm(forms.Form):
     feedback = forms.CharField(widget=forms.Textarea)
     faculty_id = forms.IntegerField(widget=forms.HiddenInput)    
@@ -199,7 +220,6 @@ def __current_conditions(state):
     conditions.append(state.statevariable_set.get(name='Political Discourse'))
     conditions.append(state.statevariable_set.get(name='Weapons Flow'))
     return conditions
-
 #
 #@login_required
 #def narrative(request, group_id, user_id):
