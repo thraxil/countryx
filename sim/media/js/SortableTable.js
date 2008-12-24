@@ -113,7 +113,7 @@ update(SortableManager.prototype, {
         }
 
         // do initial sort on first column
-        this.drawSortedRows(this.sortkey, true, false);
+        this.drawSortedRows(this.sortkey, true, true);
 
     },
 
