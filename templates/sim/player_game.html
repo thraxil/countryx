@@ -1,7 +1,7 @@
 {% extends "sim/base_sim.html" %}
 
 {% load range_node %}
-
+{% load iflessthan %}
 
 {% block css %}
 {{ block.super }}
@@ -86,7 +86,7 @@
                <div class="country_conditions_graph">
                   {% for condition in conditions %}
                      <table cellpadding="0" cellspacing="0">
-                        <tr><td rowspan="5" class="condition_row_name">{{condition.name}}</td></tr>
+                        <tr><td rowspan="5" class="condition_row_name">{{condition.name}}&nbsp;</td></tr>
                         <tr>
                             {% num_range 10 as row_count %}
 								    
@@ -97,12 +97,16 @@
 								         <td class="condition_row_dummy">&nbsp;</td>
 								      {% endifequal %}
 								    {% endfor %}
-                       </tr>
+                        </tr>
                         <tr>
                            {% num_range 9 as row_count %}
                             
                            {% for i in row_count %}
-                              <td class="condition_row_block">&nbsp;</td>
+                              {% iflessthan i condition.value %}
+                                 <td class="condition_row_block_filled">&nbsp;</td>
+                              {% else %}
+                                 <td class="condition_row_block_empty">&nbsp;</td>
+                              {% endiflessthan %}
                            {% endfor %}
                        </tr>
                        <tr>

@@ -141,13 +141,12 @@
 	width: 75px;
    font-size: 12px;
    font-family: "lucida grande",Verdana,Helvetica,Arial,sans-serif;
-   border: black 1px solid;
+   border-bottom: black 1px solid;
    text-align: center;
-   border-spacing: 2px;
-   padding: 2px;
+   border-right:  black 1px solid;
 }
 
-.condition_row_block
+.condition_row_block_filled
 {
 	width: 40px;
 	height: 100%;
@@ -155,6 +154,17 @@
 	font-size: 6px;	
 	padding: 0px;
 	border-spacing: 0px;
+	background-color: darkgray;
+}
+
+.condition_row_block_empty
+{
+   width: 40px;
+   height: 100%;
+   border: black 1px solid;
+   font-size: 6px;   
+   padding: 0px;
+   border-spacing: 0px;
 }
 
 .condition_row_dummy
@@ -175,6 +185,7 @@
    text-align: center;
    border: black 1px solid;
    border-spacing: 0px;
+   background-color: darkgray;
 }
 
 .condition_row_description
@@ -193,6 +204,14 @@
 }
 
 /** Column 3 **/
+
+.time
+{
+   color: #fff;
+   padding: 5px;
+   border-spacing: 5px;
+   font-size: 12px;
+}
 
 .player_choice
 {
