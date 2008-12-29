@@ -147,8 +147,7 @@
    padding: 2px;
 }
 
-.condition_row_block_filled,
-.condition_row_block_empty
+.condition_row_block
 {
 	width: 40px;
 	height: 100%;
@@ -156,11 +155,6 @@
 	font-size: 6px;	
 	padding: 0px;
 	border-spacing: 0px;
-}
-
-.condition_row_block_filled
-{
-	background-color: red;
 }
 
 .condition_row_dummy
