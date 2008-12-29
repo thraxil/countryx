@@ -29,7 +29,17 @@ def faculty_section_bygroup(request, section_id):
     return render_to_response("sim/faculty_section_bygroup.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
 
 def faculty_section_byplayer(request, section_id):
-    return render_to_response("sim/faculty_section_byplayer.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
+    section = Section.objects.get(id=section_id)
+    all_players = SectionGroupPlayer.objects.filter(group__section=section)
+    
+    ctx = Context({
+       'user': request.user,
+       'section': section,
+       'players': all_players,
+    })
+    
+    template = loader.get_template('sim/faculty_section_byplayer.html')
+    return HttpResponse(template.render(ctx))
 
 @login_required
 def faculty_group_detail(request, group_id):
@@ -213,12 +223,30 @@ def player_choose(request):
                 
 def __current_conditions(state):
     conditions = []
-    conditions.append(state.statevariable_set.get(name='Levels of Violence'))
-    conditions.append(state.statevariable_set.get(name='Country\'s Economy'))
-    conditions.append(state.statevariable_set.get(name='Prestige'))
-    conditions.append(state.statevariable_set.get(name='Awareness'))
-    conditions.append(state.statevariable_set.get(name='Political Discourse'))
-    conditions.append(state.statevariable_set.get(name='Weapons Flow'))
+    
+    var = state.statevariable_set.get(name='Violence Level')
+    dict = { 'name': var.name, 'value': int(var.value), 'least': 'non-violent', 'most': 'genocide' }
+    conditions.append(dict)
+    
+    var = state.statevariable_set.get(name='Economy')
+    dict = { 'name': var.name, 'value': int(var.value), 'least': 'stable', 'most': 'depression'  }
+    conditions.append(dict)
+    
+    var = state.statevariable_set.get(name='Prestige')
+    dict = { 'name': var.name, 'value': int(var.value), 'least': 'respected world player', 'most': 'globally isolated'  }
+    conditions.append(dict)
+    
+    var = state.statevariable_set.get(name='Awareness')
+    dict = { 'name': var.name, 'value': int(var.value), 'least': 'regular media coverage', 'most': 'zero media coverage'  }
+    conditions.append(dict)
+    
+    var = state.statevariable_set.get(name='Political Discourse')
+    dict = { 'name': var.name, 'value': int(var.value), 'least': 'free and open system', 'most': 'state control of information'  }
+    conditions.append(dict)
+    
+    var = state.statevariable_set.get(name='Weapons Flow')
+    dict = { 'name': var.name, 'value': int(var.value), 'least': 'minimal/no weapons smuggling', 'most': 'uncontrolled weapons smuggling'  }
+    conditions.append(dict)
     return conditions
 #
 #@login_required

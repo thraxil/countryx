@@ -4,35 +4,42 @@
     {{ block.super }}
     
     <br /><br />
-    User & Groups Page<br />
-    Welcome {{ user.first_name }} {{ user.last_name }} ({{ user.username }})
+    Welcome to Country X
     <br /><br />
         
     {% if not groups %}
     	You currently are not participating in any games. Please contact the administrator
     	<br />
     {% else %}
-    
+   
 	    {% for group in groups %}
-	    	Group: {{ group.name }}<br />
-	    	
+	       <table class="datagrid" style="width: 800px">
+		      <thead>
+		         <tr>
+		            <th style="width: 200px">{{group.section}}</th>
+		            <th style="width: 200px">Group &mdash; {{ group.name }}</th>
+		            <th />
+		         </tr>
+		      </thead>   
+		   </table>
+	      
+	      You are playing the role of the 
+		    	
+		   {% for player in group.sectiongroupplayer_set.all  %}
+	         {% ifequal player.user user %}
+	            {{ player.role.name }}<br />
+            {% endifequal %}
+         {% endfor %}
+		   <br />
 	    	{% for player in group.sectiongroupplayer_set.all  %}
 	    	    {% ifequal player.user user %}
-	    	    	<b>{{ player.user.username }}: {{ player.role.name }}</b><br />
+	    	    	<!--  ignore -->
 	    	    {% else %}
 	    	    	{{ player.user.username }}: {{ player.role.name }}<br />
 	    	    {% endifequal %}
 	    	{% endfor %}
-	    	
-	        {% for player in group.sectiongroupplayer_set.all  %}
-	    	    {% ifequal player.user user %}
-	    	        {% for turn in player.sectiongroupplayerturn_set.all %}
-	    	        	{{ turn.choice }}{{ turn.date_submitted }}
-	    	        {% endfor %}
-	    	    {% endifequal %}
-	    	{% endfor %}
-	    	
-	    	<a href="/sim/player/game/{{group.id}}/">Continue</a>
+	    	<br />
+	    	<a href="/sim/player/game/{{group.id}}/">Play The Game</a>
 	    	<hr />
 	    {% endfor %}
 	 {% endif %}      

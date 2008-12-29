@@ -9,4 +9,49 @@
 
 {% block content %}
    {{ block.super }}
+   <br />
+   <table class="datagrid" style="width: 800px">
+      <thead>
+         <tr>
+            <th style="width: 200px">{{section}}</th>
+            <th />
+            <th />
+         </tr>
+      </thead>   
+   </table>
+   <br />
+   <br />
+   
+   <table class="datagrid">
+      <thead>
+         <tr>
+            <th mochi:format="str">CurrentStatus</th>
+            <th mochi:format="str">Name</th>
+            <th mochi:format="str">Uni</th>
+            <th mochi:format="str">Group</th>
+            <th mochi:format="str">Role</th>
+            <th>Action</th>
+         </tr>
+      </thead>
+      <tfoot class="invisible">
+          <tr>
+              <td colspan="0"></td>
+          </tr>
+      </tfoot>
+      <tbody>
+         {% for player in players %}
+	         <tr>
+	            <td>{{ player.current_status }}</td>
+	            <td>{{ player.user.first_name }} {{ player.user.last_name }}</td>
+	            <td>{{ player.user.username }}</td>
+	            <td>{{ player.group.name }}</td>
+	            <td>{{ player.role.name }}</td>
+	            <td></td>
+	         </tr>
+	         <tr>
+               <td colspan="6">Foo</td>
+            </tr>
+         {% endfor %}
+      </tbody>
+   </table>
 {% endblock %}

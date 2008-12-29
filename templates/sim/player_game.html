@@ -1,5 +1,8 @@
 {% extends "sim/base_sim.html" %}
 
+{% load range_node %}
+
+
 {% block css %}
 {{ block.super }}
 <style type='text/css'>
@@ -14,39 +17,30 @@
 
 {% block content %}
 {{ block.super }}
-<br />
-<div id="tabs" class="tabs">
-	{% for t in tabs %}
-	  <span id="turn{{t.id}}" class="{% if t.activetab %} activetab {% else %} tab {% endif %}">
-	     {%if t.viewable %}
-	        <a href="/sim/player/game/{{group.id}}/{{t.id}}/">Turn {{t.id}}</a>
-	     {% else %}
-	        Turn {{t.id}}
-	     {% endif %}
-	  </span>
-	{% endfor %}
-</div>
+
 <div class="main">
    <table>
-      <tr style="vertical-align: top">
+      <tr>
          <!--  Column 1 -- Player -->
-         <td >
+         <td  class="column1">
             <!--  You -->    
             <table>
-               <tr><td colspan="2"><div class="player_rolename">Your Player: {{ you.model.role.name }}</div></td></tr>
+               <tr>
+                  <td colspan="2"><div class="section_header">REPRESENTATIVE PROFILES</div></td>
+               </tr>
+
+               <tr><td colspan="2"><div class="player_rolename">{{ you.model.role.name }} (You)</div></td></tr>
                <tr>
                   <td colspan="2">
                      <div id="{{you.model.role.name}}_description" class="your_description scrollable">{{ you.model.role.description }}</div>
                   </td>
                </tr>
-            </table>
-               
-            <!--  Everyone Else -->
-            {% for player in players %}
-                 <table>
-                    <tr><td colspan="2"><div class="player_rolename">{{ player.model.role.name }}</div></td></tr>
+                     
+               <!--  Everyone Else -->
+               {% for player in players %}
+                  <tr><td colspan="2"><div class="player_rolename">{{ player.model.role.name }}</div></td></tr>
                   <tr>
-                     <td>
+                     <td width="100%">
                         <div id="{{player.model.role.name}}_image" class="player_image"><img src="/sim/media/images/silhouette.jpg"></div>
                         <div id="{{player.model.role.name}}_description" class="player_description invisible">{{ player.model.role.description }}</div>
                      </td>
@@ -66,34 +60,85 @@
                         </div>
                      </td>
                   </tr>
-                 </table> 
-            {% endfor %}
+               {% endfor %}
+            </table> 
             
             </td>
-            <td>
+            <td class="column2">
                <!--  Column 2 -->
-               <!--  Country Conditions / Text & Graph -->
-               <div class="country_conditions">
-                  <div class="country_state">Current Country Conditions: {{ state }}</div>
-                  <div class="country_conditions_textarea scrollable">{% autoescape off %}{{ country_condition }}{% endautoescape %}</div>
-               </div>
-              
+               
+               <!--  Turn Tabs -->
+               <div id="tabs" class="tabs">
+	               {% for t in tabs %}
+	                 <span id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} activetab {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} futureturn {% endif %}">
+	                    {%if t.viewable %}
+	                       <a href="/sim/player/game/{{group.id}}/{{t.id}}/">Turn {{t.id}}</a>
+	                    {% else %}
+	                       Turn {{t.id}}
+	                    {% endif %}
+	                 </span>
+	               {% endfor %}
+	            </div>
+               
+               <div class="section_header">CURRENT COUNTRY CONDITIONS &mdash; {{ state }}</div>
+               <br />
+               
                <div class="country_conditions_graph">
                   {% for condition in conditions %}
-			            {{ condition.name }}: {{ condition.value }}<br />
-			         {% endfor %}
+                     <table cellpadding="0" cellspacing="0">
+                        <tr><td rowspan="5" class="condition_row_name">{{condition.name}}</td></tr>
+                        <tr>
+                            {% num_range 10 as row_count %}
+								    
+								    {% for i in row_count %}
+								      {% ifequal i condition.value %}
+								         <td class="condition_row_indicator" rowspan="2">{{condition.value}}</td>
+								      {% else %}
+								         <td class="condition_row_dummy">&nbsp;</td>
+								      {% endifequal %}
+								    {% endfor %}
+                       </tr>
+                        <tr>
+                           {% num_range 9 as row_count %}
+                            
+                           {% for i in row_count %}
+                              {% if i|
+                              <td class="condition_row_block">&nbsp;</td>
+                           {% endfor %}
+                       </tr>
+                       <tr>
+                           <td colspan="5" class="condition_row_description" style="text-align: left">{{condition.least}}</td>
+                           <td colspan="5" class="condition_row_description" style="text-align: right">{{condition.most}}</td>
+                       </tr>
+                       <tr><td class="condition_row_description" colspan="11">&nbsp;</td></tr>
+                       
+                     </table>
+                  {% endfor %}
                </div>
+               <br />
+               
+               <!--  Country Conditions / Text & Graph -->
+               <div class="country_conditions">
+                  <div class="country_conditions_textarea scrollable">
+                     <b>Economic and Political Snapshot</b><br/><br />
+                     {% autoescape off %}{{ country_condition }}{% endautoescape %}
+                  </div>
+               </div>
+
             </td>
-            <td>
+            <td class="column3">
+               <!-- Column 3 -->
+               
+               <div class="section_header">YOUR OPTIONS</div>
+               
                <div id="errorMsg" class="error invisible"></div>
                <div id="successMsg" class="success invisible"></div>
                
-               <!-- Column 3 -->
                <!--  Choices / Clock -->
                <div>
                   <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
                   {% ifequal 1 you.submit_status %}
-                     Status: <div id="submit_state_desc" class="player_rolename">No Action Taken</div< 
+                     <div id="submit_state_desc" class="player_rolename">Status: No Action Taken</div< 
                      <!--  not yet selected -->
                      {% for c in you.choices %}
                         <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
@@ -108,7 +153,7 @@
                   {% endifequal %}
                
                   {% ifequal 2 you.submit_status %}
-                     Status: <div id="submit_state_desc" class="player_rolename">Decision Pending</div<
+                     <div id="submit_state_desc" class="player_rolename">Status: Decision Pending</div<
                      <!--  in draft -->
                      {% for c in you.choices %}
                         {% ifequal c.choice you.saved_choice.choice %}
@@ -127,7 +172,7 @@
                   {% endifequal %}
                   
                   {% ifequal 4 you.submit_status %}
-                     Status: <div id="submit_state_desc" class="player_rolename">Final Submit</div>
+                     <div id="submit_state_desc" class="player_rolename">Final Submit</div>
                      <!--  submitted -->    
                      <div id="{{you.saved_choice.choice}}" class="player_choice">{{ you.saved_choice.desc }}</div><br />
 	                  <div id="reasoning_form" style="display: block">

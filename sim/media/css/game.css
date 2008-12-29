@@ -2,19 +2,34 @@
 {
 	background-color: #000;
 	color: #fff;
+	width: 1024px;
+	height: 668px;
+	border: white 1px dashed;
 }
 
 .tabs
 {
 	width: 100%;
 	text-align: center;
-	padding: 3px;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-bottom: 10px;
 }
 
-.tab
+.viewableturn
+{
+	color: #302226;
+   background-color: lightgray;
+   border: thin solid #302226;
+   width: 400px;
+   text-align: center;
+   padding: 3px;
+}
+
+.futureturn
 {
    color: gray;
-   background-color: white;
+   background-color: darkgray;
    border: thin solid gray;
    width: 400px;
    text-align: center;
@@ -25,12 +40,39 @@
 {
    color: #302226;
    background-color: white;
-   border: thick solid #302226;
+   border: thin solid #302226;
    width: 400px;
    text-align: center;
-   padding: 3;
+   padding: 3px;
 }
 
+.section_header
+{
+   background-color: #CCCCCC;
+   text-align: center;
+   cursor: pointer;
+   font-size: 10px;
+   border: black 1px solid;
+   color: black;  
+}
+
+.column1
+{
+    vertical-align: top;
+    width: 27%;
+}
+
+.column2
+{
+    vertical-align: top;
+    width: 45%;
+}
+
+.column3
+{
+    vertical-align: top;
+    width: 27%;
+}
 
 /** Column 1  **/
 
@@ -41,14 +83,11 @@
 	font-size: 12px;
 }
 
-.player_description
+.player_description,  
+.your_description,
+.player_image
 {
-	background-color: #000;
-   color: #fff;
-   font-size: 10px;
-   width: 150px;
-   height: 100px;
-   border: white 1px solid;
+   height: 130px;
 }
 
 .your_description
@@ -56,20 +95,22 @@
    background-color: #000;
    color: #fff;
    font-size: 10px;
-   width: 235px;
-   height: 100px;
+   border: white 1px solid;
+}
+
+.player_description
+{
+	background-color: #000;
+   color: #fff;
+   font-size: 10px;
    border: white 1px solid;
 }
 
 .player_image
 {
-   width: 150px;
-   height: 100px;
-   text-align: center;
+	text-align: center;
    vertical-align: middle;
    border: black 1px solid;
-   border-spacing: 2px;
-   padding: 2px;
 }
 
 .character_choice
@@ -86,38 +127,78 @@
 
 /** Column 2 **/
 
-.country_conditions
+.country_conditions,
+.country_conditions_graph
 {
 	background-color: #fff;
 	color: #000;
-	vertical-align: middle; 
+	vertical-align: middle;
+	width: 100%;
+}
+
+.condition_row_name
+{
+	width: 75px;
+   font-size: 12px;
+   font-family: "lucida grande",Verdana,Helvetica,Arial,sans-serif;
+   border: black 1px solid;
+   text-align: center;
+   border-spacing: 2px;
+   padding: 2px;
+}
+
+.condition_row_block_filled,
+.condition_row_block_empty
+{
+	width: 40px;
+	height: 100%;
+	border: black 1px solid;
+	font-size: 6px;	
+	padding: 0px;
+	border-spacing: 0px;
+}
+
+.condition_row_block_filled
+{
+	background-color: red;
+}
+
+.condition_row_dummy
+{
+   width: 40px;
+   height: 100%;
+   font-size: 16px;   
+   padding: 0px;
+   border-spacing: 0px;
+}
+
+.condition_row_indicator
+{
+   width: 40px;
+   height: 100%;
+   font-size: 14px;   
+   padding: 0px;
+   text-align: center;
+   border: black 1px solid;
+   border-spacing: 0px;
+}
+
+.condition_row_description
+{
+	font-size: 10px;
 }
 
 .country_conditions_textarea
 {
-   width: 400px;
-   height: 300px;
+   height: 200px;
    font-size: 12px;
    font-family: "lucida grande",Verdana,Helvetica,Arial,sans-serif;
    padding: 10px 10px 10px 10px;
    border-spacing: 5px;
-}
-
-.country_state
-{
-   background-color: #CCCCCC;
-   text-align: center;
-   cursor: pointer;
-   font-size: 10px;
    border: black 1px solid;
-   color: black;	
 }
 
-.country_conditions_graph
-{
-   background-color: #000;
-   color: #fff;
-}
+/** Column 3 **/
 
 .player_choice
 {
@@ -128,11 +209,10 @@
    border-spacing: 5px;
    font-size: 12px;
    cursor: pointer;
-   width: 200px;
 }
 
 .reasoning
 {
 	width: 100%;
 	height: 200px;
-}
+} 

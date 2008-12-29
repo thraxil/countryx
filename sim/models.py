@@ -106,10 +106,10 @@ class StateVariable(models.Model):
     state = models.ForeignKey(State)
     name = models.CharField(max_length=20)
     value = models.TextField()
-    
+        
     def __unicode__(self):
         return "[%s] %s: %s" % (self.state, self.name, self.value)
-    
+        
 class StateRoleChoice(models.Model):
     state = models.ForeignKey(State)
     role = models.ForeignKey(Role)
@@ -200,6 +200,9 @@ class SectionGroupPlayer(models.Model):
     def __unicode__(self):
         return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
 
+    def current_state(self):
+        current_state = group.sectiongroupstate_set.latest()
+        return status(current_state)
    
     def status(self, current_state):
         action = PLAYER_STATUS_NOACTION
