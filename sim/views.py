@@ -236,10 +236,10 @@ class TurnManagementForm(forms.Form):
     section_term = forms.CharField()
     section_year = forms.CharField()
     
-    turn1 = DateTimeFieldEx(widget=AdminSplitDateTime, required=True)
-    turn2 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False)
-    turn3 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False)
-    turn4 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False)
+    turn1 = DateTimeFieldEx(widget=AdminSplitDateTime, required=True, label="Turn 1 Close Date")
+    turn2 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False, label="Turn 2 Close Date")
+    turn3 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False, label="Turn 3 Close Date")
+    turn4 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False, label="Turn 4 Close Date")
     
     def __compare(self, cleaned_data, fieldOne, fieldTwo, labelOne, labelTwo):
         if (fieldTwo in cleaned_data and not cleaned_data[fieldTwo] in EMPTY_VALUES): 
