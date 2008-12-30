@@ -1,25 +1,13 @@
-{% extends "sim/base_sim.html" %}
+{% extends "sim/base_faculty.html" %}
 
-{% block css %}
-{{ block.super }}
-<style type='text/css'>
-  @import "/sim/media/css/faculty.css";
-</style>
+{% block breadcrumbs %}
+   <a href="/sim/">Home</a> >
+   <a href="/sim/faculty/groups/{{section.id}}/">{{section}}</a> >
+   Group {{ group.name }}
 {% endblock %}
 
 {% block content %}
    {{ block.super }}
-   <br />
-    <table class="datagrid" style="width: 800px">
-      <thead>
-         <tr>
-            <th style="width: 200px"><a href="/sim/faculty/groups/{{section.id}}/">{{section}}</a></th>
-            <th style="width: 200px">Group &mdash; {{ group.name }}</th>
-            <th />
-         </tr>
-      </thead>   
-   </table>
-   <br />
    
    {% for t in turns %}
       <a name="turn{{t.group_state.state.turn}}"/>
@@ -87,7 +75,7 @@
 		                  Pending
 		               {% endif %}
 		            </td>
-		            <td><a href="/sim/faculty/player/{{ group.id }}/{{ p.model.id }}/{{t.group_state.state.id}}/">Detail</a></td>
+		            <td><a href="/sim/faculty/player/turn/{{ group.id }}/{{ p.model.id }}/{{t.group_state.state.id}}/">Detail</a></td>
 		         {% else %}
 		             <td/><td/><td/>
 		         {% endifequal %}

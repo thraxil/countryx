@@ -1,34 +1,20 @@
-{% extends "sim/base_sim.html" %}
+{% extends "sim/base_faculty.html" %}
 
-{% block css %}
-{{ block.super }}
-<style type='text/css'>
-  @import "/sim/media/css/faculty.css";
-</style>
+{% block breadcrumbs %}
+   <a href="/sim/">Home</a> > {{section}}
 {% endblock %}
 
 {% block content %}
    {{ block.super }}
-   <br />
-   <table class="datagrid" style="width: 800px">
-      <thead>
-         <tr>
-            <th style="width: 200px">{{section}}</th>
-            <th />
-            <th />
-         </tr>
-      </thead>   
-   </table>
-   <br />
-   <br />
    
-   <table class="datagrid">
+   <table id="sortable_table" class="datagrid">
       <thead>
          <tr>
-            <th mochi:format="str">CurrentStatus</th>
+            <th mochi:format="str">Player Status</th>
+            <th mochi:format="str">Group</th>
+            <th mochi:format="str">Group Turn</th>
             <th mochi:format="str">Name</th>
             <th mochi:format="str">Uni</th>
-            <th mochi:format="str">Group</th>
             <th mochi:format="str">Role</th>
             <th>Action</th>
          </tr>
@@ -41,16 +27,26 @@
       <tbody>
          {% for player in players %}
 	         <tr>
-	            <td>{{ player.current_status }}</td>
-	            <td>{{ player.user.first_name }} {{ player.user.last_name }}</td>
+	            <td>
+		            {% ifequal player.current_status 1 %}
+	                   No Action Taken
+	               {% endifequal %}
+	               
+	               {% ifequal player.current_status 2 %}
+	                   Choice Pending
+	               {% endifequal %}
+	               
+	               {% ifequal player.current_status 4 %}
+	                  Submitted      
+	               {% endifequal %}
+	            </td>
+	            <td>{{ player.group.sectiongroupstate_set.latest.state.turn  }}</td>
+               <td>{{ player.group.name }}</td>
+               <td>{{ player.user.first_name }} {{ player.user.last_name }}</td>
 	            <td>{{ player.user.username }}</td>
-	            <td>{{ player.group.name }}</td>
 	            <td>{{ player.role.name }}</td>
-	            <td></td>
+	            <td><a href="/sim/faculty/player/{{ group.id }}/{{ p.model.id }}/{{t.group_state.state.id}}/">Detail</a></td>
 	         </tr>
-	         <tr>
-               <td colspan="6">Foo</td>
-            </tr>
          {% endfor %}
       </tbody>
    </table>

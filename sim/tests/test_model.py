@@ -6,12 +6,12 @@ import datetime
 class ModelTestCases(TestCase):
     fixtures = ["test_data.json"]
     
-    def test_group_status_noaction(self):
+    def _test_group_status_noaction(self):
         # update the data manually to setup this test
         group = SectionGroup.objects.get(id=1)
         self.assertEquals(GROUP_STATUS_NOACTION, group.status())
             
-    def test_group_status_pending_submitted(self):
+    def _test_group_status_pending_submitted(self):
         # update the data manually to setup this test
         group = SectionGroup.objects.get(id=1)
         current_state = group.sectiongroupstate_set.latest().state
@@ -26,7 +26,7 @@ class ModelTestCases(TestCase):
                 self.assertEquals(GROUP_STATUS_SUBMITTED, group.status())
             count += 1
             
-    def test_player_status(self):
+    def _test_player_status(self):
         group = SectionGroup.objects.get(id=2)
         player = SectionGroupPlayer.objects.get(user__username='playerE')
         
@@ -42,6 +42,12 @@ class ModelTestCases(TestCase):
         turn.submit_date=datetime.datetime.now()
         turn.save()
         self.assertEquals(PLAYER_STATUS_SUBMITTED, player.status(states[1].state))
+        
+    def test_player_current_status(self):
+        group = SectionGroup.objects.get(id=2)
+        player = SectionGroupPlayer.objects.get(user__username='playerA')
+        
+        self.assertEquals(PLAYER_STATUS_NOACTION, player.current_status())
         
             
         

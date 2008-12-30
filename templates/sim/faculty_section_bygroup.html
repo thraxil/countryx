@@ -1,26 +1,11 @@
-{% extends "sim/base_sim.html" %}
+{% extends "sim/base_faculty.html" %}
 
-{% block css %}
-{{ block.super }}
-<style type='text/css'>
-  @import "/sim/media/css/faculty.css";
-</style>
+{% block breadcrumbs %}
+   <a href="/sim/">Home</a> > {{section}}
 {% endblock %}
 
 {% block content %}
    {{ block.super }}
-   <br />
-    <table class="datagrid" style="width: 800px">
-      <thead>
-         <tr>
-            <th style="width: 200px">{{section}}</th>
-            <th />
-            <th />
-         </tr>
-      </thead>   
-   </table>
-   <br />
-   <br />
    
    <table id="sortable_table" class="datagrid">
       <thead>

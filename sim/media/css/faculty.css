@@ -1,3 +1,7 @@
+@import "/admin_media/css/widgets.css";
+@import "/admin_media/css/global.css";
+@import "/admin_media/css/forms.css";
+
 textarea#id_feedback {
    width: 400px;
    height: 450px;
@@ -6,3 +10,113 @@ textarea#id_feedback {
    font-size: 10px;
    font-family: "lucida grande",Verdana,Helvetica,Arial,sans-serif;
 }
+
+#masthead
+{
+	background-color: #417690;
+	font-size: 16px;
+	color: #fff;
+	height: 50px;
+	text-align: left;
+}
+
+#login_credentials
+{
+   background-color: #417690;
+   font-size: 12px;
+   color: #fff;
+   height: 50px;
+   text-align: right;
+   padding-right: 10px;
+   vertical-align: middle;
+}
+
+div#breadcrumbs
+{
+   background-color: white;
+   background-position: 0pt -10px;
+   padding-top: 2px;
+   padding-right: 8px;
+   padding-bottom: 3px;
+   padding-left: 8px;
+   font-size: 11px;
+   color: #999999;
+   border-top-width: 1px;
+   border-top-style: solid;
+   border-top-color: white;
+   border-bottom-width: 1px;
+   border-bottom-style: solid;
+   border-bottom-color: #cccccc;
+   margin-bottom: 10px;
+   text-align: left;
+}
+
+div#breadcrumbs a:link, a:visited
+{
+   color: #5b80b2;
+   text-decoration: none;
+}
+
+div#breadcrumbs a:hover
+{
+   color: #003366;
+}
+
+table.datagrid {
+    width: 75%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+table.datagrid thead th { 
+    text-align: left;
+    background-color: #5B80B2;
+    background-repeat: no-repeat;
+    background-position: right center;
+    color: white;
+    font-weight: bold;
+    padding: .3em .7em;
+    font-size: .9em;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+}
+
+table.datagrid thead th a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.0em;
+    background-repeat: no-repeat;
+    background-position: center right;
+    padding-right: 15px;
+}
+
+table.datagrid thead th.over {
+    background-color: #003366;
+    cursor: pointer;
+}
+
+table.datagrid tbody th {
+    font-weight: bold;
+}
+
+table.datagrid tbody td, table.datagrid tbody th {
+    text-align: left;
+    padding: .3em .7em;
+    border-bottom: 1px solid #eee;
+}
+
+table.datagrid tbody tr.alternate td, table.datagrid tbody tr.alternate th {
+    background-color: #f1f1f1;
+}
+
+table.datagrid tfoot td, table.datagrid tfoot th { 
+    background-color: #FFFEE3;
+    color: #4B4545;
+    padding: .5em;
+    font-weight: bold;
+    border-top: 2px solid #4B4545;
+}
+
+table.datagrid tfoot th { text-align: left; }
+
+table.datagrid tfoot td {  }

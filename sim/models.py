@@ -126,17 +126,28 @@ class Section(models.Model):
     name = models.CharField(max_length=20)
     term = models.CharField(max_length=20)
     year = models.IntegerField()
+    created_date = models.DateTimeField('created_date')
 
     def __unicode__(self):
         return "%s %s %s" % (self.name, self.term, self.year)
-
+    
 class SectionAdministrator(models.Model):
     user = models.ForeignKey(User)
     section = models.ForeignKey(Section)
     
     def __unicode__(self):
         return "%s" % (self.user)
-    
+
+class SectionTurnDates(models.Model):
+    section = models.ForeignKey(Section)
+    turn1 = models.DateTimeField('turn1')
+    turn2 = models.DateTimeField('turn2', null=True)
+    turn3 = models.DateTimeField('turn3', null=True)
+    turn4 = models.DateTimeField('turn4', null=True)
+
+    def __unicode__(self):
+        return "%s %s %s %s" % (self.turn1, self.turn2, self.turn3, self.turn4)
+        
 ###############################################################################
 ###############################################################################
 
@@ -200,9 +211,9 @@ class SectionGroupPlayer(models.Model):
     def __unicode__(self):
         return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
 
-    def current_state(self):
-        current_state = group.sectiongroupstate_set.latest()
-        return status(current_state)
+    def current_status(self):
+        current_state = self.group.sectiongroupstate_set.latest().state
+        return self.status(current_state)
    
     def status(self, current_state):
         action = PLAYER_STATUS_NOACTION

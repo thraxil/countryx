@@ -1,4 +1,12 @@
-{% extends "sim/base_sim.html" %}
+{% extends "sim/base_player.html" %}
+
+{% block nav %}
+   <a href="/sim"/>Home</a> |
+   <a href="/about/">About</a> | 
+   <a href="/help/">Help</a> | 
+   <a href="/siterequirements/">Site Requirements</a> | 
+   <a href="/credits/">Credits</a>
+{% endblock %}
 
 {% block content %}
     {{ block.super }}

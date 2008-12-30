@@ -5,6 +5,8 @@ from django.template import Context, loader
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django import forms
+from django.forms.util import ErrorList 
+from django.contrib.admin.widgets import AdminSplitDateTime
 import datetime
 import simplejson
 
@@ -76,6 +78,50 @@ def faculty_group_detail(request, group_id):
     return HttpResponse(template.render(ctx))
     
 @login_required
+def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated=False):
+    group = SectionGroup.objects.get(id=group_id)
+    player = SectionGroupPlayer.objects.get(id=player_id)
+    state = State.objects.get(id=state_id)
+    feedback = None
+    
+    try:
+        turn = SectionGroupPlayerTurn.objects.get(player=player, state=state)
+        feedback = turn.feedback
+    except SectionGroupPlayerTurn.DoesNotExist:
+        turn = None
+        
+    if (request.method == 'POST'):
+        form = FeedbackForm(request.POST)
+        if (form.is_valid()):
+            # Process the data in form.cleaned_data
+            turn.feedback = form.cleaned_data['feedback']
+            turn.feedback_date = datetime.datetime.now()
+            turn.faculty = SectionAdministrator.objects.get(section=group.section, user__id=form.cleaned_data['faculty_id'])
+            turn.save()
+                        
+            redirect_url = '/sim/faculty/player/%s/%s/%s/1/' % (group_id, player_id, state_id)
+            return HttpResponseRedirect(redirect_url)
+    else:
+        form = FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback })
+
+    ctx = Context({
+       'user': request.user,
+       'group': group,
+       'section': group.section,
+       'player': player,
+       'state': state,
+       'turn': turn,
+       'submit_status': player.status(state),
+       'choices': StateRoleChoice.objects.filter(state=state, role=player.role),
+       'country_condition': state.statevariable_set.get(name='Country Condition').value,
+       'form': form,
+       'updated': updated
+    })
+    
+    template = loader.get_template('sim/faculty_player_detail_byturn.html')
+    return HttpResponse(template.render(ctx))
+
+@login_required
 def faculty_player_detail(request, group_id, player_id, state_id, updated=False):
     group = SectionGroup.objects.get(id=group_id)
     player = SectionGroupPlayer.objects.get(id=player_id)
@@ -116,12 +162,105 @@ def faculty_player_detail(request, group_id, player_id, state_id, updated=False)
        'updated': updated
     })
     
-    template = loader.get_template('sim/faculty_player_detail.html')
+    template = loader.get_template('sim/faculty_player_detail_byturn.html')
     return HttpResponse(template.render(ctx))
   
 class FeedbackForm(forms.Form):
     feedback = forms.CharField(widget=forms.Textarea)
     faculty_id = forms.IntegerField(widget=forms.HiddenInput)    
+    
+@login_required
+def faculty_section_manage(request, section_id, updated=False):
+    section=Section.objects.get(id=section_id)
+        
+    if (request.method == 'POST'):
+        form = TurnManagementForm(request.POST)
+        if (form.is_valid()):
+            # Process the data in form.cleaned_data
+            try:
+               tm = SectionTurnDates.objects.get(section=section)
+            except:
+               tm = SectionTurnDates.objects.create(section=section, turn1=datetime.datetime.now())
+               
+            section.name = form.cleaned_data['section_name']
+            section.term = form.cleaned_data['section_term']
+            section.year = form.cleaned_data['section_year']
+            section.save()
+            
+            tm.turn1 = form.cleaned_data['turn1']
+            tm.turn2 = form.cleaned_data['turn2']
+            tm.turn3 = form.cleaned_data['turn3']
+            tm.turn4 = form.cleaned_data['turn4']
+            
+            tm.save()
+                        
+            redirect_url = '/sim/faculty/manage/%s/' % (section_id)
+            return HttpResponseRedirect(redirect_url)
+    else:
+        initial = {}
+        initial['section_name'] = section.name
+        initial['section_term'] = section.term
+        initial['section_year'] = section.year
+            
+        try:
+            tm = SectionTurnDates.objects.get(section=section)
+            initial['turn1'] = tm.turn1
+            initial['turn2'] = tm.turn2
+            initial['turn3'] = tm.turn3
+            initial['turn4'] = tm.turn4
+        except:
+            initial['turn1'] = datetime.datetime.now()
+        
+        form = TurnManagementForm(initial=initial)
+
+    ctx = Context({
+       'user': request.user,
+       'section': section,
+       'form': form,
+       'updated': updated
+    })
+    
+    template = loader.get_template('sim/faculty_section_manage.html')
+    return HttpResponse(template.render(ctx))
+  
+EMPTY_VALUES = (None, '')
+
+class DateTimeFieldEx(forms.DateTimeField):
+    def clean(self, value):
+        if not self.required and value[0] in EMPTY_VALUES and value[1] in EMPTY_VALUES:
+            return None
+        return super(DateTimeFieldEx, self).clean(value)
+    
+class TurnManagementForm(forms.Form):
+    section_name = forms.CharField()
+    section_term = forms.CharField()
+    section_year = forms.CharField()
+    
+    turn1 = DateTimeFieldEx(widget=AdminSplitDateTime, required=True)
+    turn2 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False)
+    turn3 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False)
+    turn4 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False)
+    
+    def __compare(self, cleaned_data, fieldOne, fieldTwo, labelOne, labelTwo):
+        if (fieldTwo in cleaned_data and not cleaned_data[fieldTwo] in EMPTY_VALUES): 
+            if (fieldOne in cleaned_data and not cleaned_data[fieldOne] in EMPTY_VALUES and cmp(cleaned_data[fieldOne], cleaned_data[fieldTwo]) > -1):
+                msg = "%s close date must be after %s close date" % (labelTwo, labelOne)
+                self._errors[fieldTwo] = ErrorList([msg])
+                del cleaned_data[fieldTwo]
+                
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        
+        self.__compare(cleaned_data, "turn1", "turn2", "Turn 1", "Turn 2")
+        
+        self.__compare(cleaned_data, "turn1", "turn3", "Turn 1", "Turn 3")
+        self.__compare(cleaned_data, "turn2", "turn3", "Turn 2", "Turn 3")
+        
+        self.__compare(cleaned_data, "turn1", "turn4", "Turn 1", "Turn 4")
+        self.__compare(cleaned_data, "turn2", "turn4", "Turn 2", "Turn 4")
+        self.__compare(cleaned_data, "turn3", "turn4", "Turn 3", "Turn 4")
+            
+        return cleaned_data
     
 ###############################################################################
 ###############################################################################
@@ -248,102 +387,4 @@ def __current_conditions(state):
     dict = { 'name': var.name, 'value': int(var.value), 'least': 'minimal/no weapons smuggling', 'most': 'uncontrolled weapons smuggling'  }
     conditions.append(dict)
     return conditions
-#
-#@login_required
-#def narrative(request, group_id, user_id):
-#    t = loader.get_template('sim/player_narrative.html')
-#    
-#    group = SectionGroup.objects.get(id=group_id)
-#    player = group.sectiongroupplayer_set.get(user__id=user_id)
-#    
-#    current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-#    conditions = __current_conditions(current_state)
-#    choices = StateRoleChoice.objects.filter(state=current_state, role=player.role)
-#        
-#    c = Context({
-#       'group': group,
-#       'player': player,
-#       'state': current_state,
-#       'country_condition': current_state.statevariable_set.get(name='Country Condition').value,
-#       'conditions': conditions,
-#       'choices': choices,
-#    })
-#    
-#    return HttpResponse(t.render(c))
-#
-#@login_required
-#def decision(request, group_id, user_id):
-#    group = SectionGroup.objects.get(id=group_id)
-#    player = group.sectiongroupplayer_set.get(user__id=user_id)
-#   
-#    current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-#    conditions = __current_conditions(current_state)
-#   
-#    choices = StateRoleChoice.objects.filter(state=current_state, role=player.role)
-#        
-#    if (request.method == 'POST'):
-#        form = DecisionForm(request.POST)
-#        if (form.is_valid()):
-#            # Process the data in form.cleaned_data
-#            choice = form.cleaned_data['choice']
-#            reasoning = form.cleaned_data['reasoning']
-#           
-#            player_turn = SectionGroupPlayerTurn.objects.create(player=player, state=current_state, choice=choice, date_submitted=datetime.now(), reasoning=reasoning) 
-#            
-#            redirect_url = 'sim/'
-#            return HttpResponseRedirect(redirect_url)
-#    else:
-#        form = DecisionForm(choices)
-#        #form = DecisionForm()
-#        
-#    return render_to_response("sim/player_decision.html", 
-#        dict(user=request.user, group=group, player=player, form=form, conditions=conditions, state=current_state))
-#
-#class DecisionForm(forms.Form):
-#    choice_list = None
-#    choice = forms.ModelChoiceField(label="Pick something", queryset=choice_list) 
-#    reasoning = forms.CharField(widget=forms.Textarea)
-#    
-#    def __init__(self, choice_list, *args, **kw):
-#        forms.Form.__init__(self, *args, **kw) 
-#        self.choice.queryset = choice_list
-
-#def status(request):
-#    response = {}
-#    
-#    try:
-#        groupid = request.POST.get('groupid', None)
-#        player = group.sectiongroupplayer_set.get(user__id=request.user_id)
-#        current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-#        
-#        response['players'] = []
-#        
-#        # Status
-#        # -- No action taken for this turn
-#        # -- Draft Submitted
-#        # -- Final Submission
-#    
-#        for player in group.sectiongroupplayer_set.all():
-#            player = {}
-#            player['role'] = player.role.name
-#            
-#            # get the turn
-#            try:
-#                turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
-#                if (turn.submit_date == None):
-#                    player['status'] = 1
-#                else:
-#                    player['status'] = 2
-#            except:
-#                player['status'] = 0
-#            
-#            players.push(player)
-#            
-#        response['result'] = 1
-#        response['message'] = "Player statuses retrieved succesfully"
-#    except:
-#        response['result'] = 0
-#        response['message'] = "An unexpected error occurred. Please try again"
-#     
-#    return HttpResponse(simplejson.dumps(response), 'application/json')
-   
+#  

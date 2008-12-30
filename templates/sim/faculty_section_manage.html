@@ -1,0 +1,23 @@
+{% extends "sim/base_faculty.html" %}
+
+{% block breadcrumbs %}
+   <a href="/sim/">Home</a> > Manage
+{% endblock %}
+
+{% block js %} 
+   {{ block.super }}
+      
+   <script type="text/javascript" src="/admin_media/js/core.js"></script>
+   <script type="text/javascript" src="/admin_media/js/calendar.js"></script>
+   <script type="text/javascript" src="/admin_media/js/admin/DateTimeShortcuts.js"></script>
+{% endblock %}
+
+{% block content %}
+   {{ block.super }}
+
+    <form action="/sim/faculty/manage/{{section.id}}/" method="POST">
+       <div class="fieldWrapper">
+          {{ form.as_p }}
+          <input type="submit" value="Submit" />
+    </form>
+{% endblock %}

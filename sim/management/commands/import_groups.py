@@ -31,7 +31,7 @@ class Command(BaseCommand):
 		try:
 			section = Section.objects.get(name=sectionName, term=term, year=year)
 		except Section.DoesNotExist:
-			section = Section.objects.create(name=sectionName, term=term, year=year)
+			section = Section.objects.create(name=sectionName, term=term, year=year, created_date=datetime.datetime.now())
 		return section
 	
 	def get_or_create_user(self, username):

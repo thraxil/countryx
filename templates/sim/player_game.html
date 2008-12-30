@@ -1,14 +1,7 @@
-{% extends "sim/base_sim.html" %}
+{% extends "sim/base_player.html" %}
 
 {% load range_node %}
 {% load iflessthan %}
-
-{% block css %}
-{{ block.super }}
-<style type='text/css'>
-  @import "/sim/media/css/game.css";
-</style>
-{% endblock %}
 
 {% block js %} 
    {{ block.super }}

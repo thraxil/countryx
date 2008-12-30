@@ -24,12 +24,17 @@ admin.site.register(State, StateAdmin)
 
 #################################################################################
 
+class SectionTurnDatesInline(admin.StackedInline):
+    model = SectionTurnDates
+    max_num = 1
+    extra = 1
+
 class SectionAdministratorInline(admin.StackedInline):
     model = SectionAdministrator
     extra = 1
     
 class SectionAdmin(admin.ModelAdmin):
-    inlines = [SectionAdministratorInline]
+    inlines = [SectionAdministratorInline, SectionTurnDatesInline]
     model = Section
 
 admin.site.register(Section, SectionAdmin)
