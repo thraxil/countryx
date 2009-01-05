@@ -44,10 +44,13 @@ class ModelTestCases(TestCase):
         self.assertEquals(PLAYER_STATUS_SUBMITTED, player.status(states[1].state))
         
     def test_player_current_status(self):
-        group = SectionGroup.objects.get(id=2)
+        group = SectionGroup.objects.get(name='B')
         player = SectionGroupPlayer.objects.get(user__username='playerA')
         
         self.assertEquals(PLAYER_STATUS_NOACTION, player.current_status())
+        
+    #def test_section_current_turn(self):
+        
         
             
         

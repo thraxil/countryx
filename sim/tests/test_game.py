@@ -16,12 +16,13 @@ class GameTestCases(TestCase):
         
     def test_game_nochoices(self):
         user = User.objects.get(username='playerA')
-        group = SectionGroup.objects.get(id=1)
+        group = SectionGroup.objects.get(name='A')
         
         self.assertEquals(group.status(), GROUP_STATUS_NOACTION)
         
         self._login(self.client, 'playerA', 'aaaa')
-        response = self.client.get('/sim/player/game/1/')
+        url = '/sim/player/game/%s/' % group.id
+        response = self.client.get(url)
         
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "sim/player_game.html")
@@ -41,16 +42,18 @@ class GameTestCases(TestCase):
         self._login(self.client, 'playerA', 'aaaa')
         
         user = User.objects.get(username='playerA')
-        group = SectionGroup.objects.get(id=1)
+        group = SectionGroup.objects.get(name='A')
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
         player = SectionGroupPlayer.objects.get(user=user)
                 
         # choose a draft item, assume it's correct, that's checked later
-        payload = "groupid=1&choiceid=1&final=0&reasoning=foobar"
+        payload = "groupid=%s&choiceid=1&final=0&reasoning=foobar" % group.id
         self.client.post('/sim/player/choose/', payload, content_type="text/xml")
         
         # now get the game screen
-        response = self.client.get('/sim/player/game/1/')
+        grp = SectionGroup.objects.get(name='A')
+        url = '/sim/player/game/%s/' % grp.id
+        response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "sim/player_game.html")
         
@@ -71,16 +74,18 @@ class GameTestCases(TestCase):
         self._login(self.client, 'playerA', 'aaaa')
         
         user = User.objects.get(username='playerA')
-        group = SectionGroup.objects.get(id=1)
+        group = SectionGroup.objects.get(name='A')
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
         player = SectionGroupPlayer.objects.get(user=user)
                 
         # choose a draft item, assume it's correct, that's checked later
-        payload = "groupid=1&choiceid=1&final=1&reasoning=foobar"
+        payload = "groupid=%s&choiceid=1&final=1&reasoning=foobar" % (group.id)
         self.client.post('/sim/player/choose/', payload, content_type="text/xml")
         
         # now get the game screen
-        response = self.client.get('/sim/player/game/1/')
+        grp = SectionGroup.objects.get(name='A')
+        url = '/sim/player/game/%s/' % grp.id
+        response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "sim/player_game.html")
         
@@ -118,7 +123,9 @@ class GameTestCases(TestCase):
         c = self.client
         self._login(c, 'playerA', 'aaaa')
         
-        payload = "groupid=1&choiceid=1&final=0&reasoning=Enter%20your%20reasoning%20here"
+        group = SectionGroup.objects.get(name='A')
+        payload = "groupid=%s" % group.id
+        payload += "&choiceid=1&final=0&reasoning=Enter%20your%20reasoning%20here"
         response = c.post('/sim/player/choose/', payload, content_type="text/xml")
         
         doc = simplejson.loads(response.content)
@@ -126,7 +133,7 @@ class GameTestCases(TestCase):
         self.assertEquals(doc['result'], 1)
         
         # verify my choice was saved in the database
-        group = SectionGroup.objects.get(id=1)
+        group = SectionGroup.objects.get(name='A')
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
         user = User.objects.get(username='playerA')
         player = group.sectiongroupplayer_set.get(user__id=user.id)
@@ -139,7 +146,9 @@ class GameTestCases(TestCase):
         c = self.client
         self._login(c, 'playerA', 'aaaa')
         
-        payload = "groupid=1&choiceid=1&final=1&reasoning=Enter%20your%20reasoning%20here"
+        group = SectionGroup.objects.get(name='A')
+        payload = "groupid=%s" % group.id
+        payload += "&choiceid=1&final=1&reasoning=Enter%20your%20reasoning%20here"
         response = c.post('/sim/player/choose/', payload, content_type="text/xml")
         
         doc = simplejson.loads(response.content)
@@ -147,7 +156,7 @@ class GameTestCases(TestCase):
         self.assertEquals(doc['result'], 2)
         
         # verify my choice was saved in the database
-        group = SectionGroup.objects.get(id=1)
+        group = SectionGroup.objects.get(name='A')
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
         user = User.objects.get(username='playerA')
         player = group.sectiongroupplayer_set.get(user__id=user.id)
@@ -157,7 +166,8 @@ class GameTestCases(TestCase):
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')
         
         # now, try it again, an error should be thrown this time.
-        payload = "groupid=1&choiceid=1&final=0&reasoning=Trying%20Again"
+        payload = "groupid=%s" % group.id
+        payload += "&choiceid=1&final=0&reasoning=Trying%20Again"
         response = c.post('/sim/player/choose/', payload, content_type="text/xml")
         
         doc = simplejson.loads(response.content)
@@ -169,23 +179,5 @@ class GameTestCases(TestCase):
         self.assertEquals(turn.choice, 1)
         self.assert_(turn.submit_date != None)
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')       
-        
-    def test_game_view_past_turn(self):
-        c = self.client
-        self._login(c, 'playerE', 'eeee')
-        
-        # view turn 1 in a game that's already at turn 2
-        response = self.client.get('/sim/player/game/2/1/')
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "sim/player_game.html")
-        
-        ctx = response.context[0]
-        
-        your_player = ctx.get("you")
-        self.assertEquals(your_player['submit_status'], PLAYER_STATUS_SUBMITTED)
-        
-        players = ctx.get('players')
-        for p in players:
-            self.assertEquals(p['submit_status'], PLAYER_STATUS_SUBMITTED)
         
         
