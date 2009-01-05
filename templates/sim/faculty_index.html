@@ -6,9 +6,10 @@
 
 {% block content %}
 	{{ block.super }}
+	
 	<br /><br />
 	<table class="datagrid" cellpadding="5">
-		<tr><th>Course Title</th><th>Term</th><th>Administrators</th></tr>
+		<tr><th>Course Title</th><th>Term</th><th>Administrators</th><th>Current Turn</th></tr>
 		{% for section in sections %}
 			<tr>
 				<td>{{section.name}}</td><td>{{section.term}} {{section.year}}</td>
@@ -17,6 +18,7 @@
 						{{admin.user.first_name}} {{admin.user.last_name}} ({{admin.user.username}})<br />
 					{% endfor %}
 				</td>
+				<td>{{section.current_turn}}</td>
 				
 				<td><a href="/sim/faculty/manage/{{section.id}}/">Turn Management</a></td>
 				<td><a href="/sim/faculty/groups/{{section.id}}/">View by Groups</a></td>
