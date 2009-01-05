@@ -36,6 +36,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
+    'genocideprevention.sim.middleware.GameStateMiddleware',
 )
 
 ROOT_URLCONF = 'genocideprevention.urls'

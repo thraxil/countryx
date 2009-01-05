@@ -12,6 +12,9 @@ import simplejson
 
 @login_required
 def root(request):
+    # check the state for all the sections and update as needed.
+    
+        
     # is the user a player or an administrator?
     qs = SectionAdministrator.objects.filter(user=request.user)
     if (len(qs) > 0):

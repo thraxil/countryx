@@ -10,10 +10,9 @@
    <table id="sortable_table" class="datagrid">
       <thead>
          <tr>
-            <th mochi:format="int">Group Turn</th>
+            <th mochi:format="str">Status</th>
             <th mochi:format="str">Group</th>
             <th>Current State</th>
-            <th mochi:format="str">Status</th>
             <th>Action</th>
          </tr>
       </thead>
@@ -25,10 +24,7 @@
       <tbody>
          {% for group in section.sectiongroup_set.all %}
             <tr>
-	            <td>{{ group.sectiongroupstate_set.latest.state.turn }}</td>
-               <td>{{ group.name }}</td>
-	    	      <td>{{ group.sectiongroupstate_set.latest.state.name }}</td>
-	    	      <td>
+	            <td>
 	                  {% ifequal group.status 1 %}
 	                     No Action Taken
 	                  {% endifequal %}
@@ -39,6 +35,8 @@
 	                     Completed Turn
 	                  {% endifequal %}
 	             </td>
+	             <td>{{ group.name }}</td>
+                <td>{{ group.sectiongroupstate_set.latest.state.name }}</td>
 	             <td><a href="/sim/faculty/group/{{ group.id }}/">View Detail</a></td>
 	          </tr>
 	      {% endfor %}

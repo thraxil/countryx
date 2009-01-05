@@ -134,16 +134,29 @@ class Section(models.Model):
     def current_turn(self):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
-           return "1"
+           return 1
         elif (turn_dates.turn2 > datetime.datetime.now()):
-           return "2"
+           return 2
         elif (turn_dates.turn3 > datetime.datetime.now()):
-           return "3"
+           return 3
         elif (turn_dates.turn4 > datetime.datetime.now()):
-           return "4"
+           return 4
        
-        return "Error"
+        return -1
     
+    def current_turn_close_date(self):
+        turn_dates = SectionTurnDates.objects.get(section=self)
+        if (turn_dates.turn1 > datetime.datetime.now()):
+           return turn_dates.turn1
+        elif (turn_dates.turn2 > datetime.datetime.now()):
+           return turn_dates.turn2
+        elif (turn_dates.turn3 > datetime.datetime.now()):
+           return turn_dates.turn3
+        elif (turn_dates.turn4 > datetime.datetime.now()):
+           return turn_dates.turn4
+       
+        return None   
+     
 class SectionAdministrator(models.Model):
     user = models.ForeignKey(User)
     section = models.ForeignKey(Section)
