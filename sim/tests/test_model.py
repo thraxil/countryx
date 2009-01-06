@@ -117,3 +117,7 @@ class ModelTestCases(TestCase):
         state = group.sectiongroupstate_set.latest().state
         self.assertEquals(State.objects.get(turn=2, name="Violence - COIN"), state)
         
+    #def test_section_current_turn_close_date(self):
+        
+        
+        

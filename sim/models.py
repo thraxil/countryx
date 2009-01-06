@@ -135,11 +135,11 @@ class Section(models.Model):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
            return 1
-        elif (turn_dates.turn2 > datetime.datetime.now()):
+        elif (turn_dates.turn2 == None or turn_dates.turn2 > datetime.datetime.now()):
            return 2
-        elif (turn_dates.turn3 > datetime.datetime.now()):
+        elif (turn_dates.turn3 == None or turn_dates.turn3 > datetime.datetime.now()):
            return 3
-        elif (turn_dates.turn4 > datetime.datetime.now()):
+        elif (turn_dates.turn4 == None or turn_dates.turn4 > datetime.datetime.now()):
            return 4
        
         return -1
@@ -148,14 +148,14 @@ class Section(models.Model):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
            return turn_dates.turn1
-        elif (turn_dates.turn2 > datetime.datetime.now()):
+        elif (turn_dates.turn2 == None or turn_dates.turn2 > datetime.datetime.now()):
            return turn_dates.turn2
-        elif (turn_dates.turn3 > datetime.datetime.now()):
+        elif (turn_dates.turn3 == None or turn_dates.turn3 > datetime.datetime.now()):
            return turn_dates.turn3
-        elif (turn_dates.turn4 > datetime.datetime.now()):
+        elif (turn_dates.turn4 == None or turn_dates.turn4 > datetime.datetime.now()):
            return turn_dates.turn4
        
-        return None   
+        return turn_dates.turn1  
      
 class SectionAdministrator(models.Model):
     user = models.ForeignKey(User)
@@ -219,10 +219,13 @@ class SectionGroup(models.Model):
         regional = SectionGroupPlayerTurn.objects.get(player__role__name='SubRegionalRep', player__group=self, turn=state.turn, submit_date__isnull=False)
         opposition = SectionGroupPlayerTurn.objects.get(player__role__name='OppositionLeadership', player__group=self, turn=state.turn, submit_date__isnull=False)
         envoy = SectionGroupPlayerTurn.objects.get(player__role__name='FirstWorldEnvoy', player__group=self, turn=state.turn, submit_date__isnull=False)
-                                        
-        state_change = StateChange.objects.get(state=state, president=president.choice, envoy=envoy.choice, regional=regional.choice, opposition=opposition.choice)
-        SectionGroupState.objects.create(state=state_change.next_state, group=self, date_updated=datetime.datetime.now())
-    
+                   
+        try:                     
+            next_state = StateChange.objects.get(state=state, president=president.choice, envoy=envoy.choice, regional=regional.choice, opposition=opposition.choice).next_state
+            SectionGroupState.objects.create(state=next_state, group=self, date_updated=datetime.datetime.now())
+        except:
+            pass
+            
 class SectionGroupState(models.Model):
     state = models.ForeignKey(State)
     group = models.ForeignKey(SectionGroup)

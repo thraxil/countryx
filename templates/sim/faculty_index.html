@@ -4,6 +4,8 @@
    Home
 {% endblock %}
 
+{% load iflessthan %}
+
 {% block content %}
 	{{ block.super }}
 	
@@ -24,7 +26,12 @@
 						{{admin.user.first_name}} {{admin.user.last_name}} ({{admin.user.username}})<br />
 					{% endfor %}
 				</td>
-				<td style="text-align: center">Turn {{section.current_turn}}</td>
+				{% iflessthan section.current_turn 0 %}
+				   <td style="text-align: center">Game Completed</td>
+				{% else %}
+				   <td style="text-align: center">Turn {{section.current_turn}}</td>
+            {% endiflessthan %}
+            
 				<td style="text-align: center">{{section.current_turn_close_date}}</td>
 				
 				<td><a href="/sim/faculty/manage/{{section.id}}/">Turn Management</a></td>
