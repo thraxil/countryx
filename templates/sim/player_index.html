@@ -10,10 +10,6 @@
 
 {% block content %}
     {{ block.super }}
-    
-    <br /><br />
-    Welcome to Country X
-    <br /><br />
         
     {% if not groups %}
     	You currently are not participating in any games. Please contact the administrator
@@ -21,16 +17,7 @@
     {% else %}
    
 	    {% for group in groups %}
-	       <table class="datagrid" style="width: 800px">
-		      <thead>
-		         <tr>
-		            <th style="width: 200px">{{group.section}}</th>
-		            <th style="width: 200px">Group &mdash; {{ group.name }}</th>
-		            <th />
-		         </tr>
-		      </thead>   
-		   </table>
-	      
+	      <h3>{{group.section}} Group &mdash; {{ group.name }}</h3>   
 	      You are playing the role of the 
 		    	
 		   {% for player in group.sectiongroupplayer_set.all  %}
@@ -39,6 +26,7 @@
             {% endifequal %}
          {% endfor %}
 		   <br />
+		   
 	    	{% for player in group.sectiongroupplayer_set.all  %}
 	    	    {% ifequal player.user user %}
 	    	    	<!--  ignore -->

@@ -30,7 +30,7 @@ class LoginTestCases(TestCase):
         
         # Now that the user is logged in, verify they are sent to the right place
         response = client.get('/sim/')
-        self.assertContains(response, "Welcome", status_code=200)
+        self.assertContains(response, 'testuser', status_code=200)
         self.assertTemplateUsed(response, "sim/player_index.html")
         
     def test_django_invalid_password(self):
@@ -52,7 +52,7 @@ class LoginTestCases(TestCase):
         self.assert_(c.login(username=uname, password=pwd))
         
         response = c.get('/sim/')
-        self.assertContains(response, "Welcome", status_code=200)
+        self.assertContains(response, uname, status_code=200)
         self.assertTemplateUsed(response, "sim/player_index.html")
 
     def test_django_logout(self):

@@ -11,12 +11,12 @@ class GameTestCases(TestCase):
         self.assert_(client.login(username=uname, password=pwd))
         
         response = client.get('/sim/')
-        self.assertContains(response, "Welcome", status_code=200)
+        self.assertContains(response, uname, status_code=200)
         self.assertTemplateUsed(response, "sim/player_index.html")
         
     def test_game_nochoices(self):
         user = User.objects.get(username='playerA')
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         
         self.assertEquals(group.status(), GROUP_STATUS_NOACTION)
         
@@ -32,7 +32,7 @@ class GameTestCases(TestCase):
         self.assertEquals(ctx.get('group'), group)
         
         your_player = ctx.get('you')
-        self.assertEquals(your_player['model'], SectionGroupPlayer.objects.get(user=user))
+        self.assertEquals(your_player['model'], SectionGroupPlayer.objects.get(user=user, group=group))
         
         self.assertEquals(your_player['submit_status'], PLAYER_STATUS_NOACTION)
         self.assertEquals(your_player['saved_turn'], None)
@@ -42,17 +42,16 @@ class GameTestCases(TestCase):
         self._login(self.client, 'playerA', 'aaaa')
         
         user = User.objects.get(username='playerA')
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-        player = SectionGroupPlayer.objects.get(user=user)
+        player = SectionGroupPlayer.objects.get(user=user,group=group)
                 
         # choose a draft item, assume it's correct, that's checked later
         payload = "groupid=%s&choiceid=1&final=0&reasoning=foobar" % group.id
         self.client.post('/sim/player/choose/', payload, content_type="text/xml")
         
         # now get the game screen
-        grp = SectionGroup.objects.get(name='A')
-        url = '/sim/player/game/%s/' % grp.id
+        url = '/sim/player/game/%s/' % group.id
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "sim/player_game.html")
@@ -74,17 +73,16 @@ class GameTestCases(TestCase):
         self._login(self.client, 'playerA', 'aaaa')
         
         user = User.objects.get(username='playerA')
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
-        player = SectionGroupPlayer.objects.get(user=user)
+        player = SectionGroupPlayer.objects.get(user=user,group=group)
                 
         # choose a draft item, assume it's correct, that's checked later
         payload = "groupid=%s&choiceid=1&final=1&reasoning=foobar" % (group.id)
         self.client.post('/sim/player/choose/', payload, content_type="text/xml")
         
         # now get the game screen
-        grp = SectionGroup.objects.get(name='A')
-        url = '/sim/player/game/%s/' % grp.id
+        url = '/sim/player/game/%s/' % group.id
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "sim/player_game.html")
@@ -123,7 +121,7 @@ class GameTestCases(TestCase):
         c = self.client
         self._login(c, 'playerA', 'aaaa')
         
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         payload = "groupid=%s" % group.id
         payload += "&choiceid=1&final=0&reasoning=Enter%20your%20reasoning%20here"
         response = c.post('/sim/player/choose/', payload, content_type="text/xml")
@@ -133,7 +131,6 @@ class GameTestCases(TestCase):
         self.assertEquals(doc['result'], 1)
         
         # verify my choice was saved in the database
-        group = SectionGroup.objects.get(name='A')
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
         user = User.objects.get(username='playerA')
         player = group.sectiongroupplayer_set.get(user__id=user.id)
@@ -146,7 +143,7 @@ class GameTestCases(TestCase):
         c = self.client
         self._login(c, 'playerA', 'aaaa')
         
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         payload = "groupid=%s" % group.id
         payload += "&choiceid=1&final=1&reasoning=Enter%20your%20reasoning%20here"
         response = c.post('/sim/player/choose/', payload, content_type="text/xml")
@@ -156,7 +153,6 @@ class GameTestCases(TestCase):
         self.assertEquals(doc['result'], 2)
         
         # verify my choice was saved in the database
-        group = SectionGroup.objects.get(name='A')
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
         user = User.objects.get(username='playerA')
         player = group.sectiongroupplayer_set.get(user__id=user.id)

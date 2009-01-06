@@ -65,9 +65,9 @@
 	               {% for t in tabs %}
 	                 <span id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} activetab {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} futureturn {% endif %}">
 	                    {%if t.viewable %}
-	                       <a href="/sim/player/game/{{group.id}}/{{t.id}}/">Turn {{t.id}}</a>
+	                       <a href="/sim/player/game/{{group.id}}/{{t.id}}/">{{t.name}}</a>
 	                    {% else %}
-	                       Turn {{t.id}}
+	                       {{ t.name }}
 	                    {% endif %}
 	                 </span>
 	               {% endfor %}

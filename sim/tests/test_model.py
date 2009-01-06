@@ -8,12 +8,12 @@ class ModelTestCases(TestCase):
     
     def test_group_status_noaction(self):
         # update the data manually to setup this test
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         self.assertEquals(GROUP_STATUS_NOACTION, group.status())
             
     def test_group_status_pending_submitted(self):
         # update the data manually to setup this test
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         current_state = group.sectiongroupstate_set.latest().state
         players = SectionGroupPlayer.objects.filter(group=group)
         
@@ -27,8 +27,8 @@ class ModelTestCases(TestCase):
             count += 1
             
     def test_player_status(self):
-        group = SectionGroup.objects.get(name='B')
-        player = SectionGroupPlayer.objects.get(user__username='playerE')
+        group = SectionGroup.objects.get(name='B', section=Section.objects.get(name='Test'))
+        player = SectionGroupPlayer.objects.get(user__username='playerE', group=group)
         
         states = group.sectiongroupstate_set.all().order_by('state__turn')
         
@@ -43,8 +43,8 @@ class ModelTestCases(TestCase):
         self.assertEquals(PLAYER_STATUS_SUBMITTED, player.status(states[0].state))
         
     def test_player_current_status(self):
-        group = SectionGroup.objects.get(name='B')
-        player = SectionGroupPlayer.objects.get(user__username='playerA')
+        group = SectionGroup.objects.get(name='B', section=Section.objects.get(name='Test'))
+        player = SectionGroupPlayer.objects.get(user__username='playerE', group=group)
         
         self.assertEquals(PLAYER_STATUS_NOACTION, player.current_status())
         
@@ -66,12 +66,12 @@ class ModelTestCases(TestCase):
         # Group A has no player turns in the test data
         
         # Setup some helpful turns for Group A to test all the conditions
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         state = group.sectiongroupstate_set.latest().state
-        playerA = SectionGroupPlayer.objects.get(user__username='playerA')
-        playerB = SectionGroupPlayer.objects.get(user__username='playerB')
-        playerC = SectionGroupPlayer.objects.get(user__username='playerC')
-        playerD = SectionGroupPlayer.objects.get(user__username='playerD')
+        playerA = SectionGroupPlayer.objects.get(user__username='playerA', group=group)
+        playerB = SectionGroupPlayer.objects.get(user__username='playerB', group=group)
+        playerC = SectionGroupPlayer.objects.get(user__username='playerC', group=group)
+        playerD = SectionGroupPlayer.objects.get(user__username='playerD', group=group)
         
         # create a draft for playerA
         SectionGroupPlayerTurn.objects.create(player=playerA, turn=state.turn, choice=1, reasoning="draft")
@@ -96,7 +96,7 @@ class ModelTestCases(TestCase):
         
     def test_sectiongroup_updatestate(self):
         # Group A has no player turns in the test data
-        group = SectionGroup.objects.get(name='A')
+        group = SectionGroup.objects.get(name='A', section=Section.objects.get(name='Test'))
         state = group.sectiongroupstate_set.latest().state
          
         # update_state should choke in this situation 
@@ -115,9 +115,6 @@ class ModelTestCases(TestCase):
         # now, try to update the state
         group.update_state()
         state = group.sectiongroupstate_set.latest().state
-        self.assertEquals(State.objects.get(turn=2, name="Violence - COIN"), state)
-        
-    #def test_section_current_turn_close_date(self):
-        
+        self.assertEquals(State.objects.get(turn=2, name="Violence - COIN"), state)        
         
         

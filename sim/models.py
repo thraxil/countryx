@@ -139,8 +139,6 @@ class Section(models.Model):
            return 2
         elif (turn_dates.turn3 == None or turn_dates.turn3 > datetime.datetime.now()):
            return 3
-        elif (turn_dates.turn4 == None or turn_dates.turn4 > datetime.datetime.now()):
-           return 4
        
         return -1
     
@@ -152,9 +150,7 @@ class Section(models.Model):
            return turn_dates.turn2
         elif (turn_dates.turn3 == None or turn_dates.turn3 > datetime.datetime.now()):
            return turn_dates.turn3
-        elif (turn_dates.turn4 == None or turn_dates.turn4 > datetime.datetime.now()):
-           return turn_dates.turn4
-       
+        
         return turn_dates.turn1  
      
 class SectionAdministrator(models.Model):
@@ -169,10 +165,9 @@ class SectionTurnDates(models.Model):
     turn1 = models.DateTimeField('turn1')
     turn2 = models.DateTimeField('turn2', null=True)
     turn3 = models.DateTimeField('turn3', null=True)
-    turn4 = models.DateTimeField('turn4', null=True)
 
     def __unicode__(self):
-        return "%s %s %s %s" % (self.turn1, self.turn2, self.turn3, self.turn4)
+        return "%s %s %s %s" % (self.turn1, self.turn2, self.turn3)
         
 ###############################################################################
 ###############################################################################
@@ -215,7 +210,7 @@ class SectionGroup(models.Model):
     
     def update_state(self):
         state = self.sectiongroupstate_set.latest().state
-        president = SectionGroupPlayerTurn.objects.get(player__role__name='President', player__group=self, turn=state.turn)
+        president = SectionGroupPlayerTurn.objects.get(player__role__name='President', player__group=self, turn=state.turn, submit_date__isnull=False)
         regional = SectionGroupPlayerTurn.objects.get(player__role__name='SubRegionalRep', player__group=self, turn=state.turn, submit_date__isnull=False)
         opposition = SectionGroupPlayerTurn.objects.get(player__role__name='OppositionLeadership', player__group=self, turn=state.turn, submit_date__isnull=False)
         envoy = SectionGroupPlayerTurn.objects.get(player__role__name='FirstWorldEnvoy', player__group=self, turn=state.turn, submit_date__isnull=False)
@@ -237,6 +232,9 @@ class SectionGroupState(models.Model):
         return "%s %s" % (self.state, self.date_updated)
     
     def status(self):
+        if (self.state.turn == 4):
+            return GROUP_STATUS_SUBMITTED
+        
         status = 0
         players = self.group.sectiongroupplayer_set.all()
         for player in players:

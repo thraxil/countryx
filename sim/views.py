@@ -83,7 +83,7 @@ def faculty_group_detail(request, group_id):
 @login_required
 def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated=False):
     group = SectionGroup.objects.get(id=group_id)
-    player = SectionGroupPlayer.objects.get(id=player_id)
+    player = SectionGroupPlayer.objects.get(id=player_id, group=group)
     state = State.objects.get(id=state_id)
     feedback = None
     
@@ -193,7 +193,6 @@ def faculty_section_manage(request, section_id, updated=False):
             tm.turn1 = form.cleaned_data['turn1']
             tm.turn2 = form.cleaned_data['turn2']
             tm.turn3 = form.cleaned_data['turn3']
-            tm.turn4 = form.cleaned_data['turn4']
             
             tm.save()
                         
@@ -210,7 +209,6 @@ def faculty_section_manage(request, section_id, updated=False):
             initial['turn1'] = tm.turn1
             initial['turn2'] = tm.turn2
             initial['turn3'] = tm.turn3
-            initial['turn4'] = tm.turn4
         except:
             initial['turn1'] = datetime.datetime.now()
         
@@ -242,7 +240,6 @@ class TurnManagementForm(forms.Form):
     turn1 = DateTimeFieldEx(widget=AdminSplitDateTime, required=True, label="Turn 1 Close Date")
     turn2 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False, label="Turn 2 Close Date")
     turn3 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False, label="Turn 3 Close Date")
-    turn4 = DateTimeFieldEx(widget=AdminSplitDateTime, required=False, label="Turn 4 Close Date")
     
     def __compare(self, cleaned_data, fieldOne, fieldTwo, labelOne, labelTwo):
         if (fieldTwo in cleaned_data and not cleaned_data[fieldTwo] in EMPTY_VALUES): 
@@ -259,10 +256,6 @@ class TurnManagementForm(forms.Form):
         self.__compare(cleaned_data, "turn1", "turn3", "Turn 1", "Turn 3")
         self.__compare(cleaned_data, "turn2", "turn3", "Turn 2", "Turn 3")
         
-        self.__compare(cleaned_data, "turn1", "turn4", "Turn 1", "Turn 4")
-        self.__compare(cleaned_data, "turn2", "turn4", "Turn 2", "Turn 4")
-        self.__compare(cleaned_data, "turn3", "turn4", "Turn 3", "Turn 4")
-            
         return cleaned_data
     
 ###############################################################################
@@ -284,11 +277,19 @@ def player_game(request, group_id, turn_id=0):
     tabs = []
     for i in range(1, 5):
         t = { 'id': i, 'activetab': (working_state.turn == i), 'viewable': False }
+
+        if i < 4:
+            t['name'] = 'Phase %s' % i
+        else:
+            t['name'] = "Results" 
+            
+        
         try:
             group.sectiongroupstate_set.get(state__turn=i).state
             t['viewable'] = True
         except:
             pass
+
         tabs.append(t)
         
     # setup set of special attributes for current user
@@ -331,7 +332,7 @@ def player_choose(request):
         reasoning = request.POST.get('reasoning', '')
         
         group = SectionGroup.objects.get(id=groupid)
-        player = group.sectiongroupplayer_set.get(user__id=request.user.id)
+        player = group.sectiongroupplayer_set.get(user__id=request.user.id, group=group)
         current_state = group.sectiongroupstate_set.latest().state
             
         # create or update the player's choice
