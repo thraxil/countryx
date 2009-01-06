@@ -140,7 +140,7 @@ class Section(models.Model):
         elif (turn_dates.turn3 == None or turn_dates.turn3 > datetime.datetime.now()):
            return 3
        
-        return -1
+        return 4
     
     def current_turn_close_date(self):
         turn_dates = SectionTurnDates.objects.get(section=self)
