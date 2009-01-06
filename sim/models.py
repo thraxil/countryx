@@ -2,7 +2,7 @@ from django.db import models, connection
 from django.contrib.auth.models import User
 from django.db.models import signals
 from django.dispatch import dispatcher
-import datetime
+import datetime, random
 
 class Role(models.Model):
     """
@@ -192,15 +192,36 @@ class SectionGroup(models.Model):
     
     def status(self):
         return self.sectiongroupstate_set.latest().status()
-            
-    def maybeUpdateState(self):
-        # are all my players submitted for the current turn?
-        current_state = sectiongroupstate_set.latest().state
-        players = SectionGroupPlayerTurn.objects.filter(player__group=self, state=current_state, submit_date__isnull=False)
-        if players.count() == 4:
-            # everyone has submitted their answers for this turn.
-            # update the game state, and let people advance.
-            print "not doing anything here yet"
+    
+    def force_response_all_players(self):
+        random.seed(None)
+        state = self.sectiongroupstate_set.latest().state
+        players = SectionGroupPlayer.objects.filter(group=self)
+        
+        for player in players:
+            # create or update the player's choice
+            try:
+                #check to see if player has a "draft" saved. Use this if possible.
+                player_response = SectionGroupPlayerTurn.objects.get(player=player, state=state)
+                if (player_response.submit_date == None):
+                    player_response.submit_date = datetime.datetime.now()
+                    player_response.save()
+            except:
+               # player has no choice saved
+               player_response = SectionGroupPlayerTurn.objects.create(player=player, state=state)
+               player_response.choice = random.randint(1,3)
+               player_response.submit_date = datetime.datetime.now()
+               player_response.save() 
+    
+    def update_state(self):
+        state = self.sectiongroupstate_set.latest().state
+        president = SectionGroupPlayerTurn.objects.get(player__role__name='President', player__group=self, state=state)
+        regional = SectionGroupPlayerTurn.objects.get(player__role__name='SubRegionalRep', player__group=self, state=state, submit_date__isnull=False)
+        opposition = SectionGroupPlayerTurn.objects.get(player__role__name='OppositionLeadership', player__group=self, state=state, submit_date__isnull=False)
+        envoy = SectionGroupPlayerTurn.objects.get(player__role__name='FirstWorldEnvoy', player__group=self, state=state, submit_date__isnull=False)
+                                        
+        state_change = StateChange.objects.get(state=state, president=president.choice, envoy=envoy.choice, regional=regional.choice, opposition=opposition.choice)
+        SectionGroupState.objects.create(state=state_change.nextState, group=self, date_updated=datetime.datetime.now())
     
 class SectionGroupState(models.Model):
     state = models.ForeignKey(State)
@@ -265,11 +286,12 @@ class SectionGroupPlayerTurn(models.Model):
     feedback = models.TextField(null=True)
     faculty = models.ForeignKey(SectionAdministrator, related_name="%(class)s_related_faculty", null=True)
     feedback_date = models.DateTimeField('feedback submitted', null=True)
+    
     class Meta:
         get_latest_by = 'submit_date'
     
     def __unicode__(self):
-        return "%s: Selected: %s from state %s" % (self.player, self.state.turn, self.choice)
+        return "%s: Turn: %s Selected: %s" % (self.player, self.state.turn, self.choice)
     
     def is_submitted(self):
         return self.submit_date != None

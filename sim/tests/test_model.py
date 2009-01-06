@@ -62,6 +62,58 @@ class ModelTestCases(TestCase):
         
         self.assertEquals(2, section.current_turn())
         
+    def test_sectiongroup_force_response_all_players(self):
+        # Group A has no player turns in the test data
         
-            
+        # Setup some helpful turns for Group A to test all the conditions
+        group = SectionGroup.objects.get(name='A')
+        state = group.sectiongroupstate_set.latest().state
+        playerA = SectionGroupPlayer.objects.get(user__username='playerA')
+        playerB = SectionGroupPlayer.objects.get(user__username='playerB')
+        playerC = SectionGroupPlayer.objects.get(user__username='playerC')
+        playerD = SectionGroupPlayer.objects.get(user__username='playerD')
+        
+        # create a draft for playerA
+        SectionGroupPlayerTurn.objects.create(player=playerA, state=state, choice=1, reasoning="draft")
+        
+        # create a full submit for playerB
+        SectionGroupPlayerTurn.objects.create(player=playerB, state=state, choice=2, reasoning="final", submit_date=datetime.datetime.now())
+        
+        # leave the other two players alone (playerC & payerD)
+        group.force_response_all_players()
+        
+        a_turn = SectionGroupPlayerTurn.objects.get(player=playerA, state__turn=1, submit_date__isnull=False)
+        self.assertEquals(1, a_turn.choice)
+        
+        b_turn = SectionGroupPlayerTurn.objects.get(player=playerB, state__turn=1, submit_date__isnull=False)
+        self.assertEquals(2, b_turn.choice)   
+        
+        c_turn = SectionGroupPlayerTurn.objects.get(player=playerC, state__turn=1, submit_date__isnull=False)       
+        self.assert_(c_turn.choice > 0)  
+        
+        d_turn = SectionGroupPlayerTurn.objects.get(player=playerD, state__turn=1, submit_date__isnull=False)
+        self.assert_(d_turn.choice > 0)
+        
+    def test_sectiongroup_updatestate(self):
+        # Group A has no player turns in the test data
+        group = SectionGroup.objects.get(name='A')
+        state = group.sectiongroupstate_set.latest().state
+         
+        # update_state should choke in this situation 
+        try:
+            group.update_state()
+        except:
+            pass
+        else:
+            fail("expected an error in cases where the group does not have submitted answers for each player")
+        
+        # pick the responses for each player so we can verify the state choice
+        players = SectionGroupPlayer.objects.filter(group=group)
+        for player in players:
+            SectionGroupPlayerTurn.objects.create(player=player, state=state, choice=2, reasoning="final", submit_date=datetime.datetime.now())
+                
+        # now, try to update the state
+        group.update_state()
+        state = group.sectiongroupstate_set.latest().state
+        self.assertEquals(State.objects.get(turn=2, name="Violence - COIN"), state)
         
