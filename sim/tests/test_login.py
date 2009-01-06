@@ -4,7 +4,15 @@ from genocideprevention.sim.models import *
 
 class LoginTestCases(TestCase):
     fixtures = ["test_data.json"]
-
+    
+    def setUp(self):
+        user = User(username="testuser")
+        user.set_password("test")
+        user.save()
+        
+    def tearDown(self):
+        User.objects.get(username="testuser").delete()
+        
     def test_index_not_logged_in(self):
         # Issue a GET request for the index page
         client = Client()

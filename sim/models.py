@@ -44,7 +44,7 @@ class State(models.Model):
     
     def influence_from(self, role):
         tablename = StateChange._meta.db_table
-        myfield = StateChange._meta.get_field('nextState').column
+        myfield = StateChange._meta.get_field('next_state').column
         otherfield = StateChange._meta.get_field('state').column
         cursor = connection.cursor()
         cursor.execute('SELECT "%s",count("%s") FROM "%s" WHERE "%s"=%d %s GROUP BY "%s"' % (
@@ -61,13 +61,13 @@ class State(models.Model):
     def to_count(self,extra=''):
         return self._countedges(
             StateChange._meta.get_field('state').column,
-            StateChange._meta.get_field('nextState').column,
+            StateChange._meta.get_field('next_state').column,
             extra
             )
     
     def from_count(self,extra=''):
         return self._countedges(
-            StateChange._meta.get_field('nextState').column,
+            StateChange._meta.get_field('next_state').column,
             StateChange._meta.get_field('state').column,
             extra
             )
@@ -97,10 +97,10 @@ class StateChange(models.Model):
     envoy = models.IntegerField()
     regional = models.IntegerField()
     opposition = models.IntegerField()
-    nextState = models.ForeignKey(State, related_name="%(class)s_related_next")
+    next_state = models.ForeignKey(State, related_name="%(class)s_related_next")
     
     def __unicode__(self):
-        return "[%s] P=%s E%s R=%s O=%s >> [%s]" % (self.state, self.president, self.envoy, self.regional, self.opposition, self.nextState)
+        return "[%s] P=%s E%s R=%s O=%s >> [%s]" % (self.state, self.president, self.envoy, self.regional, self.opposition, self.next_state)
 
 class StateVariable(models.Model):
     state = models.ForeignKey(State)
@@ -202,26 +202,26 @@ class SectionGroup(models.Model):
             # create or update the player's choice
             try:
                 #check to see if player has a "draft" saved. Use this if possible.
-                player_response = SectionGroupPlayerTurn.objects.get(player=player, state=state)
+                player_response = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
                 if (player_response.submit_date == None):
                     player_response.submit_date = datetime.datetime.now()
                     player_response.save()
             except:
                # player has no choice saved
-               player_response = SectionGroupPlayerTurn.objects.create(player=player, state=state)
+               player_response = SectionGroupPlayerTurn.objects.create(player=player, turn=state.turn)
                player_response.choice = random.randint(1,3)
                player_response.submit_date = datetime.datetime.now()
                player_response.save() 
     
     def update_state(self):
         state = self.sectiongroupstate_set.latest().state
-        president = SectionGroupPlayerTurn.objects.get(player__role__name='President', player__group=self, state=state)
-        regional = SectionGroupPlayerTurn.objects.get(player__role__name='SubRegionalRep', player__group=self, state=state, submit_date__isnull=False)
-        opposition = SectionGroupPlayerTurn.objects.get(player__role__name='OppositionLeadership', player__group=self, state=state, submit_date__isnull=False)
-        envoy = SectionGroupPlayerTurn.objects.get(player__role__name='FirstWorldEnvoy', player__group=self, state=state, submit_date__isnull=False)
+        president = SectionGroupPlayerTurn.objects.get(player__role__name='President', player__group=self, turn=state.turn)
+        regional = SectionGroupPlayerTurn.objects.get(player__role__name='SubRegionalRep', player__group=self, turn=state.turn, submit_date__isnull=False)
+        opposition = SectionGroupPlayerTurn.objects.get(player__role__name='OppositionLeadership', player__group=self, turn=state.turn, submit_date__isnull=False)
+        envoy = SectionGroupPlayerTurn.objects.get(player__role__name='FirstWorldEnvoy', player__group=self, turn=state.turn, submit_date__isnull=False)
                                         
         state_change = StateChange.objects.get(state=state, president=president.choice, envoy=envoy.choice, regional=regional.choice, opposition=opposition.choice)
-        SectionGroupState.objects.create(state=state_change.nextState, group=self, date_updated=datetime.datetime.now())
+        SectionGroupState.objects.create(state=state_change.next_state, group=self, date_updated=datetime.datetime.now())
     
 class SectionGroupState(models.Model):
     state = models.ForeignKey(State)
@@ -267,7 +267,7 @@ class SectionGroupPlayer(models.Model):
         
         if (self.sectiongroupplayerturn_related_player.all().count() > 0):
             try:
-                turn = self.sectiongroupplayerturn_related_player.get(state=current_state)
+                turn = self.sectiongroupplayerturn_related_player.get(turn=current_state.turn)
                 if turn.submit_date:
                     action = PLAYER_STATUS_SUBMITTED
                 else:
@@ -279,7 +279,7 @@ class SectionGroupPlayer(models.Model):
         
 class SectionGroupPlayerTurn(models.Model):
     player = models.ForeignKey(SectionGroupPlayer, related_name="%(class)s_related_player")
-    state = models.ForeignKey(State)
+    turn = models.IntegerField()
     choice = models.IntegerField(null=True)
     reasoning = models.TextField(null=True)
     submit_date = models.DateTimeField('final date submitted', null=True)
@@ -291,7 +291,7 @@ class SectionGroupPlayerTurn(models.Model):
         get_latest_by = 'submit_date'
     
     def __unicode__(self):
-        return "%s: Turn: %s Selected: %s" % (self.player, self.state.turn, self.choice)
+        return "%s: Turn: %s Selected: %s" % (self.player, self.turn, self.choice)
     
     def is_submitted(self):
         return self.submit_date != None

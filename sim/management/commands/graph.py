@@ -13,15 +13,15 @@ class Command(BaseCommand):
         if state not in self.states:
             self.states[state] = {}
         
-        transitions = StateChange.objects.filter(state=state).order_by('nextState__state_no')
+        transitions = StateChange.objects.filter(state=state).order_by('next_state__state_no')
         stack = []
         color = '#' + "".join(["%02x"%rn.randint(50, 200) for x in range(3)])
         
         for transition in transitions:
-            if transition.nextState not in self.states[state]:
-                self.states[state][transition.nextState] = "foo"
-                print '   "%s" -> "%s" [tailport=e, headport=w, color="%s"];' % (transition.state, transition.nextState, self.colors[transition.state.state_no-1])
-                stack.append(transition.nextState)
+            if transition.next_state not in self.states[state]:
+                self.states[state][transition.next_state] = "foo"
+                print '   "%s" -> "%s" [tailport=e, headport=w, color="%s"];' % (transition.state, transition.next_state, self.colors[transition.state.state_no-1])
+                stack.append(transition.next_state)
         
         for s in stack:        
             self.recurse_state(s)

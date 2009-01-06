@@ -61,7 +61,7 @@ def faculty_group_detail(request, group_id):
         players = group.sectiongroupplayer_set.all()
         for p in players:
             try:
-                turn = SectionGroupPlayerTurn.objects.get(player=p, state=gs.state)
+                turn = SectionGroupPlayerTurn.objects.get(player=p, turn=gs.state.turn)
             except SectionGroupPlayerTurn.DoesNotExist:
                 turn = None
                 
@@ -88,7 +88,7 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
     feedback = None
     
     try:
-        turn = SectionGroupPlayerTurn.objects.get(player=player, state=state)
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
         feedback = turn.feedback
     except SectionGroupPlayerTurn.DoesNotExist:
         turn = None
@@ -132,7 +132,7 @@ def faculty_player_detail(request, group_id, player_id, state_id, updated=False)
     feedback = None
     
     try:
-        turn = SectionGroupPlayerTurn.objects.get(player=player, state=state)
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
         feedback = turn.feedback
     except SectionGroupPlayerTurn.DoesNotExist:
         turn = None
@@ -296,7 +296,7 @@ def player_game(request, group_id, turn_id=0):
     try:
         your_player['submit_status'] = your_player['model'].status(working_state)
         your_player['choices'] = StateRoleChoice.objects.filter(state=working_state, role=your_player['model'].role)
-        your_player['saved_turn'] = SectionGroupPlayerTurn.objects.get(player=your_player['model'], state=working_state)
+        your_player['saved_turn'] = SectionGroupPlayerTurn.objects.get(player=your_player['model'], turn=working_state.turn)
         your_player['saved_choice'] = StateRoleChoice.objects.get(state=working_state, role=your_player['model'].role, choice=your_player['saved_turn'].choice)
     except:
         pass
@@ -336,9 +336,9 @@ def player_choose(request):
             
         # create or update the player's choice
         try:
-            turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
+            turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
         except:
-            turn = SectionGroupPlayerTurn.objects.create(player=player, state=current_state)
+            turn = SectionGroupPlayerTurn.objects.create(player=player, turn=current_state.turn)
         
         if turn.submit_date != None:
             # player has already submitted data

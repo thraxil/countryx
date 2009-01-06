@@ -2,8 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core import serializers
 from optparse import make_option
 from genocideprevention.sim.models import *
-import csv
-import time, datetime
+import csv, time, datetime
 
 
 class Command(BaseCommand):
@@ -51,7 +50,7 @@ class Command(BaseCommand):
 			if (len(password) < 1):
 				password='wind user'
 				user = User(username=username)
-				user.setPassword(password)
+				user.set_password(password)
 				user.set_unusable_password()
 			else:
 				user = User(username=username)

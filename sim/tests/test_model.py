@@ -19,7 +19,7 @@ class ModelTestCases(TestCase):
         
         count = 0
         for player in players:
-            turn = SectionGroupPlayerTurn.objects.create(player=player, state=current_state, choice=1, submit_date=datetime.datetime.now(), reasoning="foobar")
+            turn = SectionGroupPlayerTurn.objects.create(player=player, turn=current_state.turn, choice=1, submit_date=datetime.datetime.now(), reasoning="foobar")
             if count < 3:
                 self.assertEquals(GROUP_STATUS_PENDING, group.status())
             else:
@@ -35,7 +35,7 @@ class ModelTestCases(TestCase):
         self.assertEquals(PLAYER_STATUS_NOACTION, player.status(states[0].state))
         
         # create a draft for states[1]
-        turn = SectionGroupPlayerTurn.objects.create(player=player, state=states[0].state, choice=1, reasoning="foobar")
+        turn = SectionGroupPlayerTurn.objects.create(player=player, turn=states[0].state.turn, choice=1, reasoning="foobar")
         self.assertEquals(PLAYER_STATUS_PENDING, player.status(states[0].state))
         
         turn.submit_date=datetime.datetime.now()
@@ -74,24 +74,24 @@ class ModelTestCases(TestCase):
         playerD = SectionGroupPlayer.objects.get(user__username='playerD')
         
         # create a draft for playerA
-        SectionGroupPlayerTurn.objects.create(player=playerA, state=state, choice=1, reasoning="draft")
+        SectionGroupPlayerTurn.objects.create(player=playerA, turn=state.turn, choice=1, reasoning="draft")
         
         # create a full submit for playerB
-        SectionGroupPlayerTurn.objects.create(player=playerB, state=state, choice=2, reasoning="final", submit_date=datetime.datetime.now())
+        SectionGroupPlayerTurn.objects.create(player=playerB, turn=state.turn, choice=2, reasoning="final", submit_date=datetime.datetime.now())
         
         # leave the other two players alone (playerC & payerD)
         group.force_response_all_players()
         
-        a_turn = SectionGroupPlayerTurn.objects.get(player=playerA, state__turn=1, submit_date__isnull=False)
+        a_turn = SectionGroupPlayerTurn.objects.get(player=playerA, turn=1, submit_date__isnull=False)
         self.assertEquals(1, a_turn.choice)
         
-        b_turn = SectionGroupPlayerTurn.objects.get(player=playerB, state__turn=1, submit_date__isnull=False)
+        b_turn = SectionGroupPlayerTurn.objects.get(player=playerB, turn=1, submit_date__isnull=False)
         self.assertEquals(2, b_turn.choice)   
         
-        c_turn = SectionGroupPlayerTurn.objects.get(player=playerC, state__turn=1, submit_date__isnull=False)       
+        c_turn = SectionGroupPlayerTurn.objects.get(player=playerC, turn=1, submit_date__isnull=False)       
         self.assert_(c_turn.choice > 0)  
         
-        d_turn = SectionGroupPlayerTurn.objects.get(player=playerD, state__turn=1, submit_date__isnull=False)
+        d_turn = SectionGroupPlayerTurn.objects.get(player=playerD, turn=1, submit_date__isnull=False)
         self.assert_(d_turn.choice > 0)
         
     def test_sectiongroup_updatestate(self):
@@ -110,7 +110,7 @@ class ModelTestCases(TestCase):
         # pick the responses for each player so we can verify the state choice
         players = SectionGroupPlayer.objects.filter(group=group)
         for player in players:
-            SectionGroupPlayerTurn.objects.create(player=player, state=state, choice=2, reasoning="final", submit_date=datetime.datetime.now())
+            SectionGroupPlayerTurn.objects.create(player=player, turn=state.turn, choice=2, reasoning="final", submit_date=datetime.datetime.now())
                 
         # now, try to update the state
         group.update_state()

@@ -144,7 +144,7 @@ class Command(BaseCommand):
                 transition.opposition = entry.custom["o"].text
                 transition.president = entry.custom["p"].text
                 transition.regional = entry.custom["r"].text
-                transition.nextState = self.get_or_create_state(entry.custom["resultingstate"].text)
+                transition.next_state = self.get_or_create_state(entry.custom["resultingstate"].text)
                 transition.save()
                 print "%s" % transition
                

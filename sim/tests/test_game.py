@@ -66,7 +66,7 @@ class GameTestCases(TestCase):
         
         self.assertEquals(your_player['submit_status'], PLAYER_STATUS_PENDING)
         
-        turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
         self.assertEquals(your_player['saved_turn'], turn)
         self.assertEquals(your_player['saved_choice'], StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
           
@@ -97,7 +97,7 @@ class GameTestCases(TestCase):
         self.assertEquals(your_player['model'], player)
         self.assertEquals(your_player['submit_status'], PLAYER_STATUS_SUBMITTED)
         
-        turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
         self.assertEquals(your_player['saved_turn'], turn)
         self.assertEquals(your_player['saved_choice'], StateRoleChoice.objects.get(state=current_state, role=player.role, choice=turn.choice))
                
@@ -137,7 +137,7 @@ class GameTestCases(TestCase):
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
         user = User.objects.get(username='playerA')
         player = group.sectiongroupplayer_set.get(user__id=user.id)
-        turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
         self.assertEquals(turn.choice, 1)
         self.assertEquals(turn.submit_date, None)
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')
@@ -160,7 +160,7 @@ class GameTestCases(TestCase):
         current_state = group.sectiongroupstate_set.order_by('date_updated')[0].state
         user = User.objects.get(username='playerA')
         player = group.sectiongroupplayer_set.get(user__id=user.id)
-        turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
         self.assertEquals(turn.choice, 1)
         self.assert_(turn.submit_date != None)
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')
@@ -175,7 +175,7 @@ class GameTestCases(TestCase):
         self.assertEquals(doc['result'], 0)
         
         # verify object is unchanged
-        turn = SectionGroupPlayerTurn.objects.get(player=player, state=current_state)
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
         self.assertEquals(turn.choice, 1)
         self.assert_(turn.submit_date != None)
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')       
