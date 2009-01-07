@@ -1,0 +1,10 @@
+playerA,aaaa,Student,A,President
+playerB,bbbb,Student,A,SubRegionalRep
+playerC,cccc,Student,A,OppositionLeadership
+playerD,dddd,Student,A,FirstWorldEnvoy
+ccnmtl,,Administrator,
+testfaculty,faculty,Administrator
+playerE,eeee,Student,B,President
+playerF,ffff,Student,B,FirstWorldEnvoy
+playerG,gggg,Student,B,SubRegionalRep
+playerH,hhhh,Student,B,OppositionLeadership
