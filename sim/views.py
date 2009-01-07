@@ -12,9 +12,6 @@ import simplejson
 
 @login_required
 def root(request):
-    # check the state for all the sections and update as needed.
-    
-        
     # is the user a player or an administrator?
     qs = SectionAdministrator.objects.filter(user=request.user)
     if (len(qs) > 0):
@@ -282,7 +279,6 @@ def player_game(request, group_id, turn_id=0):
             t['name'] = 'Phase %s' % i
         else:
             t['name'] = "Results" 
-            
         
         try:
             group.sectiongroupstate_set.get(state__turn=i).state

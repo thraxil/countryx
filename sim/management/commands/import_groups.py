@@ -100,11 +100,11 @@ class Command(BaseCommand):
     )
 	
 	def clean(self):
-		SectionTurnDates.objects.all().delete()
 		SectionGroupPlayerTurn.objects.all().delete()
 		SectionGroupState.objects.all().delete()
 		SectionGroupPlayer.objects.all().delete()
 		SectionGroup.objects.all().delete()
+		SectionTurnDates.objects.all().delete()
 		SectionAdministrator.objects.all().delete()
 		Section.objects.all().delete()
 			            
@@ -116,7 +116,6 @@ class Command(BaseCommand):
 			print "Cleaning all section data..."
 			self.clean()
 			print "Cleaning complete"
-			
 					
 		if not options.get('csv') or not options.get('section') or not options.get('term') or not options.get('year') or not options.get('first_turn'):
 			print args

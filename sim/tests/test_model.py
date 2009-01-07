@@ -84,15 +84,19 @@ class ModelTestCases(TestCase):
         
         a_turn = SectionGroupPlayerTurn.objects.get(player=playerA, turn=1, submit_date__isnull=False)
         self.assertEquals(1, a_turn.choice)
+        self.assertEquals(AUTOMATIC_UPDATE_FROMDRAFT, a_turn.automatic_update)
         
         b_turn = SectionGroupPlayerTurn.objects.get(player=playerB, turn=1, submit_date__isnull=False)
         self.assertEquals(2, b_turn.choice)   
+        self.assertEquals(AUTOMATIC_UPDATE_NONE, b_turn.automatic_update)
         
         c_turn = SectionGroupPlayerTurn.objects.get(player=playerC, turn=1, submit_date__isnull=False)       
-        self.assert_(c_turn.choice > 0)  
+        self.assert_(c_turn.choice > 0 and c_turn.choice < 4)  
+        self.assertEquals(AUTOMATIC_UPDATE_RANDOM, c_turn.automatic_update)
         
         d_turn = SectionGroupPlayerTurn.objects.get(player=playerD, turn=1, submit_date__isnull=False)
-        self.assert_(d_turn.choice > 0)
+        self.assert_(d_turn.choice > 0 and d_turn.choice < 4)
+        self.assertEquals(AUTOMATIC_UPDATE_RANDOM, d_turn.automatic_update)
         
     def test_sectiongroup_updatestate(self):
         # Group A has no player turns in the test data

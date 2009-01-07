@@ -14,8 +14,8 @@
 <div class="main">
    <table>
       <tr>
-         <!--  Column 1 -- Player -->
-         <td  class="column1">
+         <!--  Column 1 -- Representative Profiles -->
+         <td class="representative_profiles">
             <!--  You -->    
             <table>
                <tr>
@@ -55,129 +55,150 @@
                   </tr>
                {% endfor %}
             </table> 
-            
-            </td>
-            <td class="column2">
-               <!--  Column 2 -->
+         </td>
+         
+         <!--  Column 2 Right-hand portion of screen. Divided up into its own table-->
+         <td>
+            <table>
+               <tr>
                
-               <!--  Turn Tabs -->
-               <div id="tabs" class="tabs">
-	               {% for t in tabs %}
-	                 <span id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} activetab {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} futureturn {% endif %}">
-	                    {%if t.viewable %}
-	                       <a href="/sim/player/game/{{group.id}}/{{t.id}}/">{{t.name}}</a>
-	                    {% else %}
-	                       {{ t.name }}
-	                    {% endif %}
-	                 </span>
-	               {% endfor %}
-	            </div>
-               
-               <div class="section_header">CURRENT COUNTRY CONDITIONS &mdash; {{ state }}</div>
-               <br />
-               
-               <div class="country_conditions_graph">
-                  {% for condition in conditions %}
-                     <table cellpadding="0" cellspacing="0">
-                        <tr><td rowspan="5" class="condition_row_name">{{condition.name}}&nbsp;</td></tr>
-                        <tr>
-                            {% num_range 10 as row_count %}
-								    
-								    {% for i in row_count %}
-								      {% ifequal i condition.value %}
-								         <td class="condition_row_indicator" rowspan="2">{{condition.value}}</td>
-								      {% else %}
-								         <td class="condition_row_dummy">&nbsp;</td>
-								      {% endifequal %}
-								    {% endfor %}
-                        </tr>
-                        <tr>
-                           {% num_range 9 as row_count %}
-                            
-                           {% for i in row_count %}
-                              {% iflessthan i condition.value %}
-                                 <td class="condition_row_block_filled">&nbsp;</td>
-                              {% else %}
-                                 <td class="condition_row_block_empty">&nbsp;</td>
-                              {% endiflessthan %}
-                           {% endfor %}
-                       </tr>
-                       <tr>
-                           <td colspan="5" class="condition_row_description" style="text-align: left">{{condition.least}}</td>
-                           <td colspan="5" class="condition_row_description" style="text-align: right">{{condition.most}}</td>
-                       </tr>
-                       <tr><td class="condition_row_description" colspan="11">&nbsp;</td></tr>
-                       
-                     </table>
-                  {% endfor %}
-               </div>
-               <br />
-               
-               <!--  Country Conditions / Text & Graph -->
-               <div class="country_conditions">
-                  <div class="country_conditions_textarea scrollable">
-                     <b>Economic and Political Snapshot</b><br/><br />
-                     {% autoescape off %}{{ country_condition }}{% endautoescape %}
-                  </div>
-               </div>
-
-            </td>
-            <td class="column3">
-               <!-- Column 3 -->
-               
-               <div class="section_header">YOUR OPTIONS</div>
-               
-               <div id="errorMsg" class="error invisible"></div>
-               <div id="successMsg" class="success invisible"></div>
-               
-               <!--  Choices / Clock -->
-               <div>
-                  <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
-                  {% ifequal 1 you.submit_status %}
-                     <div id="submit_state_desc" class="player_rolename">Status: No Action Taken</div< 
-                     <!--  not yet selected -->
-                     {% for c in you.choices %}
-                        <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
-                     {% endfor %}
-                     <div id="reasoning_form" style="display: none">
-	                     <div id="errorClient" class="error invisible"></div>
-	                     <textarea id="reasoning" class="reasoning">Enter your reasoning here</textarea>
-	                     <input id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
-	                     <input id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
-	                     <input id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
-	                  </div>
-                  {% endifequal %}
-               
-                  {% ifequal 2 you.submit_status %}
-                     <div id="submit_state_desc" class="player_rolename">Status: Decision Pending</div<
-                     <!--  in draft -->
-                     {% for c in you.choices %}
-                        {% ifequal c.choice you.saved_choice.choice %}
-                           <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
-                        {% else %}
-                           <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
-                        {% endifequal %}
-                     {% endfor %}
-                     <div id="reasoning_form" style="display: block">
-                        <div id="errorClient" class="error invisible"></div>
-                        <textarea id="reasoning" class="reasoning">{{ you.saved_turn.reasoning }}</textarea>
-                        <input id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
-                        <input id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
-                        <input id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
-                     </div>
-                  {% endifequal %}
-                  
-                  {% ifequal 4 you.submit_status %}
-                     <div id="submit_state_desc" class="player_rolename">Final Submit</div>
-                     <!--  submitted -->    
-                     <div id="{{you.saved_choice.choice}}" class="player_choice">{{ you.saved_choice.desc }}</div><br />
-	                  <div id="reasoning_form" style="display: block">
-	                     <div id="errorClient" class="error invisible"></div>
-	                     <textarea id="reasoning" class="reasoning" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
-	                  </div>
-                  {% endifequal %}
-               </div>
-            </td>
+                  <!--  Turn Tabs -->
+                  <td>
+			            <table id="tabs">
+			               <tr>
+			                  {% for t in tabs %}
+			                     <td id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} activetab {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} futureturn {% endif %}">
+					                    {%if t.viewable %}
+					                       <a href="/sim/player/game/{{group.id}}/{{t.id}}/">{{t.name}}</a>
+					                    {% else %}
+					                       {{ t.name }}
+					                    {% endif %}
+					                </td>
+					            {% endfor %}
+					         </tr>
+					       </table>
+                   </td>
+                   
+                   <!--  Elapsed Time Clock -->
+                   <td>
+                      <div class="section_header">TIME REMAINING IN PHASE</div>
+			             <table id="elapsed_time_clock">
+			                 <tr><th>Country X Time</th><th>Real Time</th></tr>
+			                 <tr><td>3 m</td><td>7 d</td></tr>
+			             </table>
+		             </td>
+		          </tr>
+		        
+			       <tr>
+			           <!--  Country Conditions Graph -->
+			           <td>
+			               
+			               <div class="country_conditions_graph">
+			                  <div class="section_header">CURRENT COUNTRY CONDITIONS &mdash; {{ state }}</div>
+                        
+			                  {% for condition in conditions %}
+			                     <table>
+			                        <tr><td rowspan="5" class="condition_row_name">{{condition.name}}</td></tr>
+			                        <tr>
+			                            {% num_range 10 as row_count %}
+											    
+											    {% for i in row_count %}
+											      {% ifequal i condition.value %}
+											         <td class="condition_row_indicator" rowspan="2">{{condition.value}}</td>
+											      {% else %}
+											         <td class="condition_row_dummy">&nbsp;</td>
+											      {% endifequal %}
+											    {% endfor %}
+			                        </tr>
+			                        <tr>
+			                           {% num_range 9 as row_count %}
+			                            
+			                           {% for i in row_count %}
+			                              {% iflessthan i condition.value %}
+			                                 <td class="condition_row_block_filled">&nbsp;</td>
+			                              {% else %}
+			                                 <td class="condition_row_block_empty">&nbsp;</td>
+			                              {% endiflessthan %}
+			                           {% endfor %}
+			                       </tr>
+			                       <tr>
+			                           <td colspan="5" class="condition_row_description" style="text-align: left">{{condition.least}}</td>
+			                           <td colspan="5" class="condition_row_description" style="text-align: right">{{condition.most}}</td>
+			                       </tr>
+			                       <tr><td class="condition_row_description" colspan="11">&nbsp;</td></tr>
+			                       
+			                     </table>
+			                  {% endfor %}
+			               </div>
+			               
+			               <br />
+			               <!--  Country Conditions / Text & Graph -->
+			               <div class="country_conditions">
+			                  <div class="country_conditions_textarea scrollable">
+			                     <b>Economic and Political Snapshot</b><br/><br />
+			                     {% autoescape off %}{{ country_condition }}{% endautoescape %}
+			                  </div>
+			               </div>
+	                  </td>
+	                  
+	                  <!--  Player Choice & Entry Form -->
+			            <td style="vertical-align: top">
+			               <div class="section_header">YOUR OPTIONS</div>
+			               Click a choice then justify it...
+			               
+			               <div id="errorMsg" class="error invisible"></div>
+			               <div id="successMsg" class="success invisible"></div>
+			               			               
+			               <!--  Choices -->
+			               <div>
+			                  <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
+			                  {% ifequal 1 you.submit_status %}
+			                     <!--  not yet selected -->
+			                     {% for c in you.choices %}
+			                        <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">
+			                           <b>Choice {{c.choice}}</b><br />
+			                           {{ c.desc }}
+			                        </div><br />
+			                     {% endfor %}
+			                     <div id="reasoning_form" style="display: none">
+				                     <div id="errorClient" class="error invisible"></div>
+				                     <textarea id="reasoning" class="reasoning">Enter your reasoning here</textarea>
+				                     <input id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
+				                     <input id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
+				                     <input id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
+				                  </div>
+			                  {% endifequal %}
+			               
+			                  {% ifequal 2 you.submit_status %}
+			                     <!--  in draft -->
+			                     {% for c in you.choices %}
+			                        {% ifequal c.choice you.saved_choice.choice %}
+			                           <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
+			                        {% else %}
+			                           <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
+			                        {% endifequal %}
+			                     {% endfor %}
+			                     <div id="reasoning_form" style="display: block">
+			                        <div id="errorClient" class="error invisible"></div>
+			                        <textarea id="reasoning" class="reasoning">{{ you.saved_turn.reasoning }}</textarea>
+			                        <input id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
+			                        <input id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
+			                        <input id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
+			                     </div>
+			                  {% endifequal %}
+			                  
+			                  {% ifequal 4 you.submit_status %}
+			                     <!--  submitted -->    
+			                     <div id="{{you.saved_choice.choice}}" class="player_choice">{{ you.saved_choice.desc }}</div><br />
+				                  <div id="reasoning_form" style="display: block">
+				                     <div id="errorClient" class="error invisible"></div>
+				                     <textarea id="reasoning" class="reasoning" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
+				                  </div>
+			                  {% endifequal %}
+			               </div>
+			            </td>
+			         </tr>
+		         </table>
          </tr>
     </table>
 </div>    

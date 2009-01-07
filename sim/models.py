@@ -200,12 +200,14 @@ class SectionGroup(models.Model):
                 player_response = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
                 if (player_response.submit_date == None):
                     player_response.submit_date = datetime.datetime.now()
+                    player_response.automatic_update = AUTOMATIC_UPDATE_FROMDRAFT
                     player_response.save()
             except:
                # player has no choice saved
                player_response = SectionGroupPlayerTurn.objects.create(player=player, turn=state.turn)
                player_response.choice = random.randint(1,3)
                player_response.submit_date = datetime.datetime.now()
+               player_response.automatic_update = AUTOMATIC_UPDATE_RANDOM
                player_response.save() 
     
     def update_state(self):
@@ -277,12 +279,17 @@ class SectionGroupPlayer(models.Model):
                 pass
                  
         return action
-        
+
+AUTOMATIC_UPDATE_NONE  = 0
+AUTOMATIC_UPDATE_FROMDRAFT = 1
+AUTOMATIC_UPDATE_RANDOM = 2
+
 class SectionGroupPlayerTurn(models.Model):
     player = models.ForeignKey(SectionGroupPlayer, related_name="%(class)s_related_player")
     turn = models.IntegerField()
     choice = models.IntegerField(null=True)
     reasoning = models.TextField(null=True)
+    automatic_update = models.IntegerField(default=0)
     submit_date = models.DateTimeField('final date submitted', null=True)
     feedback = models.TextField(null=True)
     faculty = models.ForeignKey(SectionAdministrator, related_name="%(class)s_related_faculty", null=True)
@@ -296,5 +303,3 @@ class SectionGroupPlayerTurn(models.Model):
     
     def is_submitted(self):
         return self.submit_date != None
-
-        

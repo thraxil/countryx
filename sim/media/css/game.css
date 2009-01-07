@@ -50,74 +50,23 @@
    color: #fff;
 }
 
-.tabs
-{
-	width: 100%;
-	text-align: center;
-	padding-left: 3px;
-	padding-right: 3px;
-	padding-bottom: 10px;
-}
-
-.viewableturn
-{
-	color: #302226;
-   background-color: lightgray;
-   border: thin solid #302226;
-   width: 400px;
-   text-align: center;
-   padding: 3px;
-}
-
-.futureturn
-{
-   color: gray;
-   background-color: darkgray;
-   border: thin solid gray;
-   width: 400px;
-   text-align: center;
-   padding: 3px;
-}
-
-.activetab
-{
-   color: #302226;
-   background-color: white;
-   border: thin solid #302226;
-   width: 400px;
-   text-align: center;
-   padding: 3px;
-}
-
 .section_header
 {
    background-color: #CCCCCC;
    text-align: center;
    cursor: pointer;
-   font-size: 10px;
-   border: black 1px solid;
+   font-size: 12px;
+   border: #fff 1px solid;
    color: black;  
 }
 
-.column1
-{
-    vertical-align: top;
-    width: 27%;
-}
-
-.column2
-{
-    vertical-align: top;
-    width: 45%;
-}
-
-.column3
-{
-    vertical-align: top;
-    width: 27%;
-}
-
 /** Column 1  **/
+
+.representative_profiles
+{
+    vertical-align: top;
+    width: 25%;
+}
 
 .player_rolename
 {
@@ -170,20 +119,62 @@
 
 /** Column 2 **/
 
+#tabs
+{
+   width: 480px;
+   height: 50px;
+   text-align: center;
+   vertical-align: middle;
+   padding-left: 3px;
+   padding-right: 3px;
+   padding-bottom: 10px;
+}
+
+#tabs a:link, a:visited
+{
+	text-decoration: none;
+	color: #000;
+}
+
+.viewableturn
+{
+   color: #302226;
+   background-color: lightgray;
+   border: thin solid #302226;
+}
+
+.futureturn
+{
+   color: gray;
+   background-color: darkgray;
+   border: thin solid gray;
+}
+
+.activetab
+{
+   color: #302226;
+   background-color: white;
+   border: thin solid #302226;
+}
+
 .country_conditions,
 .country_conditions_graph
 {
 	background-color: #fff;
 	color: #000;
 	vertical-align: middle;
-	width: 100%;
+	width: 480px;
+}
+
+.country_conditions_graph table
+{
+   border-spacing: 0; 
 }
 
 .condition_row_name
 {
 	width: 75px;
-   font-size: 12px;
-   font-family: "lucida grande",Verdana,Helvetica,Arial,sans-serif;
+   font-size: 10px;
    border-bottom: black 1px solid;
    text-align: center;
    border-right:  black 1px solid;
@@ -214,7 +205,7 @@
 {
    width: 40px;
    height: 100%;
-   font-size: 16px;   
+   font-size: 14px;   
    padding: 0px;
    border-spacing: 0px;
 }
@@ -223,7 +214,7 @@
 {
    width: 40px;
    height: 100%;
-   font-size: 14px;   
+   font-size: 12px;   
    padding: 0px;
    text-align: center;
    border: black 1px solid;
@@ -239,8 +230,7 @@
 .country_conditions_textarea
 {
    height: 200px;
-   font-size: 12px;
-   font-family: "lucida grande",Verdana,Helvetica,Arial,sans-serif;
+   font-size: 11px;
    padding: 10px 10px 10px 10px;
    border-spacing: 5px;
    border: black 1px solid;
@@ -248,27 +238,44 @@
 
 /** Column 3 **/
 
-.time
+#elapsed_time_clock
 {
+   width: 100%;
+}
+
+#elapsed_time_clock th
+{
+   background-color: #666;
+   font-size: 11px;
+   color: #000;
+   font-weight: bold;
+   text-align: center; 
+}
+
+#elapsed_time_clock td
+{
+   background-color: #417690;
+   font-size: 11px;
    color: #fff;
-   padding: 5px;
-   border-spacing: 5px;
-   font-size: 12px;
+   text-align: center;
+   width: 50%;
 }
 
 .player_choice
 {
 	border: white 1px solid;
-   background-color: #000;
-   color: #fff;
+   background-color: #fff;
+   color: #000;
    padding: 5px;
    border-spacing: 5px;
    font-size: 12px;
    cursor: pointer;
+   font-weight: normal;
+   height: 150px;
 }
 
 .reasoning
 {
 	width: 100%;
-	height: 200px;
+	height: 300px;
 } 
