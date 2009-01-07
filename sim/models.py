@@ -167,7 +167,7 @@ class SectionTurnDates(models.Model):
     turn3 = models.DateTimeField('turn3', null=True)
 
     def __unicode__(self):
-        return "%s %s %s %s" % (self.turn1, self.turn2, self.turn3)
+        return "%s %s %s" % (self.turn1, self.turn2, self.turn3)
         
 ###############################################################################
 ###############################################################################
