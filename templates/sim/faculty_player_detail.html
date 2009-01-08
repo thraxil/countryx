@@ -3,74 +3,82 @@
 {% block breadcrumbs %}
    <a href="/sim/">Home</a> > 
    <a href="/sim/faculty/groups/{{section.id}}/">{{section}}</a> > 
-   <a href="/sim/faculty/group/{{group.id}}/">Group &mdash; {{ group.name }} > 
-   <a href="/sim/faculty/group/{{group.id}}#turn{{state.turn}}">Turn {{ state.turn }}</a> >
+   <a href="/sim/faculty/players/{{section.id}}/">Players</a> > 
    {{ player.user.first_name }} {{ player.user.last_name }} {{ player.user.username }}
+   
 {% endblock %}
+
+{% load iflessthan %}
 
 {% block content %}
    {{ block.super }}
    
-   <table class="datagrid">
-      <tr>
-         <td>
-            <!--  Player information -->
-			   Player Status:        
-			      {% ifequal submit_status 1 %}
-			         No Action Taken
-			      {% endifequal %}
-			      {% ifequal submit_status 2 %}
-			         In Progress
-			      {% endifequal %}
-			      {% ifequal submit_status 4 %}
-			         Completed Turn
-			      {% endifequal %}
-			   <br />
-			   {% if turn %}
-			      Updated: {{ turn.submit_date }}<br />
-			   {% endif %}
-			   <br />
-			   Country Conditions: 
-			   <div class="scrollable_text">{% autoescape off %}{{ country_condition }}{% endautoescape %}</div>
-			   <br />
-		
-				Player Choices:<br />
-				{% for c in choices %}
-				   {% ifequal c.choice turn.choice %}
-				     * <b>{{c.choice}} {{ c.desc }}</b><br />
-				   {% else %}
-				     {{c.choice}} {{ c.desc }}<br />
-				   {% endifequal %}
-				{% endfor %}
+   {% for t in player_turns %}
+      <a name="turn{{t.turn}"/>
+      
+      {% iflessthan t.state.turn 4 %}
+         <h2>Turn {{t.state.turn}} {{t.state.name}}</h2>
+      
+		   <table class="datagrid">
+		      <tr>
+		         <td>
+		            <!--  Player information -->
+					   Player Status:        
+					      {% ifequal t.submit_status 1 %}
+					         No Action Taken
+					      {% endifequal %}
+					      {% ifequal t.submit_status 2 %}
+					         In Progress
+					      {% endifequal %}
+					      {% ifequal t.submit_status 4 %}
+					         Completed Turn
+					      {% endifequal %}
+					   <br />
+					   {% if t.submit_date %}
+					      Updated: {{ t.submit_date }}<br />
+					   {% endif %}
+					   <br />
+					   Country Conditions: 
+					   <div class="scrollable_text">{% autoescape off %}{{ t.country_condition }}{% endautoescape %}</div>
+					   <br />
 				
-				{% ifequal submit_status 4 %}
-               <br />
-               <br />
-               Player Reasoning:
-               <div class="scrollable_text">{% autoescape off %}{{ turn.reasoning }}{% endautoescape %}</div>
-               <br /><br />
-            {% endifequal %}
-			</td>
-			<td style="vertical-align: top; padding-left: 20px;">
-				{% ifequal submit_status 4 %}
-				   <form action="/sim/faculty/player/{{group.id}}/{{player.id}}/{{state.id}}/" method="POST">
-						<div class="fieldWrapper">
-						   {% if form.feedback.errors %}
-					         <div class="error">Please enter some feedback before submitting.</div>
-					      {% endif %}
-					      {% if updated %}
-					         <div class="success">Your changes have been saved</div>
-					      {% endif %}
-					      <label for="id_feedback">Feedback:</label><br />
-					         {{ form.feedback }}
-					      </div>
-						   <div class="fieldWrapper">
-					         {{ form.faculty_id }}
-				    	   </div>
-				  	<input type="submit" value="Submit" />
-					</form>
-			   {% endifequal %}
-			</td>
-		</tr>
-	</table>		
+						Player Choices:<br />
+						{% for c in t.choices %}
+						   {% ifequal c.choice t.choice %}
+						     * <b>{{c.choice}} {{ c.desc }}</b><br />
+						   {% else %}
+						     {{c.choice}} {{ c.desc }}<br />
+						   {% endifequal %}
+						{% endfor %}
+						
+						{% ifequal t.submit_status 4 %}
+		               <br />
+		               <br />
+		               Player Reasoning:
+		               <div class="scrollable_text">{% autoescape off %}{{ t.reasoning }}{% endautoescape %}</div>
+		               <br /><br />
+		            {% endifequal %}
+					</td>
+					<td style="vertical-align: top; padding-left: 20px;">
+					   <div id="error_client_{{t.turn}}" class="error invisible"></div>
+                  <div id="success_client_{{t.turn}}" class="success invisible"></div>
+					   {% ifequal t.submit_status 4 %}
+						   <form onsubmit="return submitFeedback(this, {{player.id}});">
+								<label for="id_feedback">Feedback:</label><br />
+						         {{ t.form.feedback }}
+						      </div>
+							   <div class="fieldWrapper">
+						         {{ t.form.faculty_id }}
+					    	   </div>
+					    	   <div class="fieldWrapper">
+                           {{ t.form.turn_id }}
+                        </div>
+						  	   <input type="submit" value="Submit" />
+							</form>
+					   {% endifequal %}
+					</td>
+				</tr>
+			</table>
+		{% endiflessthan %}		
+   {% endfor %}
 {% endblock %}

@@ -10,7 +10,7 @@
 
 {% block content %}
    {{ block.super }}
-   
+   <h2>Turn {{state.turn}} {{state.name}}</h2>
    <table class="datagrid">
       <tr>
          <td>
@@ -53,21 +53,20 @@
 			</td>
 			<td style="vertical-align: top; padding-left: 20px;">
 				{% ifequal submit_status 4 %}
-				   <form action="/sim/faculty/player/{{group.id}}/{{player.id}}/{{state.id}}/" method="POST">
+				   <div id="error_client_{{state.turn}}" class="error invisible"></div>
+               <div id="success_client_{{state.turn}}" class="success invisible"></div>
+               <form onsubmit="return submitFeedback(this, {{player.id}});">
 						<div class="fieldWrapper">
-						   {% if form.feedback.errors %}
-					         <div class="error">Please enter some feedback before submitting.</div>
-					      {% endif %}
-					      {% if updated %}
-					         <div class="success">Your changes have been saved</div>
-					      {% endif %}
-					      <label for="id_feedback">Feedback:</label><br />
-					         {{ form.feedback }}
-					      </div>
-						   <div class="fieldWrapper">
-					         {{ form.faculty_id }}
-				    	   </div>
-				  	<input type="submit" value="Submit" />
+						   <label for="id_feedback">Feedback:</label><br />
+					      {{ form.feedback }}
+					   </div>
+						<div class="fieldWrapper">
+					      {{ form.faculty_id }}
+			    	   </div>
+			    	   <div class="fieldWrapper">
+                     {{ form.turn_id }}
+                  </div>
+				  	   <input type="submit" value="Submit" />
 					</form>
 			   {% endifequal %}
 			</td>

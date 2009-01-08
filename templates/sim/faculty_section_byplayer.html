@@ -1,5 +1,7 @@
 {% extends "sim/base_faculty.html" %}
 
+{% load iflessthan %}
+
 {% block breadcrumbs %}
    <a href="/sim/">Home</a> > {{section}}
 {% endblock %}
@@ -10,13 +12,13 @@
    <table id="sortable_table" class="datagrid">
       <thead>
          <tr>
-            <th mochi:format="str">Player Status</th>
-            <th mochi:format="str">Group</th>
             <th mochi:format="str">Group Turn</th>
+            <th mochi:format="str">Group</th>
+            <th mochi:format="str">Player Status</th>
             <th mochi:format="str">Name</th>
             <th mochi:format="str">Uni</th>
             <th mochi:format="str">Role</th>
-            <th>Action</th>
+            <th>Detail</th>
          </tr>
       </thead>
       <tfoot class="invisible">
@@ -27,8 +29,10 @@
       <tbody>
          {% for player in players %}
 	         <tr>
-	            <td>
-		            {% ifequal player.current_status 1 %}
+	            <td>{{ player.group.sectiongroupstate_set.latest.state.turn  }}</td>
+               <td>{{ player.group.name }}</td>
+               <td>
+	               {% ifequal player.current_status 1 %}
 	                   No Action Taken
 	               {% endifequal %}
 	               
@@ -40,12 +44,14 @@
 	                  Submitted      
 	               {% endifequal %}
 	            </td>
-	            <td>{{ player.group.name }}</td>
-               <td>{{ player.group.sectiongroupstate_set.latest.state.turn  }}</td>
-               <td>{{ player.user.first_name }} {{ player.user.last_name }}</td>
+	            <td>{{ player.user.first_name }} {{ player.user.last_name }}</td>
 	            <td>{{ player.user.username }}</td>
 	            <td>{{ player.role.name }}</td>
-	            <td><a href="/sim/faculty/player/{{ group.id }}/{{ p.model.id }}/{{t.group_state.state.id}}/">Detail</a></td>
+	            {% iflessthan player.sectiongroupplayerturn_related_player.count 1 %}
+	                <td/>
+	            {% else %}
+	                <td><a href="/sim/faculty/player/{{player.id}}/">All Turns</a></td>
+               {% endiflessthan %}
 	         </tr>
          {% endfor %}
       </tbody>

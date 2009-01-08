@@ -88,21 +88,7 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
         turn = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
         feedback = turn.feedback
     except SectionGroupPlayerTurn.DoesNotExist:
-        turn = None
-        
-    if (request.method == 'POST'):
-        form = FeedbackForm(request.POST)
-        if (form.is_valid()):
-            # Process the data in form.cleaned_data
-            turn.feedback = form.cleaned_data['feedback']
-            turn.feedback_date = datetime.datetime.now()
-            turn.faculty = SectionAdministrator.objects.get(section=group.section, user__id=form.cleaned_data['faculty_id'])
-            turn.save()
-                        
-            redirect_url = '/sim/faculty/player/%s/%s/%s/1/' % (group_id, player_id, state_id)
-            return HttpResponseRedirect(redirect_url)
-    else:
-        form = FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback })
+        pass # should never happen
 
     ctx = Context({
        'user': request.user,
@@ -114,7 +100,7 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
        'submit_status': player.status(state),
        'choices': StateRoleChoice.objects.filter(state=state, role=player.role),
        'country_condition': state.statevariable_set.get(name='Country Condition').value,
-       'form': form,
+       'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback, 'turn_id': state.turn }),
        'updated': updated
     })
     
@@ -122,52 +108,73 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
     return HttpResponse(template.render(ctx))
 
 @login_required
-def faculty_player_detail(request, group_id, player_id, state_id, updated=False):
-    group = SectionGroup.objects.get(id=group_id)
+def faculty_player_detail(request, player_id):
     player = SectionGroupPlayer.objects.get(id=player_id)
-    state = State.objects.get(id=state_id)
-    feedback = None
+    group = player.group
     
-    try:
-        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
-        feedback = turn.feedback
-    except SectionGroupPlayerTurn.DoesNotExist:
-        turn = None
-        
-    if (request.method == 'POST'):
-        form = FeedbackForm(request.POST)
-        if (form.is_valid()):
-            # Process the data in form.cleaned_data
-            turn.feedback = form.cleaned_data['feedback']
-            turn.feedback_date = datetime.datetime.now()
-            turn.faculty = SectionAdministrator.objects.get(section=group.section, user__id=form.cleaned_data['faculty_id'])
-            turn.save()
-                        
-            redirect_url = '/sim/faculty/player/%s/%s/%s/1/' % (group_id, player_id, state_id)
-            return HttpResponseRedirect(redirect_url)
-    else:
-        form = FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback })
-
+    player_turns = []
+    turns = SectionGroupPlayerTurn.objects.filter(player=player).order_by("-turn")
+    
+    for t in turns:
+        turn_state = group.sectiongroupstate_set.get(state__turn=t.turn).state
+        player_turn = {'turn': t.turn, 
+                       'submit_status': player.status(turn_state),
+                       'choice': t.choice,
+                       'choices': StateRoleChoice.objects.filter(state=turn_state, role=player.role),
+                       'country_condition': turn_state.statevariable_set.get(name='Country Condition').value,
+                       'submit_date': t.submit_date,
+                       'reasoning': t.reasoning,
+                       'state': turn_state,
+                       'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': t.feedback, 'turn_id': t.turn}),
+                       }
+ 
+        player_turns.append(player_turn)
+                
     ctx = Context({
        'user': request.user,
+       'player': player,
        'group': group,
        'section': group.section,
-       'player': player,
-       'state': state,
-       'turn': turn,
-       'submit_status': player.status(state),
-       'choices': StateRoleChoice.objects.filter(state=state, role=player.role),
-       'country_condition': state.statevariable_set.get(name='Country Condition').value,
-       'form': form,
-       'updated': updated
+       'player_turns': player_turns
     })
-    
-    template = loader.get_template('sim/faculty_player_detail_byturn.html')
+
+    template = loader.get_template('sim/faculty_player_detail.html')
     return HttpResponse(template.render(ctx))
-  
+
+def faculty_feedback_submit(request):
+    response = {}
+    try:
+        player_id = request.POST.get('player_id', None)
+        faculty_id = int(request.POST.get('faculty_id', None))
+        turn_id = int(request.POST.get('turn_id', None))
+        feedback = request.POST.get('feedback', '')
+        
+        player = SectionGroupPlayer.objects.get(id=player_id)
+        group = player.group
+        
+        # Retrieve the associated player turn to update
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=turn_id)
+        print turn
+        
+        turn.feedback = feedback
+        turn.feedback_date = datetime.datetime.now()
+        turn.faculty = SectionAdministrator.objects.get(section=group.section, user__id=faculty_id)
+        turn.save()
+             
+        response['result'] = 1
+        response['turn_id'] = turn_id
+        response['message'] = "Your feedback has been saved."
+    except:
+        response['result'] = 0
+        response['turn_id'] = turn_id
+        response['message'] = "An unexpected error occurred. Please try again"
+        
+    return HttpResponse(simplejson.dumps(response), 'application/json')
+ 
 class FeedbackForm(forms.Form):
     feedback = forms.CharField(widget=forms.Textarea)
-    faculty_id = forms.IntegerField(widget=forms.HiddenInput)    
+    faculty_id = forms.IntegerField(widget=forms.HiddenInput)
+    turn_id = forms.IntegerField(widget=forms.HiddenInput)    
     
 @login_required
 def faculty_section_manage(request, section_id, updated=False):

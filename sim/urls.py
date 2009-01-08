@@ -23,8 +23,7 @@ urlpatterns = patterns('',
                        (r'^faculty/group/(?P<group_id>\d+)/$', 'genocideprevention.sim.views.faculty_group_detail'),
                        
                        (r'^faculty/player/turn/(?P<group_id>\d+)/(?P<player_id>\d+)/(?P<state_id>\d+)/$', 'genocideprevention.sim.views.faculty_player_detail_byturn'),
-                       (r'^faculty/player/turn/(?P<group_id>\d+)/(?P<player_id>\d+)/(?P<state_id>\d+)/(?P<updated>\d+)/$', 'genocideprevention.sim.views.faculty_player_detail_byturn'),
+                       (r'^faculty/player/(?P<player_id>\d+)/$', 'genocideprevention.sim.views.faculty_player_detail'),
+                       (r'^faculty/feedback/$', 'genocideprevention.sim.views.faculty_feedback_submit'),
 
-                       (r'^faculty/player/(?P<group_id>\d+)/(?P<player_id>\d+)/(?P<state_id>\d+)/$', 'genocideprevention.sim.views.faculty_player_detail'),
-                       (r'^faculty/player/(?P<group_id>\d+)/(?P<player_id>\d+)/(?P<state_id>\d+)/(?P<updated>\d+)/$', 'genocideprevention.sim.views.faculty_player_detail'),
 )
