@@ -4,11 +4,14 @@ Retrieved the data thus. Using syntax for all applications
 This doesn't always work, sometimes, the whole db needs to be flushed & readded:
 ./manage.py flush
 ./manage.py import --user columbiasim --pwd cicr2008
-./manage.py import_groups --clean --csv users.csv --section Test --term Spring --year 2009 --first_turn "2009-01-20 12:00"
+./manage.py import_groups --clean --csv static-data/users.csv --section Test --term Spring --year 2009 --first_turn "2009-01-20 12:00"
 
 and, do the following:
 update sim_statevariable set name='Economy' where name like '%Economy';
-update sim_statevariable set name='Violence Level' where name='Levels of Violence'; 
+update sim_statevariable set name='Violence Level' where name='Levels of Violence';
+
+Manually add the role descriptions from the wiki.
+http://wiki.ccnmtl.columbia.edu/index.php/Walkthrough_Narrative-Gen_Sim 
 
 ./manage.py dumpdata > sim/fixtures/test_data.json
 
@@ -18,7 +21,6 @@ Users
 -----------------------
 ccnmtl silverpair
 testfaculty faculty
-
 
 playerA aaaa
 playerB bbbb

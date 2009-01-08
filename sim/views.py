@@ -154,7 +154,6 @@ def faculty_feedback_submit(request):
         
         # Retrieve the associated player turn to update
         turn = SectionGroupPlayerTurn.objects.get(player=player, turn=turn_id)
-        print turn
         
         turn.feedback = feedback
         turn.feedback_date = datetime.datetime.now()

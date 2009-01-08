@@ -13,7 +13,6 @@ class GameStateMiddleware(object):
     def process_request(self, request):
       self.write_lock.acquire()
       try:
-         print "GameStateMiddleware: process_request"
          sections = Section.objects.all()
          for section in sections:
             section_turn = section.current_turn()
