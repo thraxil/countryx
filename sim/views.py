@@ -125,6 +125,7 @@ def faculty_player_detail(request, player_id):
                        'submit_date': t.submit_date,
                        'reasoning': t.reasoning,
                        'state': turn_state,
+                       'automatic_update': t.automatic_update,
                        'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': t.feedback, 'turn_id': t.turn}),
                        }
  

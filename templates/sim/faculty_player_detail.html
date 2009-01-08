@@ -36,6 +36,17 @@
 					   <br />
 					   {% if t.submit_date %}
 					      Updated: {{ t.submit_date }}<br />
+					      
+					      {% ifequal t.automatic_update 0 %}
+		                  Player completed turn on time.
+		               {% endifequal %}
+		               {% ifequal t.automatic_update 1 %}
+		                  Player ran out time. The player's saved draft was submitted.
+		               {% endifequal %}
+		               {% ifequal t.automatic_update 2 %}
+		                  Player ran out of time. A random choice was assigned.
+		               {% endifequal %}
+		               <br />
 					   {% endif %}
 					   <br />
 					   Country Conditions: 
