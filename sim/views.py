@@ -326,7 +326,7 @@ def player_game(request, group_id, turn_id=0):
     return HttpResponse(t.render(c))
 
 #actually needs to be faculty only
-@login_required 
+#@login_required 
 def allpaths(request):
    #NOTE: template currently assumes 4 turns
    t = loader.get_template('sim/allpaths.html')

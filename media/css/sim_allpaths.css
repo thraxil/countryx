@@ -3,7 +3,12 @@ body
   font-family:sans-serif;
   font-size:10px;
  }
-
+#gridkey .key-label { font-weight:bold;text-align:center; }
+#gridkey .role 
+{
+  font-weight:bold; 
+  text-transform:capitalize;
+}
 #gridkey 
 { 
   background-color:white;
@@ -12,13 +17,14 @@ body
   right:0;
   top:0;
  }
+
 #explanation 
 { 
   position:absolute;
   top:0;
   font-size:12px;
   left:300px;
-  width:700px;
+  width:650px;
  }
 
 #turns
@@ -71,18 +77,36 @@ td
  }
 
 .transition-from{ float:left } 
-.transition-to{ float:right } 
+.transition-to
+{ 
+  float:right ;
+  cursor:pointer;
+} 
 
 .transition-to,
 .transition-from
 { 
-  cursor:pointer;
   padding:0;
   margin:0;
   display:block;
   width:48%;/*45px;*/
   border:1px solid black;
 
+ }
+#gridkey td.smalltrans 
+{ 
+  width:18px;
+ }
+
+#fillmeup .transition-permutation 
+{ 
+  width:10%;
+  height:17px;
+  border:1px solid white;
+ }
+#fillmeup .transition-permutation.selected
+{ 
+  border:1px solid black;
  }
 
 .transition-permutation 
@@ -91,7 +115,10 @@ td
   display:block;
   width:11%;
   height:7px;
-     
+  /*
+  border-left:1px solid white;
+  border-bottom:1px solid white;
+     */
   padding:0;
   margin:0;
 

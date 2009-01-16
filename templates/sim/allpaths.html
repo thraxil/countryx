@@ -2,7 +2,8 @@
 {% load hash %}
 
 {% block js %}
- <script type="text/javascript" src="/site_media/js/sim_allpaths.js"></script>
+   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
+   <script type="text/javascript" src="/site_media/js/sim_allpaths.js"></script>
 {% endblock %}
 {% block css %}
    <link href="/site_media/css/sim_allpaths.css" rel="stylesheet" type="text/css" />
@@ -48,9 +49,11 @@
 		  {%if not forloop.parentloop.last %}
 		  <div class="transition-to">
 		    <div class="table-label">TO</div>
-		    {%for change_color in s.full_to %}
-		      <div class="transition-permutation" style="background-color:#{{change_color}}"></div>
-		    {%endfor %}
+		    <div class="transitions">
+		      {%for change_color in s.full_to %}
+		        <div class="transition-permutation" style="background-color:#{{change_color}}"></div>
+		      {%endfor %}
+		    </div>
 		  </div>
 		  {%endif%}
 		</div>
@@ -61,21 +64,24 @@
 
 	<!--KEY-->
 	<table id="gridkey" border="1">
-	  <tr><td colspan="2"><b>KEY</b></td>
-	      <td colspan="3">1</td><td colspan="3">2</td><td colspan="3">3</td>
-	      <td>{{roles.2}}</td>
+	  <tr><td class="key-label" colspan="2">KEY</td>
+	      <td id="o2-1" class="option" colspan="3">1</td><td id="o2-2" class="option" colspan="3">2</td><td id="o2-3" class="option" colspan="3">3</td>
+	      <td class="role">{{roles.2}}</td>
 	  </tr>
-	  <tr><td>{{roles.0}}</td>
-	      <td>{{roles.1}}</td>
-	      <td>1</td><td>2</td><td>3</td><td>1</td><td>2</td><td>3</td><td>1</td><td>2</td><td>3</td>
-	      <td>{{roles.3}}</td>
+	  <tr><td class="role">{{roles.0}}</td>
+	      <td class="role">{{roles.1}}</td>
+	      <td id="o3-1" class="smalltrans option">1</td>
+	      <td id="o3-2" class="smalltrans option">2</td><td id="o3-3" class="smalltrans option">3</td><td id="o3-1" class="smalltrans option">1</td><td id="o3-2" class="smalltrans option">2</td><td id="o3-3" class="smalltrans option">3</td><td id="o3-1" class="smalltrans option">1</td><td id="o3-2" class="smalltrans option">2</td><td id="o3-3" class="smalltrans option">3</td>
+	      <td class="role">{{roles.3}}</td>
 	  </tr>
-	  <tr><td rowspan="3">1</td><td>1</td>
-	      <td rowspan="9" colspan="9">hi</td>
+	  <tr><td rowspan="3">1</td><td class="option">1</td>
+	      <td id="fillmeup" rowspan="9" colspan="9">
+		Click a TO box to zoom in
+	      </td>
 	  </tr>
-	  <tr><td>2</td></tr><tr><td>3</td></tr>
-	  <tr><td rowspan="3">2</td><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
-	  <tr><td rowspan="3">3</td><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
+	  <tr><td class="option">2</td></tr><tr><td class="option">3</td></tr>
+	  <tr><td rowspan="3">2</td><td class="option">1</td></tr><tr><td class="option">2</td></tr><tr><td class="option">3</td></tr>
+	  <tr><td rowspan="3">3</td><td class="option">1</td></tr><tr><td class="option">2</td></tr><tr><td class="option">3</td></tr>
 	</table>
 
 
