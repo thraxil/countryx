@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load hash %}
+
+{% block js %}
+ <script type="text/javascript" src="/site_media/js/sim_allpaths.js"></script>
+{% endblock %}
+{% block css %}
+   <link href="/site_media/css/sim_allpaths.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+	{{ block.super }}
+	<div id="explanation">
+	  <h2>How to read this</h2>
+	  <p>Each state has an 81x81 grid for 'From'-states and 'To'-destination states.  
+	  
+	  On the key, in the upper right, you'll see that each combination of choices for each role will
+	  have a single pixel in the 81x81 grid.  We place the major actors on the outside, so when
+	  they have a significant effect you will see large stripes--vertical or horizontal in the TO chart.
+	  If the minor roles affect the outcome, you will see narrower stripes.
+	  </p>
+	  <p>The colors represent the states that the combination goes TO or FROM.  Since FROM pixels represent
+	  outcomes from multiple states, if there's an overlap, we represent it as black.  In that case, 
+	  just look in the TO grids of the preceding turn for that state, to see how you get there
+	  </p>
+	</div>
+	<div id="turns">
+	  {% for t in turns %}
+	    <div class="overview-turn t{{forloop.counter}}">
+	      <div class="turn-details">
+		<h2 class="turn-name">Turn {{forloop.counter}}</h2>
+	      </div>
+	      {% for s in t.states %}	      
+	        <div class="overview-state s{{forloop.counter}}">
+		  <div class="state-name" style="background-color:#{{s.color}}">
+		    {{s.name}}
+		  </div>
+		  <!--Transition FROM -->
+		  {%if not forloop.parentloop.first %}
+		  <div class="transition-from">
+		    <div class="table-label">FROM</div>
+		    {%for change_color in s.full_from %}
+		      <div class="transition-permutation" style="background-color:#{{change_color}}"></div>
+		    {%endfor %}
+		  </div>
+		  {%endif%}
+		  <!--Transition TO -->
+		  {%if not forloop.parentloop.last %}
+		  <div class="transition-to">
+		    <div class="table-label">TO</div>
+		    {%for change_color in s.full_to %}
+		      <div class="transition-permutation" style="background-color:#{{change_color}}"></div>
+		    {%endfor %}
+		  </div>
+		  {%endif%}
+		</div>
+	      {% endfor %}	  
+	    </div>
+	  {% endfor %}	  
+	</div>
+
+	<!--KEY-->
+	<table id="gridkey" border="1">
+	  <tr><td colspan="2"><b>KEY</b></td>
+	      <td colspan="3">1</td><td colspan="3">2</td><td colspan="3">3</td>
+	      <td>{{roles.2}}</td>
+	  </tr>
+	  <tr><td>{{roles.0}}</td>
+	      <td>{{roles.1}}</td>
+	      <td>1</td><td>2</td><td>3</td><td>1</td><td>2</td><td>3</td><td>1</td><td>2</td><td>3</td>
+	      <td>{{roles.3}}</td>
+	  </tr>
+	  <tr><td rowspan="3">1</td><td>1</td>
+	      <td rowspan="9" colspan="9">hi</td>
+	  </tr>
+	  <tr><td>2</td></tr><tr><td>3</td></tr>
+	  <tr><td rowspan="3">2</td><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
+	  <tr><td rowspan="3">3</td><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
+	</table>
+
+
+
+{% endblock %}

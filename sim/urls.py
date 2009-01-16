@@ -17,6 +17,7 @@ urlpatterns = patterns('',
                        (r'^player/choose/$', 'genocideprevention.sim.views.player_choose'),
                        
                        # faculty management pages
+                       (r'^allpaths/$', 'genocideprevention.sim.views.allpaths'),
                        (r'^faculty/manage/(?P<section_id>\d+)/$', 'genocideprevention.sim.views.faculty_section_manage'),
                        (r'^faculty/groups/(?P<section_id>\d+)/$', 'genocideprevention.sim.views.faculty_section_bygroup'),
                        (r'^faculty/players/(?P<section_id>\d+)/$', 'genocideprevention.sim.views.faculty_section_byplayer'),

@@ -1,0 +1,98 @@
+body 
+{ 
+  font-family:sans-serif;
+  font-size:10px;
+ }
+
+#gridkey 
+{ 
+  background-color:white;
+  position:absolute;
+  font-size:10px;
+  right:0;
+  top:0;
+ }
+#explanation 
+{ 
+  position:absolute;
+  top:0;
+  font-size:12px;
+  left:300px;
+  width:700px;
+ }
+
+#turns
+{ 
+  margin-top:20px;
+ }
+.turn-name { 
+             margin-bottom:2px;
+ }
+
+td 
+{ 
+  border:1px solid black;
+  }
+
+.variable 
+{ 
+  display:none;
+  }
+
+.table-label
+{ 
+  width:100%;
+  color:#444444;
+  text-decoration:underline;
+ }
+
+.overview-turn
+{ 
+  display:block;
+  position:relative;
+  clear:both;
+  padding-top:20px;
+  
+ } 
+.overview-state 
+{ 
+  float:left;
+  width:140px;
+  display:inline-block;
+  border:2px solid black;
+  margin-right:8px;
+ }
+
+.state-name 
+{ 
+  height:3.5em;
+  padding:2px;
+  min-width:6em;
+ }
+
+.transition-from{ float:left } 
+.transition-to{ float:right } 
+
+.transition-to,
+.transition-from
+{ 
+  cursor:pointer;
+  padding:0;
+  margin:0;
+  display:block;
+  width:48%;/*45px;*/
+  border:1px solid black;
+
+ }
+
+.transition-permutation 
+{ 
+  float:left;
+  display:block;
+  width:11%;
+  height:7px;
+     
+  padding:0;
+  margin:0;
+
+ }

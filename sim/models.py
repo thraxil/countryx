@@ -57,6 +57,31 @@ class State(models.Model):
                 ))
             rv.append(3-cursor.rowcount)
         return rv
+
+    def get_color(self):
+        colors = ['ffd478',
+                  'ff9400','d25700','935200','d4fb79','73fa79','8efa00','4e8f00','76d6ff','0096ff',
+                  '0a31ff','d783ff','7a80ff','942092','531a93','ff8ad8','ff3092','ff40ff',
+                  '941751','941200','ff2700','005393','ff7e79','fffc00','009192',
+                  '009051','00f900','929292','929000']
+        if len(colors) > self.id:
+            return colors[self.id]
+        else:
+            return str(hex(592191*self.id))[2:]#255*255*255/28 states == 592191
+
+    def full_to(self,roles):
+        return [x.next_state.get_color() for x in StateChange.objects.filter(state=self).order_by(*roles)]
+    
+    def full_from(self,roles):
+        default = 'FFFFFF'
+        rv = [default] * (3**len(roles))
+        for ch in StateChange.objects.filter(next_state=self).order_by(*roles):
+            index = sum([(3**(len(roles)-i-1))*(getattr(ch,r)-1) for i,r in enumerate(roles)])
+            if rv[index] != default:
+                rv[index] = '000000'
+            else:
+                rv[index] = ch.state.get_color();
+        return rv
             
     def to_count(self,extra=''):
         return self._countedges(
@@ -90,7 +115,7 @@ class State(models.Model):
             metadata['influence_to'][role] = self.influence(role, self.to_count, metadata['to'])
             
         return metadata
-    
+
 class StateChange(models.Model):
     state = models.ForeignKey(State, related_name="%(class)s_related_current")
     president = models.IntegerField()

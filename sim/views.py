@@ -325,6 +325,38 @@ def player_game(request, group_id, turn_id=0):
     t = loader.get_template('sim/player_game.html')
     return HttpResponse(t.render(c))
 
+#actually needs to be faculty only
+@login_required 
+def allpaths(request):
+   #NOTE: template currently assumes 4 turns
+   t = loader.get_template('sim/allpaths.html')
+   turns = []
+   roles = ('president','regional','envoy','opposition')
+   for turn in range(1,5):
+      states = State.objects.filter(turn=turn).order_by("state_no")
+      turn = {'states':[]}
+      for s in states:
+         import re
+         variables = StateVariable.objects.filter(state=s)
+         turn['states'].append({'state_no':s.state_no,
+                                'name':s.name,
+                                'variables':[{'value':v.value,
+                                              'name':re.sub('\W','_',v.name)}
+                                             for v in variables if len(v.value)<3],
+                                'full_from':s.full_from(roles),
+                                'full_to':s.full_to(roles),
+                                'color':s.get_color(),
+                                })
+      turns.append(turn)
+
+   c = Context({
+      'turns':turns,
+      'roles':roles,
+      })
+   
+   return HttpResponse(t.render(c))
+
+   
 @login_required
 def player_choose(request):
     response = {}
@@ -394,4 +426,3 @@ def __current_conditions(state):
     dict = { 'name': var.name, 'value': int(var.value), 'least': 'minimal/no weapons smuggling', 'most': 'uncontrolled weapons smuggling'  }
     conditions.append(dict)
     return conditions
-#  
