@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load hash %}
 
 {% block js %}
    <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
@@ -13,10 +12,10 @@
 	{{ block.super }}
 	<div id="explanation">
 	  <h2>How to read this</h2>
-	  <p>Each state has an 81x81 grid for 'From'-states and 'To'-destination states.  
+	  <p>Each state has an 9x9 grid for 'From'-states and 'To'-destination states.  
 	  
 	  On the key, in the upper right, you'll see that each combination of choices for each role will
-	  have a single pixel in the 81x81 grid.  We place the major actors on the outside, so when
+	  have a single pixel in the 9x9 grid.  We place the major actors on the outside, so when
 	  they have a significant effect you will see large stripes--vertical or horizontal in the TO chart.
 	  If the minor roles affect the outcome, you will see narrower stripes.
 	  </p>
