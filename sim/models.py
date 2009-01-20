@@ -64,10 +64,12 @@ class State(models.Model):
                   '0a31ff','d783ff','7a80ff','942092','531a93','ff8ad8','ff3092','ff40ff',
                   '941751','941200','ff2700','005393','ff7e79','fffc00','009192',
                   '009051','00f900','929292','929000']
-        if len(colors) > self.id:
-            return colors[self.id]
+        #when reimported ids get higher than 28.  The 28 should NOT be hard-coded
+        key = (self.id % 28) + 1 
+        if len(colors) > key:
+            return colors[key]
         else:
-            return str(hex(592191*self.id))[2:]#255*255*255/28 states == 592191
+            return str(hex(592191*key))[2:]#255*255*255/28 states == 592191
 
     def full_to(self,roles):
         return [x.next_state.get_color() for x in StateChange.objects.filter(state=self).order_by(*roles)]
