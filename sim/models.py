@@ -72,17 +72,23 @@ class State(models.Model):
             return str(hex(592191*key))[2:]#255*255*255/28 states == 592191
 
     def full_to(self,roles):
-        return [x.next_state.get_color() for x in StateChange.objects.filter(state=self).order_by(*roles)]
+        return [{'color':x.next_state.get_color(),'ids':[x.next_state.id]}
+                for x in StateChange.objects.filter(state=self).order_by(*roles)]
     
     def full_from(self,roles):
-        default = 'FFFFFF'
-        rv = [default] * (3**len(roles))
+        default_color = 'FFFFFF'
+        #don't do dictionaries here, since then they'll all be a pointer to the same object
+        rv = [False] * (3**len(roles))
         for ch in StateChange.objects.filter(next_state=self).order_by(*roles):
             index = sum([(3**(len(roles)-i-1))*(getattr(ch,r)-1) for i,r in enumerate(roles)])
-            if rv[index] != default:
-                rv[index] = '000000'
+            if not rv[index]:
+                rv[index] = {'color':default_color,'ids':[]}
+
+            rv[index]['ids'].append(ch.state.id)
+            if rv[index]['color'] != default_color:
+                rv[index]['color'] = '000000'
             else:
-                rv[index] = ch.state.get_color();
+                rv[index]['color'] = ch.state.get_color();
         return rv
             
     def to_count(self,extra=''):

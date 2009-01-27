@@ -328,17 +328,18 @@ def player_game(request, group_id, turn_id=0):
 #actually needs to be faculty only
 #@login_required 
 def allpaths(request):
-   #NOTE: template currently assumes 4 turns
    t = loader.get_template('sim/allpaths.html')
    turns = []
    roles = ('president','regional','envoy','opposition')
+   #NOTE: we currently assume 4 turns indexed at 1
    for turn in range(1,5):
       states = State.objects.filter(turn=turn).order_by("state_no")
       turn = {'states':[]}
       for s in states:
          import re
          variables = StateVariable.objects.filter(state=s)
-         turn['states'].append({'state_no':s.state_no,
+         turn['states'].append({'id':s.id,
+                                'state_no':s.state_no,
                                 'name':s.name,
                                 'variables':[{'value':v.value,
                                               'name':re.sub('\W','_',v.name)}
@@ -346,6 +347,7 @@ def allpaths(request):
                                 'full_from':s.full_from(roles),
                                 'full_to':s.full_to(roles),
                                 'color':s.get_color(),
+                                
                                 })
       turns.append(turn)
 

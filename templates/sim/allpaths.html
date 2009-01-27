@@ -38,7 +38,7 @@
 		<h2 class="turn-name">Turn {{forloop.counter}}</h2>
 	      </div>
 	      {% for s in t.states %}	      
-	        <div class="overview-state s{{forloop.counter}}">
+	        <div class="overview-state s{{s.id}}">
 		  <div class="state-name" style="background-color:#{{s.color}}">
 		    {{s.name}}
 		  </div>
@@ -46,9 +46,9 @@
 		  {%if not forloop.parentloop.first %}
 		  <div class="transition-from">
 		    <div class="table-label">FROM</div>
-		    {%for change_color in s.full_from %}
+		    {%for trans in s.full_from %}
 		      <div class="transition-permutation" 
-			   style="background-color:#{{change_color}}"
+			   style="background-color:#{{trans.color}}"
 			   data-index="{{forloop.counter}}"></div>
 		    {%endfor %}
 		  </div>
@@ -58,9 +58,9 @@
 		  <div class="transition-to">
 		    <div class="table-label">TO</div>
 		    <div class="transitions">
-		      {%for change_color in s.full_to %}
+		      {%for trans in s.full_to %}
 		        <div class="transition-permutation" 
-			     style="background-color:#{{change_color}}"
+			     style="background-color:#{{trans.color}}"
 			     data-index="{{forloop.counter}}"></div>
 		      {%endfor %}
 		    </div>
