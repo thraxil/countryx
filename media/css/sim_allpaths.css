@@ -123,3 +123,8 @@ td
   margin:0;
 
  }
+
+td.selected 
+{ 
+  background-color:yellow;
+ }
