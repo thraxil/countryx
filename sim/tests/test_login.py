@@ -1,6 +1,6 @@
 from django.test.client import Client
 from django.test import TestCase
-from genocideprevention.sim.models import *
+from countryx.sim.models import *
 
 class LoginTestCases(TestCase):
     fixtures = ["test_data.json"]

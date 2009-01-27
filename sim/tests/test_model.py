@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from genocideprevention.sim.models import *
+from countryx.sim.models import *
 import simplejson
 import datetime, time
 

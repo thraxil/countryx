@@ -1,4 +1,4 @@
-# Django settings for genocideprevention project.
+# Django settings for countryx project.
 import os.path
 
 DEBUG = True
@@ -11,7 +11,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'postgresql_psycopg2' # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'genocideprevention' # Or path to database file if using sqlite3.
+DATABASE_NAME = 'countryx' # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -21,7 +21,7 @@ TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = False
-MEDIA_ROOT = "/var/www/genocideprevention/uploads/"
+MEDIA_ROOT = "/var/www/countryx/uploads/"
 MEDIA_URL = '/uploads/'
 ADMIN_MEDIA_PREFIX = '/media/'
 SECRET_KEY = ')ng#)ef_u@_^zvvu@dxm7ql-yb^_!a6%v3v^j3b(mp+)l+5%@h'
@@ -36,17 +36,17 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
-    'genocideprevention.sim.middleware.GameStateMiddleware',
+    'countryx.sim.middleware.GameStateMiddleware',
 )
 
-ROOT_URLCONF = 'genocideprevention.urls'
+ROOT_URLCONF = 'countryx.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     # Put application templates before these fallback ones:
-    "/var/www/genocideprevention/templates/",
+    "/var/www/countryx/templates/",
     os.path.join(os.path.dirname(__file__),"templates"),
 )
 
@@ -59,13 +59,13 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'sorl.thumbnail',
     'django.contrib.admin',
-    'genocideprevention.sim',
+    'countryx.sim',
 )
 
 THUMBNAIL_SUBDIR = "thumbs"
-EMAIL_SUBJECT_PREFIX = "[genocideprevention] "
+EMAIL_SUBJECT_PREFIX = "[countryx] "
 EMAIL_HOST = 'localhost'
-SERVER_EMAIL = "genocideprevention@ccnmtl.columbia.edu"
+SERVER_EMAIL = "countryx@ccnmtl.columbia.edu"
 
 # WIND settings
 

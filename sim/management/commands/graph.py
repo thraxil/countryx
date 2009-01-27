@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.core import serializers
 from optparse import make_option
-from genocideprevention.sim.models import *
+from countryx.sim.models import *
 import random as  rn
 
 class Command(BaseCommand):

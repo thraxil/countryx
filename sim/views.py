@@ -1,5 +1,5 @@
 from django.template import Context, loader
-from genocideprevention.sim.models import *
+from countryx.sim.models import *
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.template import Context, loader
 from django.contrib.auth.decorators import login_required

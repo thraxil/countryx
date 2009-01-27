@@ -1,4 +1,4 @@
-from genocideprevention.sim.models import *
+from countryx.sim.models import *
 from django.contrib import admin
 from django import forms
 

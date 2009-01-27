@@ -1,10 +1,10 @@
 from settings_shared import *
 
 TEMPLATE_DIRS = (
-    "/var/www/genocideprevention/genocideprevention/templates",
+    "/var/www/countryx/countryx/templates",
 )
 
-MEDIA_ROOT = '/var/www/genocideprevention/uploads/'
+MEDIA_ROOT = '/var/www/countryx/uploads/'
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
