@@ -326,38 +326,42 @@ def player_game(request, group_id, turn_id=0):
     return HttpResponse(t.render(c))
 
 #actually needs to be faculty only
-#@login_required 
+@login_required 
+def allquestions(request):
+    response = {}
+    for x in StateRoleChoice.objects.all():
+        response.setdefault(x.state.id,{}).setdefault(x.role.name,{}).setdefault(x.choice,x.desc)
+    return HttpResponse(simplejson.dumps(response), 'application/json')
+
+#actually needs to be faculty only
+@login_required 
+def allvariables(request):
+    response = {}
+    for x in StateVariable.objects.all():
+        response.setdefault(x.state.id,{}).setdefault(x.name,x.value)
+    return HttpResponse(simplejson.dumps(response), 'application/json')
+
+@login_required 
 def allpaths(request):
-   t = loader.get_template('sim/allpaths.html')
-   turns = []
-   roles = ('president','regional','envoy','opposition')
-   #NOTE: we currently assume 4 turns indexed at 1
-   for turn in range(1,5):
-      states = State.objects.filter(turn=turn).order_by("state_no")
-      turn = {'states':[]}
-      for s in states:
-         import re
-         variables = StateVariable.objects.filter(state=s)
-         turn['states'].append({'id':s.id,
-                                'state_no':s.state_no,
-                                'name':s.name,
-                                'variables':[{'value':v.value,
-                                              'name':re.sub('\W','_',v.name)}
-                                             for v in variables if len(v.value)<3],
-                                'full_from':s.full_from(roles),
-                                'full_to':s.full_to(roles),
-                                'color':s.get_color(),
-                                
-                                })
-      turns.append(turn)
-
-   c = Context({
-      'turns':turns,
-      'roles':roles,
-      })
-   
-   return HttpResponse(t.render(c))
-
+    t = loader.get_template('sim/allpaths.html')
+    turns = []
+    roles = ('president','regional','envoy','opposition')
+    #NOTE: we currently assume 4 turns indexed at 1
+    for turn in range(1,5):
+        states = State.objects.filter(turn=turn).order_by("state_no")
+        turn = {'states':[]}
+        for s in states:
+            turn['states'].append({'id':s.id,
+                                   'state_no':s.state_no,
+                                   'name':s.name,
+                                   'full_from':s.full_from(roles),
+                                   'full_to':s.full_to(roles),
+                                   'color':s.get_color(),
+                                   })
+        turns.append(turn)
+            
+    c = Context({'turns':turns,'roles':roles})
+    return HttpResponse(t.render(c))
    
 @login_required
 def player_choose(request):

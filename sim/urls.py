@@ -18,6 +18,8 @@ urlpatterns = patterns('',
                        
                        # faculty management pages
                        (r'^allpaths/$', 'countryx.sim.views.allpaths'),
+                       (r'^allpaths/questions$', 'countryx.sim.views.allquestions'),
+                       (r'^allpaths/variables$', 'countryx.sim.views.allvariables'),
                        (r'^faculty/manage/(?P<section_id>\d+)/$', 'countryx.sim.views.faculty_section_manage'),
                        (r'^faculty/groups/(?P<section_id>\d+)/$', 'countryx.sim.views.faculty_section_bygroup'),
                        (r'^faculty/players/(?P<section_id>\d+)/$', 'countryx.sim.views.faculty_section_byplayer'),
