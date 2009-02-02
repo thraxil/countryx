@@ -47,7 +47,7 @@
 		  <div class="transition-from">
 		    <div class="table-label">FROM</div>
 		    {%for trans in s.full_from %}
-		      <div class="transition-permutation" 
+		      <div class="transition-permutation{%for i in trans.ids%} tran{{i}}{%endfor%}" 
 			   style="background-color:#{{trans.color}}"
 			   data-index="{{forloop.counter}}"></div>
 		    {%endfor %}
@@ -59,8 +59,9 @@
 		    <div class="table-label">TO</div>
 		    <div class="transitions">
 		      {%for trans in s.full_to %}
-		        <div class="transition-permutation" 
+		        <div class="transition-permutation tran{{trans.ids.0}}" 
 			     style="background-color:#{{trans.color}}"
+			     data-stateid="{{trans.ids.0}}"
 			     data-index="{{forloop.counter}}"></div>
 		      {%endfor %}
 		    </div>
