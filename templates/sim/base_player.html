@@ -15,22 +15,18 @@
 </div>
 
 {% block masthead %}
-   <table width="100%">
-      <tr>
-         <td>
-            <div id="masthead"><a href="/sim/">Country X</a></div>
+  <a href="/sim/">Country X</a>  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>
             <div id="masthead_desc">Descriptive Tag Line Goes Here</div>
-         </td>
          
-         <td id="login_credentials">
+         
+         <div id="login_credentials">
             {{user.username}} | <a href="/sim/logout/">Logout</a> |
             <a href="/about/">About</a> | <a href="/help/">Help</a> | <a href="/contact/">Contact</a>
             <br />
             <br />
-            CCMNMTL LOGO
-         </td>
-      </tr>
-   </table>
+            
+         </div>
+     
 {% endblock %}
 
 {% block content %}

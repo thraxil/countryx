@@ -20,9 +20,9 @@ function toggleCharacterProfile(control, characterName)
    toggle(img, 'slide')
       
    if ('none' == getStyle(desc, 'display'))
-      control.innerHTML = 'Character<br />Image'
+      control.innerHTML = 'Hide Profile'
    else
-      control.innerHTML = 'Character<br />Profile'
+      control.innerHTML = 'Show Profile'
 }
 
 function clearChoice(control)
