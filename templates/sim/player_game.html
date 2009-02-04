@@ -101,7 +101,10 @@
 											      {% endifequal %}
 											    {% endfor %}
 			                        </tr>
-			                        <tr>
+			                       
+			                       
+			                       {%if condition.good_inverse %} 
+			                        <tr class="negative_row">
 			                           {% num_range 9 as row_count %}
 			                            
 			                           {% for i in row_count %}
@@ -112,9 +115,24 @@
 			                              {% endiflessthan %}
 			                           {% endfor %}
 			                       </tr>
+			                       
+			                       {%else%} 
+			                       <tr class="positive_row">
+			                           {% num_range 9 as row_count %}
+			                            
+			                           {% for i in row_count %}
+			                              {% iflessthan forloop.counter condition.value %}
+			                                 <td class="condition_row_block_filled">&nbsp;</td>
+			                              {% else %}
+			                                 <td class="condition_row_block_empty">&nbsp;</td>
+			                              {% endiflessthan %}
+			                           {% endfor %}
+			                           
+			                        {%endif%}
+			                       </tr>
 			                       <tr>
-			                           <td colspan="5" class="condition_row_description" style="text-align: left">{{condition.least}}</td>
-			                           <td colspan="5" class="condition_row_description" style="text-align: right">{{condition.most}}</td>
+			                           <td colspan="5" class="condition_row_description" style="text-align: left">{{condition.most}}</td>
+			                           <td colspan="5" class="condition_row_description" style="text-align: right">{{condition.least}}</td>
 			                       </tr>
 			                  
 			                       
@@ -131,7 +149,7 @@
                 
                       <h2>DEADLINE FOR DECISION</h2>
 			             <div id="elapsed_time_clock">
-			                April 7, 2009
+			             <h3>   April 7, 2009</h3>
 			             </div>
 	
 	
@@ -153,7 +171,7 @@
 			                        <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">
 			                           <b>Choice {{c.choice}}</b><br />
 			                           {{ c.desc }}
-			                        </div><br />
+			                        </div>
 			                     {% endfor %}
 			                     <div id="reasoning_form" style="display: none">
 				                     <div id="errorClient" class="error invisible"></div>
@@ -184,7 +202,7 @@
 			                  
 			                  {% ifequal 4 you.submit_status %}
 			                     <!--  submitted -->    
-			                     <div id="{{you.saved_choice.choice}}" class="player_choice">{{ you.saved_choice.desc }}</div><br />
+			                     <div id="{{you.saved_choice.choice}}" class="player_choice">{{ you.saved_choice.desc }}</div>
 				                  <div id="reasoning_form" style="display: block">
 				                     <div id="errorClient" class="error invisible"></div>
 				                     <textarea id="reasoning" class="reasoning" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
