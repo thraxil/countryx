@@ -407,28 +407,29 @@ def player_choose(request):
                 
 def __current_conditions(state):
     conditions = []
-    
-    var = state.statevariable_set.get(name='Violence Level')
-    dict = { 'name': var.name, 'value': int(var.value), 'least': 'non-violent', 'most': 'genocide' }
-    conditions.append(dict)
-    
-    var = state.statevariable_set.get(name='Economy')
-    dict = { 'name': var.name, 'value': int(var.value), 'least': 'stable', 'most': 'depression'  }
-    conditions.append(dict)
-    
-    var = state.statevariable_set.get(name='Prestige')
-    dict = { 'name': var.name, 'value': int(var.value), 'least': 'respected world player', 'most': 'globally isolated'  }
-    conditions.append(dict)
-    
-    var = state.statevariable_set.get(name='Awareness')
-    dict = { 'name': var.name, 'value': int(var.value), 'least': 'regular media coverage', 'most': 'zero media coverage'  }
-    conditions.append(dict)
-    
-    var = state.statevariable_set.get(name='Political Discourse')
-    dict = { 'name': var.name, 'value': int(var.value), 'least': 'free and open system', 'most': 'state control of information'  }
-    conditions.append(dict)
-    
-    var = state.statevariable_set.get(name='Weapons Flow')
-    dict = { 'name': var.name, 'value': int(var.value), 'least': 'minimal/no weapons smuggling', 'most': 'uncontrolled weapons smuggling'  }
-    conditions.append(dict)
+    details = {'Violence Level':{'least': 'non-violent',
+                                 'most': 'genocide',
+                                 'good_inverse':True},
+               'Economy':{'least': 'stable',
+                          'most': 'depression'  },
+               'Prestige':{'least': 'respected world player',
+                           'most': 'globally isolated'  },
+               'Awareness':{'least': 'regular media coverage',
+                            'most': 'zero media coverage'  },
+               'Political Discourse':{'least': 'free and open system',
+                                      'most': 'state control of information'},
+               'Weapons Flow':{'least': 'minimal/no weapons smuggling',
+                               'most': 'uncontrolled weapons smuggling',
+                               'good_inverse':True},
+               }
+    for k,v in details.items():
+        var = state.statevariable_set.get(name=k)
+        var_dict = details[k]
+        var_dict['name'] =var.name
+        if var_dict.get('good_inverse',False):
+            var_dict['value'] =11-int(var.value)
+        else:
+            var_dict['value'] =int(var.value)
+            
+        conditions.append(var_dict)
     return conditions
