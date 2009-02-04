@@ -407,8 +407,8 @@ def player_choose(request):
                 
 def __current_conditions(state):
     conditions = []
-    details = {'Violence Level':{'least': 'non-violent',
-                                 'most': 'genocide',
+    details = {'Violence Level':{'most': 'non-violent',
+                                 'least': 'genocide',
                                  'good_inverse':True},
                'Economy':{'least': 'stable',
                           'most': 'depression'  },
@@ -418,13 +418,12 @@ def __current_conditions(state):
                             'most': 'zero media coverage'  },
                'Political Discourse':{'least': 'free and open system',
                                       'most': 'state control of information'},
-               'Weapons Flow':{'least': 'minimal/no weapons smuggling',
-                               'most': 'uncontrolled weapons smuggling',
+               'Weapons Flow':{'most': 'minimal/no weapons smuggling',
+                               'least': 'uncontrolled weapons smuggling',
                                'good_inverse':True},
                }
-    for k,v in details.items():
+    for k,var_dict in details.items():
         var = state.statevariable_set.get(name=k)
-        var_dict = details[k]
         var_dict['name'] =var.name
         if var_dict.get('good_inverse',False):
             var_dict['value'] =11-int(var.value)
