@@ -1,12 +1,24 @@
 from countryx.sim.models import *
+from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django import forms
 from django.forms.util import ErrorList 
 from django.contrib.admin.widgets import AdminSplitDateTime
 import datetime
 import simplejson
+
+class rendered_with(object):
+    def __init__(self, template_name):
+        self.template_name = template_name
+
+    def __call__(self, func):
+        def rendered_func(request, *args, **kwargs):
+            items = func(request, *args, **kwargs)
+            return render_to_response(self.template_name, items, context_instance=RequestContext(request))
+
+        return rendered_func
 
 @login_required
 def root(request):
@@ -20,9 +32,10 @@ def root(request):
 ###############################################################################
 ###############################################################################    
 
+@rendered_with("sim/faculty_index.html")
 def __faculty_index(request):
     sections = Section.objects.filter(sectionadministrator__user=request.user)
-    return render_to_response("sim/faculty_index.html", dict(sections=sections, user=request.user, port=request.META['SERVER_PORT'], hostname=request.META['SERVER_NAME']))
+    return dict(sections=sections, user=request.user, port=request.META['SERVER_PORT'], hostname=request.META['SERVER_NAME'])
 
 @login_required
 def faculty_section_bygroup(request, section_id):
@@ -248,9 +261,10 @@ class TurnManagementForm(forms.Form):
 ###############################################################################
 ###############################################################################
 
+@rendered_with("sim/player_index.html")
 def __player_index(request):
     groups = SectionGroup.objects.filter(sectiongroupplayer__user=request.user)
-    return render_to_response("sim/player_index.html", dict(user=request.user, groups=groups))
+    return dict(user=request.user, groups=groups)
 
 @login_required
 def player_game(request, group_id, turn_id=0):
