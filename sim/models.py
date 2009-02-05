@@ -168,9 +168,9 @@ class Section(models.Model):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
            return 1
-        elif (turn_dates.turn2 == None or turn_dates.turn2 > datetime.datetime.now()):
+        elif (turn_dates.turn2 is None or turn_dates.turn2 > datetime.datetime.now()):
            return 2
-        elif (turn_dates.turn3 == None or turn_dates.turn3 > datetime.datetime.now()):
+        elif (turn_dates.turn3 is None or turn_dates.turn3 > datetime.datetime.now()):
            return 3
        
         return 4
@@ -179,9 +179,9 @@ class Section(models.Model):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
            return turn_dates.turn1
-        elif (turn_dates.turn2 == None or turn_dates.turn2 > datetime.datetime.now()):
+        elif (turn_dates.turn2 is None or turn_dates.turn2 > datetime.datetime.now()):
            return turn_dates.turn2
-        elif (turn_dates.turn3 == None or turn_dates.turn3 > datetime.datetime.now()):
+        elif (turn_dates.turn3 is None or turn_dates.turn3 > datetime.datetime.now()):
            return turn_dates.turn3
         
         return turn_dates.turn1  
@@ -231,7 +231,7 @@ class SectionGroup(models.Model):
             try:
                 #check to see if player has a "draft" saved. Use this if possible.
                 player_response = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
-                if (player_response.submit_date == None):
+                if (player_response.submit_date is None):
                     player_response.submit_date = datetime.datetime.now()
                     player_response.automatic_update = AUTOMATIC_UPDATE_FROMDRAFT
                     player_response.save()
