@@ -1,7 +1,5 @@
-from django.template import Context, loader
 from countryx.sim.models import *
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
-from django.template import Context, loader
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django import forms
@@ -33,15 +31,11 @@ def faculty_section_bygroup(request, section_id):
 def faculty_section_byplayer(request, section_id):
     section = Section.objects.get(id=section_id)
     all_players = SectionGroupPlayer.objects.filter(group__section=section)
-    
-    ctx = Context({
-       'user': request.user,
-       'section': section,
-       'players': all_players,
-    })
-    
-    template = loader.get_template('sim/faculty_section_byplayer.html')
-    return HttpResponse(template.render(ctx))
+    return render_to_response('sim/faculty_section_byplayer.html',{
+            'user': request.user,
+            'section': section,
+            'players': all_players,
+            })
 
 @login_required
 def faculty_group_detail(request, group_id):
@@ -67,15 +61,12 @@ def faculty_group_detail(request, group_id):
         conditions = gs.state.statevariable_set.get(name='Country Condition').value
         turns.append( { 'group_state': gs, 'players': player_turns, 'country_condition': conditions } )
        
-    ctx = Context({
-       'user': request.user,
-       'group': group,
-       'turns': turns,
-       'section': group.section,
-    })
-    
-    template = loader.get_template('sim/faculty_group_detail.html')
-    return HttpResponse(template.render(ctx))
+    return render_to_response('sim/faculty_group_detail.html',{
+            'user': request.user,
+            'group': group,
+            'turns': turns,
+            'section': group.section,
+            })
     
 @login_required
 def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated=False):
@@ -90,22 +81,20 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
     except SectionGroupPlayerTurn.DoesNotExist:
         pass # should never happen
 
-    ctx = Context({
-       'user': request.user,
-       'group': group,
-       'section': group.section,
-       'player': player,
-       'state': state,
-       'turn': turn,
-       'submit_status': player.status(state),
-       'choices': StateRoleChoice.objects.filter(state=state, role=player.role),
-       'country_condition': state.statevariable_set.get(name='Country Condition').value,
-       'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback, 'turn_id': state.turn }),
-       'updated': updated
-    })
-    
-    template = loader.get_template('sim/faculty_player_detail_byturn.html')
-    return HttpResponse(template.render(ctx))
+    return render_to_response(
+        'sim/faculty_player_detail_byturn.html',{
+            'user': request.user,
+            'group': group,
+            'section': group.section,
+            'player': player,
+            'state': state,
+            'turn': turn,
+            'submit_status': player.status(state),
+            'choices': StateRoleChoice.objects.filter(state=state, role=player.role),
+            'country_condition': state.statevariable_set.get(name='Country Condition').value,
+            'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback, 'turn_id': state.turn }),
+            'updated': updated
+            })
 
 @login_required
 def faculty_player_detail(request, player_id):
@@ -131,16 +120,13 @@ def faculty_player_detail(request, player_id):
  
         player_turns.append(player_turn)
                 
-    ctx = Context({
-       'user': request.user,
-       'player': player,
-       'group': group,
-       'section': group.section,
-       'player_turns': player_turns
-    })
-
-    template = loader.get_template('sim/faculty_player_detail.html')
-    return HttpResponse(template.render(ctx))
+    return render_to_response('sim/faculty_player_detail.html',{
+            'user': request.user,
+            'player': player,
+            'group': group,
+            'section': group.section,
+            'player_turns': player_turns
+            })
 
 def faculty_feedback_submit(request):
     response = {}
@@ -218,15 +204,12 @@ def faculty_section_manage(request, section_id, updated=False):
         
         form = TurnManagementForm(initial=initial)
 
-    ctx = Context({
-       'user': request.user,
-       'section': section,
-       'form': form,
-       'updated': updated
-    })
-    
-    template = loader.get_template('sim/faculty_section_manage.html')
-    return HttpResponse(template.render(ctx))
+    return render_to_response('sim/faculty_section_manage.html',{
+            'user': request.user,
+            'section': section,
+            'form': form,
+            'updated': updated
+            })
   
 EMPTY_VALUES = (None, '')
 
@@ -311,19 +294,16 @@ def player_game(request, group_id, turn_id=0):
         if (p != your_player['model']):
             players.append({ 'model' : p, 'submit_status': p.status(working_state) })
                         
-    c = Context({
-       'user': request.user,
-       'group': group,
-       'state': working_state,
-       'country_condition': working_state.statevariable_set.get(name='Country Condition').value,
-       'conditions': __current_conditions(working_state),
-       'tabs': tabs,
-       'players': players,
-       'you': your_player,
-    })
-    
-    t = loader.get_template('sim/player_game.html')
-    return HttpResponse(t.render(c))
+    return render_to_response('sim/player_game.html',{
+            'user': request.user,
+            'group': group,
+            'state': working_state,
+            'country_condition': working_state.statevariable_set.get(name='Country Condition').value,
+            'conditions': __current_conditions(working_state),
+            'tabs': tabs,
+            'players': players,
+            'you': your_player,
+            })
 
 #actually needs to be faculty only
 @login_required 
@@ -343,7 +323,6 @@ def allvariables(request):
 
 @login_required 
 def allpaths(request):
-    t = loader.get_template('sim/allpaths.html')
     turns = []
     roles = ('president','regional','envoy','opposition')
     #NOTE: we currently assume 4 turns indexed at 1
@@ -359,9 +338,9 @@ def allpaths(request):
                                    'color':s.get_color(),
                                    })
         turns.append(turn)
-            
-    c = Context({'turns':turns,'roles':roles})
-    return HttpResponse(t.render(c))
+
+    return render_to_response('sim/allpaths.html',
+                              {'turns':turns,'roles':roles})
    
 @login_required
 def player_choose(request):
