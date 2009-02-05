@@ -127,7 +127,7 @@
 	float: right;
 	margin-top: -30px;
 	height: 30px;
-	width: 500px;
+	width: 679px;
 	display: block;
 }
 
@@ -139,7 +139,7 @@
 
 #tabs ul li {
 
-	width: 120px;
+	width: 101px;
 	height: 30px;
 	margin-left: 5px;
 	display: block;
@@ -277,7 +277,12 @@
 
 #elapsed_time_clock
 {
-   width: 100%;
+   border: 1px solid pink;
+   
+display:block;
+height:36px;
+margin-top:-8px;
+width:248px;
 }
 
 #elapsed_time_clock th
@@ -309,6 +314,13 @@ margin-top: 10px;
 text-decoration:none;
 padding: 10px;
 background-image: url(../images/choice_mass.jpg);
+}
+
+.choice_title {
+display:block;
+font-size:16px;
+font-weight:bold;
+margin-bottom:6px;
 }
 
 .reasoning
@@ -361,11 +373,14 @@ background-image: url(../images/choice_mass.jpg);
 
 #column_3 {
 
-	width: 240px;
-	float: left;	
-	margin: 10px;
-	
-		max-height: 520px;
-		overflow: hidden;
+background-color:yellow;
+border-left:1px solid #DDDDDD;
+border-right:1px solid #DDDDDD;
+float:left;
+margin:0 0 10px 10px;
+max-height:520px;
+overflow:hidden;
+padding:10px;
+width:228px;
 
 }

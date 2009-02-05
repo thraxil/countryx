@@ -19,13 +19,21 @@
 			               <ul>
 			                  {% for t in tabs %}
 			                     <li id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} activetab {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} futureturn {% endif %}">
+			                       
+			                          <!--  Elapsed Time Clock -->
+                
+                      
+			             
 					                    {%if t.viewable %}
 					                       <a href="/sim/player/game/{{group.id}}/{{t.id}}/">{{t.name}}</a>
 					                    {% else %}
 					                       {{ t.name }}
 					                    {% endif %}
-					                </li>
-					            {% endfor %}
+					              
+					            {% endfor %}</li>
+					            <li><div id="elapsed_time_clock">DEADLINE FOR DECISION<br />
+			                April 7, 2009
+			             </div></li>
 					         </ul>
 					       </div>
 
@@ -145,18 +153,13 @@
 <div id="column_3">
 	<h1>OPTIONS</h1>
 	
-	      <!--  Elapsed Time Clock -->
-                
-                      <h2>DEADLINE FOR DECISION</h2>
-			             <div id="elapsed_time_clock">
-			             <h3>   April 7, 2009</h3>
-			             </div>
+	 
 	
 	
 
   <!--  Player Choice & Entry Form -->
 			          
-			               <h2>YOUR OPTIONS</h2>
+			             
 			               Click a choice then justify it...
 			               
 			               <div id="errorMsg" class="error invisible"></div>
@@ -169,7 +172,7 @@
 			                     <!--  not yet selected -->
 			                     {% for c in you.choices %}
 			                        <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">
-			                           <b>Choice {{c.choice}}</b><br />
+			                           <div class="choice_title">Choice {{c.choice}}</div>
 			                           {{ c.desc }}
 			                        </div>
 			                     {% endfor %}
