@@ -11,25 +11,22 @@ class GameStateMiddleware(object):
         self.__dict__ = self.__shared_state
                 
     def process_request(self, request):
-      self.write_lock.acquire()
-      try:
-         sections = Section.objects.all()
-         for section in sections:
-            section_turn = section.current_turn()
-            
+        if request.path.startswith("/admin/"):
+            return # skip it in admin otherwise we can't add a section
+        self.write_lock.acquire()
+        try:
+            sections = Section.objects.all()
+            for section in sections:
+                section_turn = section.current_turn()
             # verify each group's current state == the current section turn
             # if not, then add the state to the group and make sure all members get automated answers.
             groups = section.sectiongroup_set.all()
             for group in groups:
                 group_state = group.sectiongroupstate_set.latest().state
                 if (section_turn != group_state.turn):
-                
                     group.force_response_all_players()
-                   
                     # update the group state to the next turn based on the player choices
                     group.update_state()
-                    
-      finally:
-         self.write_lock.release()
-      
-      return None
+        finally:
+            self.write_lock.release()
+        return None
