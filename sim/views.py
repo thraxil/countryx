@@ -188,7 +188,7 @@ def faculty_end_turn(request, section_id):
 
 @login_required
 def faculty_section_manage(request, section_id, updated=False):
-    section=Section.objects.get(id=section_id)
+    section = get_object_or_404(Section,id=section_id)
         
     if (request.method == 'POST'):
         form = TurnManagementForm(request.POST)
