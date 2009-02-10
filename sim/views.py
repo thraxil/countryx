@@ -38,19 +38,23 @@ def __faculty_index(request):
     return dict(sections=sections, user=request.user, port=request.META['SERVER_PORT'], hostname=request.META['SERVER_NAME'])
 
 @login_required
+@rendered_with("sim/faculty_section_bygroup.html")
 def faculty_section_bygroup(request, section_id):
-    return render_to_response("sim/faculty_section_bygroup.html", dict(user=request.user, section=Section.objects.get(id=section_id)))
+    return dict(user=request.user, section=Section.objects.get(id=section_id))
 
+@login_required
+@rendered_with('sim/faculty_section_byplayer.html')
 def faculty_section_byplayer(request, section_id):
     section = Section.objects.get(id=section_id)
     all_players = SectionGroupPlayer.objects.filter(group__section=section)
-    return render_to_response('sim/faculty_section_byplayer.html',{
+    return {
             'user': request.user,
             'section': section,
             'players': all_players,
-            })
+            }
 
 @login_required
+@rendered_with('sim/faculty_group_detail.html')
 def faculty_group_detail(request, group_id):
     group = SectionGroup.objects.get(id=group_id)
     
@@ -74,14 +78,15 @@ def faculty_group_detail(request, group_id):
         conditions = gs.state.statevariable_set.get(name='Country Condition').value
         turns.append( { 'group_state': gs, 'players': player_turns, 'country_condition': conditions } )
        
-    return render_to_response('sim/faculty_group_detail.html',{
+    return {
             'user': request.user,
             'group': group,
             'turns': turns,
             'section': group.section,
-            })
+            }
     
 @login_required
+@rendered_with('sim/faculty_player_detail_byturn.html')
 def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated=False):
     group = SectionGroup.objects.get(id=group_id)
     player = SectionGroupPlayer.objects.get(id=player_id, group=group)
@@ -94,8 +99,7 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
     except SectionGroupPlayerTurn.DoesNotExist:
         pass # should never happen
 
-    return render_to_response(
-        'sim/faculty_player_detail_byturn.html',{
+    return {
             'user': request.user,
             'group': group,
             'section': group.section,
@@ -107,9 +111,10 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
             'country_condition': state.statevariable_set.get(name='Country Condition').value,
             'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback, 'turn_id': state.turn }),
             'updated': updated
-            })
+            }
 
 @login_required
+@rendered_with('sim/faculty_player_detail.html')
 def faculty_player_detail(request, player_id):
     player = SectionGroupPlayer.objects.get(id=player_id)
     group = player.group
@@ -133,13 +138,13 @@ def faculty_player_detail(request, player_id):
  
         player_turns.append(player_turn)
                 
-    return render_to_response('sim/faculty_player_detail.html',{
+    return {
             'user': request.user,
             'player': player,
             'group': group,
             'section': group.section,
             'player_turns': player_turns
-            })
+            }
 
 def faculty_feedback_submit(request):
     response = {}
