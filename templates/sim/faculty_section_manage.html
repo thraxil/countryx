@@ -15,12 +15,36 @@
 {% block content %}
    {{ block.super }}
 
+
+
    {% ifnotequal section.current_turn 4 %}
 
    <form action="end_turn/" method="post">
-     <!-- todo: put in options for selecting choices on roles
-	  that haven't submitted -->
-     <input type="submit" value="turn advance" />
+     <fieldset><legend>Manually Advance Turn</legend>
+       <!-- todo: put in options for selecting choices on roles
+	    that haven't submitted -->
+
+       <table>
+	 <tr}><th>group</th><th>status</th><th>action</th></tr>
+	 {% for group in section.sectiongroup_set.all %}
+	 <tr class="{% cycle "even" "odd" %}">
+	   <th>{{ group.name }}</th>
+	   <td>{{ group.status_name }}</td>
+	   <td>{% ifnotequal group.status 4 %}
+	     {% ifequal group.status 1 %}
+	     No players have submitted yet. All choices will be made randomly.
+	     {% else %}
+	     Some players have not submitted yet. Their choices will be
+	     made randomly.
+	     {% endifequal %}
+	     {% endifnotequal %}
+	   </td>
+	 </tr>
+	 {% endfor %}
+       </table>
+
+       <input type="submit" value="turn advance" />
+     </fieldset>
    </form>
 
    {% endifnotequal %}
@@ -29,12 +53,17 @@
    <p>This section has completed all four turns</p>
    {% endifequal %}
 
+
     <form action="." method="POST">
-       <div class="fieldWrapper">
-	 <table>
-          {{ form.as_table }}
+      <fieldset>
+	<legend>Adjust Section Info</legend>
+	<div class="fieldWrapper">
+	  <table>
+            {{ form.as_table }}
 	  </table>
           <input type="submit" value="Submit" />
+	</div>
+	</fieldset>
     </form>
     
     

@@ -100,3 +100,4 @@ ul.tabbernav li.tabberactive a:hover
 .invisible { display: none; }
 
 
+tr.even td, tr.even th { background-color: #eef;}

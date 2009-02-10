@@ -236,6 +236,12 @@ class SectionGroup(models.Model):
     
     def status(self):
         return self.sectiongroupstate_set.latest().status()
+
+    def status_name(self):
+        statuses = {GROUP_STATUS_NOACTION : "no action",
+                    GROUP_STATUS_PENDING : "pending",
+                    GROUP_STATUS_SUBMITTED : "submitted"}
+        return statuses[self.status()]
     
     def force_response_all_players(self):
         random.seed(None)
