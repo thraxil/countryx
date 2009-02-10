@@ -15,9 +15,25 @@
 {% block content %}
    {{ block.super }}
 
-    <form action="/sim/faculty/manage/{{section.id}}/" method="POST">
+   {% ifnotequal section.current_turn 4 %}
+
+   <form action="end_turn/" method="post">
+     <!-- todo: put in options for selecting choices on roles
+	  that haven't submitted -->
+     <input type="submit" value="End Turn" />
+   </form>
+
+   {% endifnotequal %}
+
+   {% ifequal section.current_turn 4 %}
+   <p>This section has completed all four turns</p>
+   {% endifequal %}
+
+    <form action="." method="POST">
        <div class="fieldWrapper">
-          {{ form.as_p }}
+	 <table>
+          {{ form.as_table }}
+	  </table>
           <input type="submit" value="Submit" />
     </form>
     

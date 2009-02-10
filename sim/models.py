@@ -185,6 +185,22 @@ class Section(models.Model):
            return turn_dates.turn3
         
         return turn_dates.turn1  
+
+    def end_turn(self):
+        ct = self.current_turn()
+        std = self.sectionturndates_set.all()[0]
+        if ct == 1:
+            std.turn1 = datetime.datetime.now()
+        elif ct == 2:
+            std.turn2 = datetime.datetime.now()
+        elif ct == 3:
+            std.turn3 = datetime.datetime.now()
+        else:
+            raise "This shouldn't have happened"
+        std.save()
+
+    def get_absolute_url(self):
+        return "/sim/faculty/manage/%d/" % self.id
      
 class SectionAdministrator(models.Model):
     user = models.ForeignKey(User)

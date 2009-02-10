@@ -181,6 +181,12 @@ class FeedbackForm(forms.Form):
     turn_id = forms.IntegerField(widget=forms.HiddenInput)    
     
 @login_required
+def faculty_end_turn(request, section_id):
+    section = get_object_or_404(Section,id=section_id)
+    section.end_turn()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER',section.get_absolute_url()))
+
+@login_required
 def faculty_section_manage(request, section_id, updated=False):
     section=Section.objects.get(id=section_id)
         
