@@ -78,12 +78,11 @@ def faculty_group_detail(request, group_id):
         conditions = gs.state.statevariable_set.get(name='Country Condition').value
         turns.append( { 'group_state': gs, 'players': player_turns, 'country_condition': conditions } )
        
-    return {
-            'user': request.user,
-            'group': group,
-            'turns': turns,
-            'section': group.section,
-            }
+    return dict(user=request.user,
+                group=group,
+                turns=turns,
+                section=group.section,
+                )
     
 @login_required
 @rendered_with('sim/faculty_player_detail_byturn.html')
@@ -93,24 +92,23 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
     state = get_object_or_404(State,id=state_id)
     turn = get_object_or_404(SectionGroupPlayerTurn,player=player,turn=state.turn)
 
-    return {
-            'user': request.user,
-            'group': group,
-            'section': group.section,
-            'player': player,
-            'state': state,
-            'turn': turn,
-            'submit_status': player.status(state),
-            'choices': StateRoleChoice.objects.filter(state=state, role=player.role),
-            'country_condition': state.statevariable_set.get(name='Country Condition').value,
-            'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': turn.feedback, 'turn_id': state.turn }),
-            'updated': updated
-            }
+    return dict(user=request.user,
+                group=group,
+                section=group.section,
+                player=player,
+                state=state,
+                turn=turn,
+                submit_status=player.status(state),
+                choices=StateRoleChoice.objects.filter(state=state, role=player.role),
+                country_condition=state.statevariable_set.get(name='Country Condition').value,
+                form=FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': turn.feedback, 'turn_id': state.turn }),
+                updated=updated
+                )
 
 @login_required
 @rendered_with('sim/faculty_player_detail.html')
 def faculty_player_detail(request, player_id):
-    player = SectionGroupPlayer.objects.get(id=player_id)
+    player = get_object_or_404(SectionGroupPlayer, id=player_id)
     group = player.group
     
     player_turns = []
@@ -132,13 +130,12 @@ def faculty_player_detail(request, player_id):
  
         player_turns.append(player_turn)
                 
-    return {
-            'user': request.user,
-            'player': player,
-            'group': group,
-            'section': group.section,
-            'player_turns': player_turns
-            }
+    return dict(user = request.user,
+                player = player,
+                group = group,
+                section = group.section,
+                player_turns = player_turns,
+                )
 
 def faculty_feedback_submit(request):
     response = {}
@@ -147,15 +144,15 @@ def faculty_feedback_submit(request):
     turn_id = int(request.POST.get('turn_id', None))
     feedback = request.POST.get('feedback', '')
 
-    player = SectionGroupPlayer.objects.get(id=player_id)
+    player = get_object_or_404(SectionGroupPlayer, id=player_id)
     group = player.group
 
     # Retrieve the associated player turn to update
-    turn = SectionGroupPlayerTurn.objects.get(player=player, turn=turn_id)
+    turn = get_object_or_404(SectionGroupPlayerTurn, player=player, turn=turn_id)
 
     turn.feedback = feedback
     turn.feedback_date = datetime.datetime.now()
-    turn.faculty = SectionAdministrator.objects.get(section=group.section, user__id=faculty_id)
+    turn.faculty = get_object_or_404(SectionAdministrator, section=group.section, user__id=faculty_id)
     turn.save()
 
     response['result'] = 1
@@ -265,32 +262,32 @@ def __player_index(request):
     groups = SectionGroup.objects.filter(sectiongroupplayer__user=request.user)
     return dict(user=request.user, groups=groups)
 
+def tab_name(i):
+    if i < 4:
+        return 'Phase %s' % i
+    else:
+        return "Results" 
+
+def tab_viewable(group,i):
+    try:
+        group.sectiongroupstate_set.get(state__turn=i).state
+        return True
+    except:
+        return False
+
 @rendered_with('sim/player_game.html')
 @login_required
 def player_game(request, group_id, turn_id=0):
-    group = SectionGroup.objects.get(id=group_id)
+    group = get_object_or_404(SectionGroup,id=group_id)
     
     if turn_id == 0:
         working_state = group.sectiongroupstate_set.latest().state
     else:
         working_state = group.sectiongroupstate_set.get(state__turn=turn_id).state
     
-    tabs = []
-    for i in range(1, 5):
-        t = { 'id': i, 'activetab': (working_state.turn == i), 'viewable': False }
-
-        if i < 4:
-            t['name'] = 'Phase %s' % i
-        else:
-            t['name'] = "Results" 
-        
-        try:
-            group.sectiongroupstate_set.get(state__turn=i).state
-            t['viewable'] = True
-        except:
-            pass
-
-        tabs.append(t)
+    tabs = [dict(id=i, activetab=(working_state.turn == i), 
+                 viewable=tab_viewable(group,i), name=tab_name(i),      
+                 ) for i in range(1,5)]
         
     # setup set of special attributes for current user
     your_player = { 'model': group.sectiongroupplayer_set.get(user__id=request.user.id), 'saved_turn': None, 'saved_choice': None }
