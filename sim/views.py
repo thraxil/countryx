@@ -6,7 +6,6 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django import forms
 from django.forms.util import ErrorList 
 from django.contrib.admin.widgets import AdminSplitDateTime
-from django.core.exceptions import ObjectDoesNotExist
 import datetime
 import simplejson
 
@@ -89,16 +88,10 @@ def faculty_group_detail(request, group_id):
 @login_required
 @rendered_with('sim/faculty_player_detail_byturn.html')
 def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated=False):
-    group = SectionGroup.objects.get(id=group_id)
-    player = SectionGroupPlayer.objects.get(id=player_id, group=group)
-    state = State.objects.get(id=state_id)
-    feedback = None
-    
-    try:
-        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
-        feedback = turn.feedback
-    except SectionGroupPlayerTurn.DoesNotExist:
-        pass # should never happen
+    group = get_object_or_404(SectionGroup,id=group_id)
+    player = get_object_or_404(SectionGroupPlayer,id=player_id, group=group)
+    state = get_object_or_404(State,id=state_id)
+    turn = get_object_or_404(SectionGroupPlayerTurn,player=player,turn=state.turn)
 
     return {
             'user': request.user,
@@ -110,7 +103,7 @@ def faculty_player_detail_byturn(request, group_id, player_id, state_id, updated
             'submit_status': player.status(state),
             'choices': StateRoleChoice.objects.filter(state=state, role=player.role),
             'country_condition': state.statevariable_set.get(name='Country Condition').value,
-            'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': feedback, 'turn_id': state.turn }),
+            'form': FeedbackForm(initial={'faculty_id': request.user.id, 'feedback': turn.feedback, 'turn_id': state.turn }),
             'updated': updated
             }
 
@@ -272,6 +265,7 @@ def __player_index(request):
     groups = SectionGroup.objects.filter(sectiongroupplayer__user=request.user)
     return dict(user=request.user, groups=groups)
 
+@rendered_with('sim/player_game.html')
 @login_required
 def player_game(request, group_id, turn_id=0):
     group = SectionGroup.objects.get(id=group_id)
@@ -315,16 +309,15 @@ def player_game(request, group_id, turn_id=0):
         if (p != your_player['model']):
             players.append({ 'model' : p, 'submit_status': p.status(working_state) })
                         
-    return render_to_response('sim/player_game.html',{
-            'user': request.user,
-            'group': group,
-            'state': working_state,
-            'country_condition': working_state.statevariable_set.get(name='Country Condition').value,
-            'conditions': __current_conditions(working_state),
-            'tabs': tabs,
-            'players': players,
-            'you': your_player,
-            })
+    return dict(user = request.user,
+                group = group,
+                state = working_state,
+                country_condition = working_state.statevariable_set.get(name='Country Condition').value,
+                conditions = __current_conditions(working_state),
+                tabs = tabs,
+                players = players,
+                you = your_player,
+                )
 
 #actually needs to be faculty only
 @login_required 
