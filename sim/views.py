@@ -331,6 +331,7 @@ def allvariables(request):
         response.setdefault(x.state.id,{}).setdefault(x.name,x.value)
     return HttpResponse(simplejson.dumps(response), 'application/json')
 
+@rendered_with('sim/allpaths.html')
 @login_required 
 def allpaths(request):
     turns = []
@@ -338,19 +339,16 @@ def allpaths(request):
     #NOTE: we currently assume 4 turns indexed at 1
     for turn in range(1,5):
         states = State.objects.filter(turn=turn).order_by("state_no")
-        turn = {'states':[]}
-        for s in states:
-            turn['states'].append({'id':s.id,
-                                   'state_no':s.state_no,
-                                   'name':s.name,
-                                   'full_from':s.full_from(roles),
-                                   'full_to':s.full_to(roles),
-                                   'color':s.get_color(),
-                                   })
+        turn = dict(states=[{'id':s.id,
+                             'state_no':s.state_no,
+                             'name':s.name,
+                             'full_from':s.full_from(roles),
+                             'full_to':s.full_to(roles),
+                             'color':s.get_color(),
+                             } for s in states])
         turns.append(turn)
 
-    return render_to_response('sim/allpaths.html',
-                              {'turns':turns,'roles':roles})
+    return dict(turns=turns, roles=roles)
    
 @login_required
 def player_choose(request):
