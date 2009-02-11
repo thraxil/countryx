@@ -301,10 +301,9 @@ def player_game(request, group_id, turn_id=0):
         pass
     
     # setup player list attributes
-    players = []
-    for p in group.sectiongroupplayer_set.all():
-        if (p != your_player['model']):
-            players.append({ 'model' : p, 'submit_status': p.status(working_state) })
+    players = [dict(model=p, submit_status=p.status(working_state)) 
+               for p in group.sectiongroupplayer_set.all()
+               if (p != your_player['model'])]
                         
     return dict(user = request.user,
                 group = group,
