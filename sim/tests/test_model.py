@@ -52,6 +52,10 @@ class ModelTestCases(TestCase):
         time_format = "%Y-%m-%d %H:%M"
         
         section = Section.objects.get(name="Test")
+        turn_dates = SectionTurnDates.objects.get(section=section)
+        turn_dates.turn1 = datetime.datetime.now() + datetime.timedelta(hours=1)
+        turn_dates.save()
+
         self.assertEquals(1, section.current_turn())
         
         # make turn 1 be in the past & retest
