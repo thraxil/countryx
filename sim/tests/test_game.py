@@ -109,13 +109,10 @@ class GameTestCases(TestCase):
     def test_choose_savedraft_invalid(self):
         c = self.client
         self._login(c, 'playerA', 'aaaa')
-        
+ 
         payload = "<?xml version='1.0' encoding='utf-8'?><library><book><title>Blink</title><author>Malcolm Gladwell</author></book></library>"
         response = c.post('/sim/player/choose/', payload, content_type="text/xml")
-        
-        doc = simplejson.loads(response.content)
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(doc['result'], 0)
+        self.assertEquals(response.status_code, 404)
     
     def test_choose_savedraft_valid(self):
         c = self.client

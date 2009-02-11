@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django import forms
 from django.forms.util import ErrorList 
 from django.contrib.admin.widgets import AdminSplitDateTime
+from django.core.exceptions import ObjectDoesNotExist
 import datetime
 import simplejson
 
@@ -148,31 +149,25 @@ def faculty_player_detail(request, player_id):
 
 def faculty_feedback_submit(request):
     response = {}
-    try:
-        player_id = request.POST.get('player_id', None)
-        faculty_id = int(request.POST.get('faculty_id', None))
-        turn_id = int(request.POST.get('turn_id', None))
-        feedback = request.POST.get('feedback', '')
-        
-        player = SectionGroupPlayer.objects.get(id=player_id)
-        group = player.group
-        
-        # Retrieve the associated player turn to update
-        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=turn_id)
-        
-        turn.feedback = feedback
-        turn.feedback_date = datetime.datetime.now()
-        turn.faculty = SectionAdministrator.objects.get(section=group.section, user__id=faculty_id)
-        turn.save()
-             
-        response['result'] = 1
-        response['turn_id'] = turn_id
-        response['message'] = "Your feedback has been saved."
-    except:
-        response['result'] = 0
-        response['turn_id'] = turn_id
-        response['message'] = "An unexpected error occurred. Please try again"
-        
+    player_id = request.POST.get('player_id', None)
+    faculty_id = int(request.POST.get('faculty_id', None))
+    turn_id = int(request.POST.get('turn_id', None))
+    feedback = request.POST.get('feedback', '')
+
+    player = SectionGroupPlayer.objects.get(id=player_id)
+    group = player.group
+
+    # Retrieve the associated player turn to update
+    turn = SectionGroupPlayerTurn.objects.get(player=player, turn=turn_id)
+
+    turn.feedback = feedback
+    turn.feedback_date = datetime.datetime.now()
+    turn.faculty = SectionAdministrator.objects.get(section=group.section, user__id=faculty_id)
+    turn.save()
+
+    response['result'] = 1
+    response['turn_id'] = turn_id
+    response['message'] = "Your feedback has been saved."
     return HttpResponse(simplejson.dumps(response), 'application/json')
  
 class FeedbackForm(forms.Form):
@@ -196,7 +191,7 @@ def faculty_section_manage(request, section_id, updated=False):
             # Process the data in form.cleaned_data
             try:
                tm = SectionTurnDates.objects.get(section=section)
-            except:
+            except SectionTurnDates.DoesNotExist:
                tm = SectionTurnDates.objects.create(section=section, turn1=datetime.datetime.now())
                
             section.name = form.cleaned_data['section_name']
@@ -223,7 +218,7 @@ def faculty_section_manage(request, section_id, updated=False):
             initial['turn1'] = tm.turn1
             initial['turn2'] = tm.turn2
             initial['turn3'] = tm.turn3
-        except:
+        except SectionTurnDates.DoesNotExist:
             initial['turn1'] = datetime.datetime.now()
         
         form = TurnManagementForm(initial=initial)
@@ -305,13 +300,14 @@ def player_game(request, group_id, turn_id=0):
         
     # setup set of special attributes for current user
     your_player = { 'model': group.sectiongroupplayer_set.get(user__id=request.user.id), 'saved_turn': None, 'saved_choice': None }
+    your_player['submit_status'] = your_player['model'].status(working_state)
+    your_player['choices'] = StateRoleChoice.objects.filter(state=working_state, role=your_player['model'].role)
+
     try:
-        your_player['submit_status'] = your_player['model'].status(working_state)
-        your_player['choices'] = StateRoleChoice.objects.filter(state=working_state, role=your_player['model'].role)
         your_player['saved_turn'] = SectionGroupPlayerTurn.objects.get(player=your_player['model'], turn=working_state.turn)
-        your_player['saved_choice'] = StateRoleChoice.objects.get(state=working_state, role=your_player['model'].role, choice=your_player['saved_turn'].choice)
-    except:
+    except SectionGroupPlayerTurn.DoesNotExist:
         pass
+    your_player['saved_choice'] = StateRoleChoice.objects.get(state=working_state, role=your_player['model'].role, choice=your_player['saved_turn'].choice)
     
     # setup player list attributes
     players = []
@@ -370,42 +366,39 @@ def allpaths(request):
 @login_required
 def player_choose(request):
     response = {}
+
+    groupid = request.POST.get('groupid', None)
+    choiceid = request.POST.get('choiceid', None)
+    final = int(request.POST.get('final', False))
+    reasoning = request.POST.get('reasoning', '')
+
+    group = get_object_or_404(SectionGroup,id=groupid)
+    player = group.sectiongroupplayer_set.get(user__id=request.user.id, group=group)
+    current_state = group.sectiongroupstate_set.latest().state
+
+    # create or update the player's choice
     try:
-        groupid = request.POST.get('groupid', None)
-        choiceid = request.POST.get('choiceid', None)
-        final = int(request.POST.get('final', False))
-        reasoning = request.POST.get('reasoning', '')
-        
-        group = SectionGroup.objects.get(id=groupid)
-        player = group.sectiongroupplayer_set.get(user__id=request.user.id, group=group)
-        current_state = group.sectiongroupstate_set.latest().state
-            
-        # create or update the player's choice
-        try:
-            turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
-        except:
-            turn = SectionGroupPlayerTurn.objects.create(player=player, turn=current_state.turn)
-        
-        if turn.submit_date != None:
-            # player has already submitted data
-            response['result'] = 0
-            response['message'] = 'Player has already submitted a final choice'
-        else:
-            turn.choice = choiceid
-            turn.reasoning = reasoning
-            if final:
-               turn.submit_date = datetime.datetime.now()
-            turn.save() 
-             
-            if (final):
-                response['result'] = 2
-                response['message'] = "Your choice and reasoning have been submitted"
-            else:
-                response['result'] = 1
-                response['message'] = "Draft has been saved"
-    except:
+        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
+    except SectionGroupPlayerTurn.DoesNotExist:
+        turn = SectionGroupPlayerTurn.objects.create(player=player, turn=current_state.turn)
+
+    if turn.submit_date != None:
+        # player has already submitted data
         response['result'] = 0
-        response['message'] = "An unexpected error occurred. Please try again"
+        response['message'] = 'Player has already submitted a final choice'
+    else:
+        turn.choice = choiceid
+        turn.reasoning = reasoning
+        if final:
+           turn.submit_date = datetime.datetime.now()
+        turn.save() 
+
+        if (final):
+            response['result'] = 2
+            response['message'] = "Your choice and reasoning have been submitted"
+        else:
+            response['result'] = 1
+            response['message'] = "Draft has been saved"
         
     return HttpResponse(simplejson.dumps(response), 'application/json')
                 
