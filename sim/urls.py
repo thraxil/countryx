@@ -30,4 +30,5 @@ urlpatterns = patterns('',
                        (r'^faculty/player/(?P<player_id>\d+)/$', 'countryx.sim.views.faculty_player_detail'),
                        (r'^faculty/feedback/$', 'countryx.sim.views.faculty_feedback_submit'),
 
+                       (r'^cheat/$', 'countryx.sim.views.cheat'),
 )

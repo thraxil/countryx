@@ -201,6 +201,44 @@ class Section(models.Model):
 
     def get_absolute_url(self):
         return "/sim/faculty/manage/%d/" % self.id
+
+    def set_sectionturndates_to_default(self):
+        """ sets turn dates on this section to one day apart starting now """
+        dates = (datetime.datetime.now() + datetime.timedelta(hours=24),
+                 datetime.datetime.now() + datetime.timedelta(hours=48),
+                 datetime.datetime.now() + datetime.timedelta(hours=72))
+        if self.sectionturndates_set.all().count() > 0:
+            std = self.sectionturndates_set.all()[0]
+            std.turn1 = dates[0]
+            std.turn2 = dates[1]
+            std.turn3 = dates[2]
+            std.save()
+            return std
+        else:
+            std = SectionTurnDates.objects.create(section=self,
+                                                  turn1 = dates[0],
+                                                  turn2 = dates[1],
+                                                  turn3 = dates[2],
+                                                  )
+            return std
+
+    def clear_all(self):
+        """ clear out all the groups in the section (and their games by extension) """
+        for g in self.sectiongroup_set.all():
+            g.delete()
+
+    def add_faculty(self,user):
+        """ make sure that the user is set as faculty for this group """
+        if self.sectionadministrator_set.filter(user=user).count() == 0:
+            sa = SectionAdministrator.objects.create(section=self,user=user)
+
+    def remove_faculty(self,user):
+        """ make sure the user isn't faculty for this section """
+        try:
+            sa = SectionAdministrator.objects.get(section=self,user=user)
+            sa.delete()
+        except SectionAdministrator.DoesNotExist:
+            pass
      
 class SectionAdministrator(models.Model):
     user = models.ForeignKey(User)
@@ -217,6 +255,29 @@ class SectionTurnDates(models.Model):
 
     def __unicode__(self):
         return "%s %s %s" % (self.turn1, self.turn2, self.turn3)
+
+def get_or_create_section(name):
+    """ fetches an existing section with a given name 
+
+    or creates a new one if necessary
+
+    mostly used for the cheat functionality """
+    try:
+        return Section.objects.get(name=name)
+    except Section.DoesNotExist:
+        # need to make one
+        return Section.objects.create(name=name,term="cheat",year=2009,
+                                      created_date=datetime.datetime.now())
+
+def get_or_create_user(username,first_name,last_name,email,
+                       password,is_staff=False,is_superuser=False):
+    try:
+        return User.objects.get(username=username)
+    except User.DoesNotExist:
+        return User.objects.create(username=username,first_name=first_name,
+                                   last_name=last_name,email=email,
+                                   password=password,is_staff=is_staff,
+                                   is_superuser=is_superuser)
         
 ###############################################################################
 ###############################################################################

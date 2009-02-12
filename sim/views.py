@@ -416,3 +416,161 @@ def __current_conditions(state):
             
         conditions.append(var_dict)
     return conditions
+
+
+class FeedbackForm(forms.Form):
+    feedback = forms.CharField(widget=forms.Textarea)
+    faculty_id = forms.IntegerField(widget=forms.HiddenInput)
+    turn_id = forms.IntegerField(widget=forms.HiddenInput)    
+
+class CheatForm(forms.Form):
+    mode = forms.ChoiceField(choices=[('faculty','Faculty'),('player','Player')])
+    role = forms.ChoiceField(choices=[(r.id,r.name) for r in Role.objects.all()])
+    turn = forms.IntegerField(max_value=4,min_value=1, widget=forms.HiddenInput)
+    state = forms.IntegerField(widget=forms.HiddenInput)
+
+@login_required
+def cheat(request):
+    """ allows an admin to set up a game at a particular point.
+    useful for dev, QA, and demoing """
+    
+    if request.method == "POST":
+        cf = CheatForm(request.POST)
+        if cf.is_valid():
+            state = get_object_or_404(State,id=cf.cleaned_data['state'])
+            role = get_object_or_404(Role,id=cf.cleaned_data['role'])
+
+            section = get_or_create_section("cheat")
+            # clear out all existing groups/games
+            section.clear_all()
+            group = SectionGroup.objects.create(section=section,name="cheaters")
+
+            # set any turn dates necessary to the past
+            std = section.set_sectionturndates_to_default()
+            turn = cf.cleaned_data['turn']
+
+            # fake out dates but make sure they stay in order
+            pastdates = (datetime.datetime.now() - datetime.timedelta(hours=72),
+                         datetime.datetime.now() - datetime.timedelta(hours=48),
+                         datetime.datetime.now() - datetime.timedelta(hours=24))
+            if turn > 1:
+                std.turn1 = pastdates[0]
+            if turn > 2:
+                std.turn2 = pastdates[1]
+            if turn > 3:
+                std.turn3 = pastdates[2]
+            std.save()
+
+            # populate with players in regularly assigned roles
+            players = [get_or_create_user("cheaterA",first_name="cheater",
+                                          last_name="A",email="cheaterA@ccnmtl.columbia.edu",
+                                          password="aaaa",is_staff=False,
+                                          is_superuser=False),
+                       get_or_create_user("cheaterB",first_name="cheater",
+                                          last_name="B",email="cheaterB@ccnmtl.columbia.edu",
+                                          password="bbbb",is_staff=False,
+                                          is_superuser=False),
+                       get_or_create_user("cheaterC",first_name="cheater",
+                                          last_name="C",email="cheaterC@ccnmtl.columbia.edu",
+                                          password="cccc",is_staff=False,
+                                          is_superuser=False),
+                       get_or_create_user("cheaterD",first_name="cheater",
+                                          last_name="D",email="cheaterD@ccnmtl.columbia.edu",
+                                          password="dddd",is_staff=False,
+                                          is_superuser=False),
+                       ]
+            for (player,r) in zip(players,Role.objects.all()):
+                sgp = SectionGroupPlayer.objects.create(user=player,
+                                                        group=group,
+                                                        role=r)
+
+            if cf.cleaned_data['mode'] == 'faculty':
+                # set the game up with the user as faculty 
+                section.add_faculty(request.user)
+            else:
+                # set the game up with the user as player
+                section.remove_faculty(request.user)
+                # just replace the one that we populated earlier
+                sgp = SectionGroupPlayer.objects.get(group=group,
+                                                     role=role)
+                sgp.user=request.user
+                sgp.save()
+
+            # figure out the proper history
+
+            path = []
+            scs = []
+
+            # start from the desired end state and work backwards to the start
+            current_state = state
+            while turn > 0:
+                sc = None
+                if turn > 1: # turn 1 doesn't have any StateChanges leading up to it
+                    allowed_statechanges = list(StateChange.objects.filter(next_state=current_state))
+                    # just pick one of the paths that led to the state
+                    sc = random.choice(allowed_statechanges) 
+                    scs.append(sc)
+
+                path.append(current_state)
+
+                if turn > 1:
+                    current_state = sc.state
+                turn -= 1
+
+            # reverse our lists
+            path.reverse()
+            scs.reverse()
+            scs.append(None) # put an extra None on the end to make zip() happy
+
+            # at this point, 'path' contains the list of states for each turn in order
+            # and 'scs' contains the list of StateChanges out of each turn
+
+            # now go through in order and set up the turns
+            turn = 1
+            for (s,sc) in zip(path,scs):
+                sgs = SectionGroupState.objects.create(state=s,group=group,
+                                                       date_updated=datetime.datetime.now())
+                if turn < 4:
+                    if sc is not None: # the last turn will have no StateChanges out of it
+                        for sgp in group.sectiongroupplayer_set.all():
+                            r = sgp.role
+                            choice = None
+                            if r.name == 'President':
+                                choice = sc.president
+                            if r.name == 'OppositionLeadership':
+                                choice = sc.opposition
+                            if r.name == 'FirstWorldEnvoy':
+                                choice = sc.envoy
+                            if r.name == 'SubRegionalRep':
+                                choice = sc.regional
+                            sgpt = SectionGroupPlayerTurn.objects.create(
+                                player=sgp,
+                                turn=turn,
+                                choice=choice,
+                                reasoning="automatic. cheat-mode",
+                                automatic_update=False,
+                                submit_date=datetime.datetime.now(),
+                                )
+
+                turn += 1
+
+            return HttpResponseRedirect("/sim/")
+    else:
+        cf = CheatForm()
+
+    turns = []
+    roles = ('president','regional','envoy','opposition')
+    #NOTE: we currently assume 4 turns indexed at 1
+    for turn in range(1,5):
+        states = State.objects.filter(turn=turn).order_by("state_no")
+        turn = dict(states=[{'id':s.id,
+                             'state_no':s.state_no,
+                             'name':s.name,
+                             'full_from':s.full_from(roles),
+                             'full_to':s.full_to(roles),
+                             'color':s.get_color(),
+                             } for s in states])
+        turns.append(turn)
+
+    return render_to_response("sim/cheat.html",dict(cf=cf,turns=turns, roles=roles))
+
