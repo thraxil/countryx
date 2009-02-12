@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load hash %}
+
+{% block js %}
+ <script type="text/javascript" src="/site_media/js/sim_allpaths.js"></script>
+{% endblock %}
+{% block css %}
+ <style type="text/css">
+   @import "/site_media/css/sim_allpaths.css"
+ </style>
+{% endblock %}
+
+{% block content %}
+	{{ block.super }}
+
+	<form>
+	  <select name="diff">
+	    {% for v in turns.0.states.0.variables %}
+	    
+	    <option value="{{v.name}}">{{v.name}}</option>
+	    {% endfor %}
+	  </select>
+	</form>
+	<!--KEY-->
+	<table id="gridkey" border="1">
+	  <tr><td colspan="2"><b>KEY</b></td>
+	      <td colspan="3">1</td><td colspan="3">2</td><td colspan="3">3</td>
+	      <td>Envoy</td>
+	  </tr>
+	  <tr><td>Pres</td>
+	      <td>Reg</td>
+	      <td>1</td><td>2</td><td>3</td><td>1</td><td>2</td><td>3</td><td>1</td><td>2</td><td>3</td>
+	      <td>Opposition</td>
+	  </tr>
+	  <tr><td rowspan="3">1</td><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
+	  <tr><td rowspan="3">2</td><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
+	  <tr><td rowspan="3">3</td><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
+	</table>
+
+
+	<div id="states">
+	  {% for t in turns %}
+	    <div class="overview-turn t{{forloop.counter}}">
+	      {% for s in t.states %}	      
+	        <div class="overview-state s{{forloop.counter}}">
+		  <div class="state-name" style="background-color:#{{s.x.get_color}}">
+		    {{s.name}}
+		  </div>
+		  {%if not forloop.parentloop.last %}
+		  <div class="transition-to">
+		    {%for row in s.x.full_to %}
+		      <div class="transition-permutation" style="background-color:#{{row}}"></div>
+		    {%endfor %}
+		  </div>
+		  {%endif%}
+		</div>
+	      {% endfor %}	  
+	    </div>
+	  {% endfor %}	  
+	</div>
+
+	<table border="1">
+	  <tr>
+	    <td id="t1s1" class="state t1">
+	      <div class="state-name">state 1</div>
+	      {% for v in turns.0.states.0.variables %}
+	      <span id="var_t1s1_{{v.name}}" class="variable">{{v.value}}</span>
+	      {% endfor %}
+
+	      <div class="transition-to">
+		{%for row in turns.0.states.0.x.full_to %}
+		  <div class="transition-permutation" style="background-color:#{{row}}"></div>
+		{%endfor %}
+	      </div>
+
+	    </td>
+	    {% for s in turns.1.states %}
+	      <td id="t1s1s{{s.state_no}}" class="transition">
+		{%comment%}
+	        <div>
+		  {% hash s.transitions "1" as transition %}
+		  {{s.transitions|hashf:"1"}}
+		  {{blah}}
+
+		</div>
+		{%endcomment%}
+	      </td>
+	    {% endfor %}
+	  </tr>
+<!--BLOCK 1--><!--this would repeat for each turn-pair-->
+	  <tr>
+	    <td class="void"></td><!--#t(n) + #t(n-1) +...+1 -->
+	    {% for s in turns.1.states %}
+	    <td id="t2s{{s.state_no}}" class="state t2">
+	      <div class="state-name" style="background-color:#{{s.x.get_color}}">{{s.name}}</div>
+	      <div class="transition-to">
+		{%for row in s.x.full_to %}
+		  <div class="transition-permutation" style="background-color:#{{row}}"></div>
+		{%endfor %}
+	      </div>
+
+	    </td>
+	    {% endfor %}
+	  </tr>
+
+	  {% for s2 in turns.2.states %}
+	  <tr>
+	    <td class="void"></td><!--#t(n) + #t(n-1) +...+1 -->
+	    
+	    {% for s1 in turns.1.states %}
+	    <td id="t2s{{s1.state_no}}s{{s2.state_no}}" class="transition">
+		{%comment%}
+	      <div class="transition-to">
+		{%for row in s1.x.full_to %}
+		  {%ifequal row s2.x.get_color %}
+		    <div class="transition-permutation" style="background-color:#{{row}}"></div>
+		  {% else %}
+		    <div class="transition-permutation" ></div>
+		  {%endifequal %}
+		{%endfor %}
+	      </div>
+		{%endcomment%}
+	    </td>
+	    {% endfor %}
+
+	    <td id="t2s{{s2.state_no}}" class="state t3">
+	      <div class="state-name" style="background-color:#{{s2.x.get_color}}">
+		{{s2.name}}
+	      </div>
+	      <div class="transition-to">
+		{%for row in s2.x.full_to %}
+		  <div class="transition-permutation" style="background-color:#{{row}}"></div>
+		{%endfor %}
+	      </div>
+	    </td>
+
+	    {% for s3 in turns.3.states %}
+	    <td id="t3s{{s2.state_no}}s{{s3.state_no}}" class="transition">
+	    </td>
+	    {% endfor %}
+	  </tr>
+	  {% endfor %}
+<!--BLOCK 2-->
+	  <tr>
+	    <td class="void"></td><!--#n -->
+	    <td class="void"></td>
+	    {% for t2 in turns.1.states %}
+	      <td class="void"></td><!--#t(n) + #t(n-1) +...+1 -->
+	    {% endfor %}
+	    {% for s3 in turns.3.states %}
+	    <td id="t3s{{s3.state_no}}" class="state t4">
+	      <div class="state-name" style="background-color:#{{s3.x.get_color}}">
+		{{s3.name}}
+	      </div>
+	    </td>
+	    {% endfor %}
+	  </tr>
+
+	</table>
+{% endblock %}
