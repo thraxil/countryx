@@ -23,10 +23,11 @@
 <table>
 {{ cf.as_table }}
 <tr><th>State:</th>
-<td><span id="selectedStateName">Start</span></td>
+<td><span id="selectedStateName">Choose a state from below</span></td>
 </tr>
 </table>
-<input type="submit" value="cheat!" />
+<input type="submit" value="cheat!" disabled="disabled"
+       id="submitbutton" />
 </form>
 
 
@@ -72,29 +73,5 @@
 	    </div>
 	  {% endfor %}	  
 	</div>
-
-	<!--KEY-->
-	<table id="gridkey" class="" border="1">
-	  <tr><td id="key-label" class="key-label" colspan="2">KEY</td>
-	      <td class="o3-1 option" colspan="3">1</td><td class="o3-2 option" colspan="3">2</td><td class="o3-3 option" colspan="3">3</td>
-	      <td class="role role-3">{{roles.2}}</td>
-	  </tr>
-	  <tr><td class="role role-1">{{roles.0}}</td>
-	      <td class="role role-2">{{roles.1}}</td>
-	      <td class="o4-1 smalltrans option">1</td>
-	      <td class="o4-2 smalltrans option">2</td><td class="o4-3 smalltrans option">3</td><td class="o4-1 smalltrans option">1</td><td class="o4-2 smalltrans option">2</td><td class="o4-3 smalltrans option">3</td><td class="o4-1 smalltrans option">1</td><td class="o4-2 smalltrans option">2</td><td class="o4-3 smalltrans option">3</td>
-	      <td class="role role-4">{{roles.3}}</td>
-	  </tr>
-	  <tr><td rowspan="3" class="o1-1 option" >1</td><td class="o2-1 option">1</td>
-	      <td id="fillmeup" rowspan="9" colspan="9">
-		Click a TO box to zoom in
-	      </td>
-	  </tr>
-	  <tr><td class="o2-2 option">2</td></tr><tr><td class="o2-3 option">3</td></tr>
-	  <tr><td rowspan="3" class="o1-2 option" >2</td><td class="o2-1 option">1</td></tr><tr><td class="o2-2 option">2</td></tr><tr><td class="o2-3 option">3</td></tr>
-	  <tr><td rowspan="3" class="o1-3 option" >3</td><td class="o2-1 option">1</td></tr><tr><td class="o2-2 option">2</td></tr><tr><td class="o2-3 option">3</td></tr>
-	</table>
-
-
 
 {% endblock %}

@@ -36,11 +36,13 @@
 	while (--i >0) {
 	    ///e.g. president[i=1] = parseInt(num%81.1/27.01) +1;
 	    var ord = Math.pow(3,4-i)+0.01; //3's column
-	    var parent_ord = Math.pow(3,5-i)+0.01; 
+	    var parent_ord = Math.pow(3,5-i)+0.01;
 	    var choice = parseInt(num%parent_ord/ord) +1 ;
 	    class_vals += ' s'+i+'-'+choice
 	}
-	$('gridkey').className = class_vals;
+        if ($('gridkey')) {
+	    $('gridkey').className = class_vals;
+	}
 	//$('key-label').innerHTML = class_vals;
     }
 
@@ -66,7 +68,7 @@
     }
 
     //assumes 9x9 box
-    GridSelector.prototype.selectBox = function(i,j) { 
+    GridSelector.prototype.selectBox = function(i,j) {
 	var mod_j =(j%9==0)?9:j%9; //last column stays 9
 	var mod_i =(i%9==0)?9:i%9; //last column stays 9
 	var dx = (mod_j)-(mod_i);
@@ -112,7 +114,7 @@
 	if (s[1] == index) {return;}
 	if (purge_others
 	    || (Math.abs(s[1]-s[0]) > Math.abs(index-s[0]))) {
-	    
+
 	    forEach(getElementsByTagAndClassName(null,'selected',self.parent), function(elt) {
 		removeElementClass(elt,'selected');
 	    });
@@ -122,7 +124,7 @@
     }
 
 
-    
+
 
 
 })();
