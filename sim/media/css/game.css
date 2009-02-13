@@ -10,7 +10,9 @@
 
 .main
 {
-	background-color: #464646;
+	background-color: #666;
+	background-image: url(../images/main_bg.jpg);
+	background-repeat: repeat-x;
 	color: #fff;
 	width: 974px;
 	height: 540px;
@@ -22,7 +24,7 @@
 {
    background-color: #999;
    z-index: -10000;
-   background-image: url(../images/masthead.jpg);
+   background-image: url(../images/masthead_bg.jpg);
    width: 974px;
    margin: 0 auto;
    height: 100px;
@@ -40,6 +42,7 @@
    text-decoration: none;
    padding: 0;
    z-index: 2;
+
   
 }
 
@@ -53,6 +56,8 @@
 
 }
 
+#simlogo a img {border: none; margin-top: 2px; }
+
 #login_credentials
 {
    
@@ -62,8 +67,9 @@
    text-align: right;
    padding-right: 10px;
    vertical-align: top;
-   float: left;
+   float: right;
    	z-index: 4;
+/*   	margin-top: -30px;*/
 
 }
 
@@ -108,7 +114,7 @@
 
 .character_choice
 {
-   background-color: #727272;
+   background-color: #1e1e1e;
    text-align: right;
    cursor: pointer;
    font-size: 10px;
@@ -277,8 +283,7 @@
 
 #elapsed_time_clock
 {
-   border: 1px solid pink;
-   
+background-color: #666;
 display:block;
 height:36px;
 margin-top:-8px;
@@ -350,16 +355,21 @@ margin-bottom:6px;
 	font-size: 13px;
 	padding: 5px;
 	margin-top: 0;
+	background-image: url(../images/h1_bg.jpg);
+	background-repeat: repeat-x;
+	border: 1px solid #555;
 
 }
 
 #column_1 h2, #column_2 h2, #column_3 h2
 {
 	background-color: #555;
-    color: #fff;
+    color: #000;
 	font-size: 12px;
 	padding: 5px;
-	margin-bottom: 0px;
+	margin-bottom: 1px;
+	background-image: url(../images/h2_bg.jpg);
+	background-repeat: repeat-x;
 }
 
 #column_2 {
@@ -373,14 +383,14 @@ margin-bottom:6px;
 
 #column_3 {
 
-background-color:yellow;
-border-left:1px solid #DDDDDD;
-border-right:1px solid #DDDDDD;
+background-color:#dedede;
 float:left;
-margin:0 0 10px 10px;
+margin:0 0 8px 10px;
 max-height:520px;
+min-height: 520px;
 overflow:hidden;
 padding:10px;
-width:228px;
+width:230px;
+color: #000;
 
 }
