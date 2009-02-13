@@ -572,5 +572,5 @@ def cheat(request):
                              } for s in states])
         turns.append(turn)
 
-    return render_to_response("sim/cheat.html",dict(cf=cf,turns=turns, roles=roles))
+    return render_to_response("sim/cheat.html",dict(cf=cf,turns=turns, roles=roles,user=request.user))
 

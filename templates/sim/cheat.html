@@ -1,10 +1,12 @@
 {% extends "sim/base_faculty.html" %}
 {% block js %}
+{{ block.super }}
    <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
    <script type="text/javascript" src="/site_media/js/sim_allpaths.js"></script>
    <script type="text/javascript" src="/site_media/js/cheat.js"></script>
 {% endblock %}
 {% block css %}
+   {{ block.super }}
    <link href="/site_media/css/sim_allpaths.css" rel="stylesheet" type="text/css" />
    <style type="text/css">
      {%for r in roles%}
@@ -22,7 +24,7 @@
 <form action="." method="post">
 <table>
 {{ cf.as_table }}
-<tr><th>State:</th>
+<tr><th><label>State:</label></th>
 <td><span id="selectedStateName">Choose a state from below</span></td>
 </tr>
 </table>
