@@ -2,7 +2,7 @@
 
 /* resizable textarea styles */
 textarea.resizable {width: 90%; height: 90%;}
-
+textarea.reasoning  { height: 100px; }
 .resize-handle {
                cursor: se-resize;
                position: absolute;
