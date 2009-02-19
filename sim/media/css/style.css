@@ -26,13 +26,13 @@ body
 .error {
 	color: #D8000C;
 	background-color: #FFBABA;
-	background-image: url('error.png');
+	background-image: url('/site_media/images/error.png');
 }
 
 .success {
 	color: #4F8A10;
 	background-color: #DFF2BF;
-	background-image:url('success.png');
+	background-image:url('/site_media/images/success.png');
 
 }
 

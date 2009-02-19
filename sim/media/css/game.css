@@ -11,7 +11,7 @@
 .main
 {
 	background-color: #666;
-	background-image: url(../images/main_bg.jpg);
+	background-image: url(/site_media/images/main_bg.jpg);
 	background-repeat: repeat-x;
 	color: #fff;
 	width: 974px;
@@ -24,7 +24,7 @@
 {
    background-color: #999;
    z-index: -10000;
-   background-image: url(../images/masthead_bg.jpg);
+   background-image: url(/site_media/images/masthead_bg.jpg);
    width: 974px;
    margin: 0 auto;
    height: 100px;
@@ -207,9 +207,9 @@
    border-collapse: collapse; 
 }
 
-.negative_row {background-image: url(../images/gradient_red.jpg);}
+.negative_row {background-image: url(/site_media/images/gradient_red.jpg);}
 
-.positive_row {background-image: url(../images/gradient_green.jpg);}
+.positive_row {background-image: url(/site_media/images/gradient_green.jpg);}
 
 .condition_row_block_filled
 {
@@ -318,7 +318,7 @@ height:90px;
 margin-top: 10px;
 text-decoration:none;
 padding: 10px;
-background-image: url(../images/choice_mass.jpg);
+background-image: url(/site_media/images/choice_mass.jpg);
 }
 
 .choice_title {
@@ -355,7 +355,7 @@ margin-bottom:6px;
 	font-size: 13px;
 	padding: 5px;
 	margin-top: 0;
-	background-image: url(../images/h1_bg.jpg);
+	background-image: url(/site_media/images/h1_bg.jpg);
 	background-repeat: repeat-x;
 	border: 1px solid #555;
 
@@ -368,7 +368,7 @@ margin-bottom:6px;
 	font-size: 12px;
 	padding: 5px;
 	margin-bottom: 1px;
-	background-image: url(../images/h2_bg.jpg);
+	background-image: url(/site_media/images/h2_bg.jpg);
 	background-repeat: repeat-x;
 }
 
