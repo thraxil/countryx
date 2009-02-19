@@ -69,7 +69,7 @@
    vertical-align: top;
    float: right;
    	z-index: 4;
-/*   	margin-top: -30px;*/
+   margin-top: -50px;
 
 }
 
@@ -130,11 +130,11 @@
 
 #tabs
 {
-	float: right;
+	margin-left: 115px;
 	margin-top: -30px;
 	height: 30px;
-	width: 679px;
 	display: block;
+
 }
 
 #tabs ul
@@ -347,7 +347,14 @@ margin-bottom:6px;
 
 }
 
-#column_1 h1, #column_2 h1, #column_3 h1{
+#rightcolumns {
+
+	float: left;
+
+
+}
+
+#column_1 h1, #column_2 h1, #column_3 h1, #rightcolumns h1 {
 
 	background-color: #363636;
 	color: #fff;
@@ -377,7 +384,7 @@ margin-bottom:6px;
 	width: 404px;
 	float: left;
 	margin-left: 10px;
-	margin-top: 10px;
+	margin-top: -10px;
 
 }
 
@@ -386,11 +393,12 @@ margin-bottom:6px;
 background-color:#dedede;
 float:left;
 margin:0 0 8px 10px;
-max-height:520px;
-min-height: 520px;
+max-height:490px;
+min-height: 490px;
 overflow:hidden;
 padding:10px;
 width:230px;
 color: #000;
+padding-top: 0;
 
 }
