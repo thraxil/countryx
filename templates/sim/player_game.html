@@ -13,30 +13,7 @@
 
 <div class="main">
 
-     <!--  Turn Tabs -->
-                 
-			            <div id="tabs">
-			               <ul>
-			                  {% for t in tabs %}
-			                     <li id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} activetab {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} futureturn {% endif %}">
-			                       
-			                          <!--  Elapsed Time Clock -->
-                
-                      
-			             
-					                    {%if t.viewable %}
-					                       <a href="/sim/player/game/{{group.id}}/{{t.id}}/">{{t.name}}</a>
-					                    {% else %}
-					                       {{ t.name }}
-					                    {% endif %}
-					              
-					            {% endfor %}</li>
-					            <li><div id="elapsed_time_clock">DEADLINE FOR DECISION<br />
-			                April 7, 2009
-			             </div></li>
-					         </ul>
-					       </div>
-
+  
 
 <!--  Column 1: Representative Profiles -->
 
@@ -76,9 +53,34 @@
 		{% endfor %}
 </div>
 
+<div id="rightcolumns">
 
+   <!--  Turn Tabs -->
+                 
+			            <div id="tabs">
+			               <ul>
+			                  {% for t in tabs %}
+			                     <li id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} activetab {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} futureturn {% endif %}">
+			                       
+			                          <!--  Elapsed Time Clock -->
+                
+                      
+			             
+					                    {%if t.viewable %}
+					                       <a href="/sim/player/game/{{group.id}}/{{t.id}}/">{{t.name}}</a>
+					                    {% else %}
+					                       {{ t.name }}
+					                    {% endif %}
+					              
+					            {% endfor %}</li>
+					            
+					         </ul>
+					       </div>
+
+
+<h1>SITUATION ANALYSIS</h1>
 <div id="column_2">
-	<h1>SITUATION ANALYSIS</h1>
+	
 	
 	 	<!--  Country Conditions Text  -->
 	 	<h2>Economic and Political Snapshot</h2>
@@ -151,10 +153,12 @@
 
 
 <div id="column_3">
-	<h1>OPTIONS</h1>
+	<h2>OPTIONS</h2>
 	
 	 
-	
+	<div id="elapsed_time_clock">DEADLINE FOR DECISION<br />
+			                April 7, 2009
+			             </div>
 	
 
   <!--  Player Choice & Entry Form -->
@@ -217,7 +221,7 @@
 </div>
 
 
-
+</div>
 
 
 
