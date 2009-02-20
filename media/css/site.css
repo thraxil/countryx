@@ -2,7 +2,13 @@
 
 /* resizable textarea styles */
 textarea.resizable {width: 90%; height: 90%;}
-textarea.reasoning  { height: 100px; }
+textarea.reasoning  {
+
+	height: 235px; 
+	width: 210px;
+	border: 1px solid #bbb;
+	margin: 5px 0 5px 0;
+	}
 .resize-handle {
                cursor: se-resize;
                position: absolute;

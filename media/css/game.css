@@ -201,6 +201,7 @@
 {
 	background-color: #727272;
 	padding: 10px;
+	padding-bottom: 13px;
 
 
 }
@@ -415,13 +416,15 @@ padding-top: 0;
 
 #choices {
 
+	margin: 10px;
+
 	}
 
 
 
 
-.player_choice_1 {
-	background-image: url(/site_media/images/choices/choice_off_negotiation.jpg);
+.choice_button {
+	background-image: url(/site_media/images/choices/default_option_button.png);
 	color:#FFFFFF;
 display:block;
 font-family:arial,helvetica,sans-serif;
@@ -434,51 +437,4 @@ padding: 10px;
 
 }
 
-.player_choice_1 .choice_title:after {
-	/*content: "Negotiations";*/
-
-}
-
-.player_choice_2 {
-	background-image: url(/site_media/images/choices/choice_off_negotiation.jpg);
-	color:#FFFFFF;
-display:block;
-font-family:arial,helvetica,sans-serif;
-height:90px;
-margin-top: 10px;
-text-decoration:none;
-padding: 10px;
-
-
-
-}
-
-.player_choice_2 .choice_title:after {
-	/*content: "Communicate With Insurgents";*/
-
-}
-
-.player_choice_3 {
-	background-image: url(/site_media/images/choices/choice_off_negotiation.jpg);
-	color:#FFFFFF;
-display:block;
-font-family:arial,helvetica,sans-serif;
-height:90px;
-margin-top: 10px;
-text-decoration:none;
-padding: 10px;
-
-
-
-}
-
-.player_choice_3 .choice_title:after {
-	/*content: "Communicate With Regional Allies";*/
-
-}
-
-
-
-
-
-
+.player_choice {border: 1px solid red;}
