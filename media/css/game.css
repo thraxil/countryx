@@ -28,7 +28,7 @@
    background-image: url(/site_media/images/masthead_bg.jpg);
    width: 974px;
    margin: 0 auto;
-   height: 100px;
+   height: 93px;
    position: relative;
 }
 
@@ -362,6 +362,14 @@ margin-bottom:6px;
 
 }
 
+#rightcolumns h1 {
+
+
+	margin-top: 34px;
+	
+
+}
+
 #column_1 h2, #column_2 h2, #column_3 h2
 {
 	background-color: #555;
@@ -370,6 +378,13 @@ margin-bottom:6px;
 	padding: 5px;
 	margin-bottom: 1px;
 	background-image: url(/site_media/images/h2_bg.jpg);
+	background-repeat: repeat-x;
+}
+
+ #column_3 h2
+{
+	margin-top: 0px;
+	background-image: url(/site_media/images/h2_bg_green.jpg);
 	background-repeat: repeat-x;
 }
 
@@ -390,7 +405,6 @@ margin:0 0 8px 10px;
 max-height:490px;
 min-height: 490px;
 overflow:hidden;
-padding:10px;
 width:230px;
 color: #000;
 padding-top: 0;
