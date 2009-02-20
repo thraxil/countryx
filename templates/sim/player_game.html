@@ -6,9 +6,7 @@
 {% block js %} 
    {{ block.super }}
    <script type="text/javascript" src="/site_media/js/game.js"></script>
-<!--[if lt IE 8]>
-<script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js" type="text/javascript"></script>
-<![endif]-->
+
 
 {% endblock %}
 
@@ -48,7 +46,7 @@
                              {% endifequal %}
         </div>
                         
-		<div class=" invisible"></div>
+		<div class="invisible"></div>
         
         <div id="{{player.model.role.name}}_description" class="player_description">
         <div id="{{player.model.role.name}}_image" class="player_image"><img src="/site_media/images/{{ player.model.role.name }}_silhouette.jpg"></div>
@@ -168,13 +166,14 @@
   <!--  Player Choice & Entry Form -->
 			          
 			             
-			               Click a choice then justify it...
+			           
 			               
 			               <div id="errorMsg" class="error invisible"></div>
 			               <div id="successMsg" class="success invisible"></div>
 			               			               
 			               <!--  Choices -->
 			               <div id="choices">
+			                   Click a choice then justify it...
 			                  <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
 			                  {% ifequal 1 you.submit_status %}
 			                     <!--  not yet selected -->
