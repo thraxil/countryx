@@ -6,6 +6,10 @@
 {% block js %} 
    {{ block.super }}
    <script type="text/javascript" src="/site_media/js/game.js"></script>
+<!--[if lt IE 8]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js" type="text/javascript"></script>
+<![endif]-->
+
 {% endblock %}
 
 {% block content %}
@@ -170,13 +174,13 @@
 			               <div id="successMsg" class="success invisible"></div>
 			               			               
 			               <!--  Choices -->
-			               <div>
+			               <div id="choices">
 			                  <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
 			                  {% ifequal 1 you.submit_status %}
 			                     <!--  not yet selected -->
 			                     {% for c in you.choices %}
-			                        <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">
-			                           <div class="choice_title">Choice {{c.choice}}</div>
+			                        <div id="{{c.choice}}" class="player_choice_{{c.choice}}" onclick="choose(this, {{ c.choice }}); return true;">
+			                           <div class="choice_title">Choice {{c.choice}}:</div>
 			                           {{ c.desc }}
 			                        </div>
 			                     {% endfor %}
