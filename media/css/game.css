@@ -30,8 +30,6 @@
    margin: 0 auto;
    height: 100px;
    position: relative;
-
-
 }
 
 #masthead a
@@ -135,7 +133,9 @@
 	margin-left: 115px;
 	height: 34px;
 	display: block;
-
+	z-index:1000;
+	position:absolute;
+	right:100px;
 
 }
 
@@ -173,14 +173,12 @@
 {
    color: #302226;
    background-image: url(/site_media/images/tabs/toptab_visited.png);
- 
 }
 
 .futureturn
 {
    color: gray;
    background-image: url(/site_media/images/tabs/toptab_off.png);
-  
 }
 
 .activetab
@@ -345,12 +343,9 @@ margin-bottom:6px;
 }
 
 #rightcolumns {
-
 	float: left;
+	position:relative;
 	margin-top: -34px;
-
-
-
 }
 
 #column_1 h1, #column_2 h1, #column_3 h1, #rightcolumns h1 {
