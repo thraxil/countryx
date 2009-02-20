@@ -5,9 +5,9 @@ textarea.resizable {width: 90%; height: 90%;}
 textarea.reasoning  {
 
 	height: 235px; 
-	width: 210px;
+	width: 220px;
 	border: 1px solid #bbb;
-	margin: 5px 0 5px 0;
+	margin: -30px 0 5px 0;
 	}
 .resize-handle {
                cursor: se-resize;
@@ -104,6 +104,8 @@ ul.tabbernav li.tabberactive a:hover
 }
 
 .invisible { display: none; }
+
+div.invisible { display: none; }
 
 
 tr.even td, tr.even th { background-color: #eef;}

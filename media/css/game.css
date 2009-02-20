@@ -291,7 +291,7 @@ background-color: #1e1e1e;
 display:block;
 border-top: 1px solid #3e3e3e;
 margin:-1px 0 15px 0;
-width:220px;
+width:230px;
 color: #fff;
 text-align: center;
 padding: 5px;
@@ -344,9 +344,11 @@ margin-bottom:6px;
 }
 
 #rightcolumns {
-	float: left;
+	float: right;
 	position:relative;
 	margin-top: -34px;
+	width: 673px;
+	border-left: 1px solid #333;
 }
 
 #column_1 h1, #column_2 h1, #column_3 h1, #rightcolumns h1 {
@@ -406,7 +408,7 @@ margin:0 0 8px 10px;
 max-height:490px;
 min-height: 490px;
 overflow:hidden;
-width:230px;
+width:240px;
 color: #000;
 padding-top: 0;
 
@@ -437,4 +439,14 @@ padding: 10px;
 
 }
 
-.player_choice {border: 1px solid red;}
+.player_choice {
+
+	background-image: url(/site_media/images/choices/default_option_button.png);
+display:block;
+height:85px;
+margin:5px 0 -12px 0;
+padding:15px;
+width:190px;
+color: #fff;
+
+}
