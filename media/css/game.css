@@ -1,11 +1,12 @@
 #main
 {
 	background-color: #464646;
-	color: #fff;
+	color: #FFF;
 	width: 974px;
 	height: 540px;
 	margin: 0 auto;
 	z-index: 1;
+	font-family: "lucida grande", arial, sans-serif;
 }
 
 .main
@@ -56,7 +57,7 @@
 
 }
 
-#simlogo a img {border: none; margin-top: 2px; }
+#simlogo a img {border: none; margin: 43px 10px 0 0px; }
 
 #login_credentials
 {
@@ -65,11 +66,12 @@
    color: #fff;
    height: 50px;
    text-align: right;
-   padding-right: 10px;
-   vertical-align: top;
-   float: right;
+      vertical-align: top;
    	z-index: 4;
-   margin-top: -50px;
+   cursor: pointer;
+   position: absolute;
+   top: 8px;
+   right: 12px;
 
 }
 
@@ -131,9 +133,9 @@
 #tabs
 {
 	margin-left: 115px;
-	margin-top: -30px;
-	height: 30px;
+	height: 34px;
 	display: block;
+
 
 }
 
@@ -145,13 +147,15 @@
 
 #tabs ul li {
 
-	width: 101px;
-	height: 30px;
+	width: 98px;
+	height: 26px;
 	margin-left: 5px;
 	display: block;
 	float: left;
 	text-align: center;
 	border: none;
+	color: #fff;
+	padding-top: 8px;
 
 
 	
@@ -162,27 +166,28 @@
 {
 	text-decoration: none;
 	color: #000;
+	color: #fff;
 }
 
 .viewableturn
 {
    color: #302226;
-   background-color: lightgray;
-   border: thin solid #302226;
+   background-image: url(/site_media/images/tabs/toptab_visited.png);
+ 
 }
 
 .futureturn
 {
    color: gray;
-   background-color: darkgray;
-   border: thin solid gray;
+   background-image: url(/site_media/images/tabs/toptab_off.png);
+  
 }
 
 .activetab
 {
    color: #302226;
-   background-color: white;
-   border: thin solid #302226;
+   background-image: url(/site_media/images/tabs/toptab_on.png);
+
 }
 
 .country_conditions
@@ -283,11 +288,14 @@
 
 #elapsed_time_clock
 {
-background-color: #666;
+background-color: #1e1e1e;
 display:block;
-height:36px;
-margin-top:-8px;
-width:248px;
+border-top: 1px solid #3e3e3e;
+margin:-1px 0 15px 0;
+width:220px;
+color: #fff;
+text-align: center;
+padding: 5px;
 }
 
 #elapsed_time_clock th
@@ -308,22 +316,11 @@ width:248px;
    width: 50%;
 }
 
-.player_choice
-{
-background-color:#666666;
-color:#FFFFFF;
-display:block;
-font-family:arial,helvetica,sans-serif;
-height:90px;
-margin-top: 10px;
-text-decoration:none;
-padding: 10px;
-background-image: url(/site_media/images/choice_mass.jpg);
-}
+
 
 .choice_title {
 display:block;
-font-size:16px;
+font-size:15px;
 font-weight:bold;
 margin-bottom:6px;
 }
@@ -350,6 +347,8 @@ margin-bottom:6px;
 #rightcolumns {
 
 	float: left;
+	margin-top: -34px;
+
 
 
 }
@@ -402,3 +401,75 @@ color: #000;
 padding-top: 0;
 
 }
+
+/** Choice button styles **/
+
+#choices {
+
+	}
+
+
+
+
+.player_choice_1 {
+	background-image: url(/site_media/images/choices/choice_off_negotiation.jpg);
+	color:#FFFFFF;
+display:block;
+font-family:arial,helvetica,sans-serif;
+height:90px;
+margin-top: 10px;
+text-decoration:none;
+padding: 10px;
+
+
+
+}
+
+.player_choice_1 .choice_title:after {
+	/*content: "Negotiations";*/
+
+}
+
+.player_choice_2 {
+	background-image: url(/site_media/images/choices/choice_off_negotiation.jpg);
+	color:#FFFFFF;
+display:block;
+font-family:arial,helvetica,sans-serif;
+height:90px;
+margin-top: 10px;
+text-decoration:none;
+padding: 10px;
+
+
+
+}
+
+.player_choice_2 .choice_title:after {
+	/*content: "Communicate With Insurgents";*/
+
+}
+
+.player_choice_3 {
+	background-image: url(/site_media/images/choices/choice_off_negotiation.jpg);
+	color:#FFFFFF;
+display:block;
+font-family:arial,helvetica,sans-serif;
+height:90px;
+margin-top: 10px;
+text-decoration:none;
+padding: 10px;
+
+
+
+}
+
+.player_choice_3 .choice_title:after {
+	/*content: "Communicate With Regional Allies";*/
+
+}
+
+
+
+
+
+
