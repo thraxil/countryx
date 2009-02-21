@@ -66,19 +66,27 @@
    text-align: right;
       vertical-align: top;
    	z-index: 4;
-   cursor: pointer;
-   position: absolute;
+     position: absolute;
    top: 8px;
    right: 12px;
 
 }
 
-#login_credentials a
+
+
+#login_credentials a:link, #login_credentials a:visited
 {
   
    font-size: 12px;
    color: #fff;
    	z-index: 5;
+   	cursor: pointer;
+}
+
+#login_credentials a:hover
+{
+  
+  color: yellow;
 }
 
 
@@ -288,6 +296,7 @@
 #elapsed_time_clock
 {
 background-color: #1e1e1e;
+border-bottom: 2px solid red;
 display:block;
 border-top: 1px solid #3e3e3e;
 margin:-1px 0 15px 0;
@@ -421,23 +430,17 @@ padding-top: 0;
 	margin: 10px;
 
 	}
+	
+.buttonlink a:hover{
+
+	color: yellow;
+
+	}
 
 
 
 
-.choice_button {
-	background-image: url(/site_media/images/choices/default_option_button.png);
-	color:#FFFFFF;
-display:block;
-font-family:arial,helvetica,sans-serif;
-height:90px;
-margin-top: 10px;
-text-decoration:none;
-padding: 10px;
 
-
-
-}
 
 .player_choice {
 
@@ -448,5 +451,14 @@ margin:5px 0 -12px 0;
 padding:15px;
 width:190px;
 color: #fff;
+cursor: pointer;
+
+}
+
+.player_choice:hover {
+
+	
+	background-image: url(/site_media/images/choices/default_option_button_over.png);
+border: 1px solid red;
 
 }
