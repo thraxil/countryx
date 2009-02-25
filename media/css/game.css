@@ -308,7 +308,7 @@
 {
 	width: 280px;
 	float: left;
-	max-height: 540px;
+	height: 540px;
 	overflow: auto;
 	margin-left: 10px;
 	padding-right: 10px;
