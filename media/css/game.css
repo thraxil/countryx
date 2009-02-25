@@ -378,7 +378,8 @@
 }
 
 /** Choice button styles **/
-#choices { margin: 10px; }
+#choices { margin: 0; padding: 0 5px 0 10px;}
+
 .buttonlink a:hover { color: yellow; }
 
 .player_choice

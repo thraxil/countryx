@@ -178,7 +178,7 @@
 			                  {% ifequal 1 you.submit_status %}
 			                     <!--  not yet selected -->
 			                     {% for c in you.choices %}
-			                        <div id="{{c.choice}}" class="player_choice_{{c.choice}}" onclick="choose(this, {{ c.choice }}); return true;">
+			                        <div id="{{c.choice}}" class="player_choice_{{c.choice}} player_choice" onclick="choose(this, {{ c.choice }}); return true;">
 			                      <div class="choice_title">Choice {{c.choice}}:</div>
 			                           {{ c.desc }}
 			                        </div>
