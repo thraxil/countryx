@@ -1,23 +1,67 @@
 {% extends "base.html" %}
+{% block css %}
+{{ block.super }}
+<style type='text/css'>
+     @import "/site_media/css/style.css";
+  @import "/site_media/css/game.css";
+</style>
+{% endblock %}
+{% block js %}
+   {{ block.super }}
+   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
+   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/Visual.js"></script>
+   <script type="text/javascript" src="/site_media/js/json2.js"></script>
+   <script type="text/javascript" src="/site_media/js/SortableTable.js"></script>
+{% endblock %}
+
+
+{% block masthead %}
+<div id="simlogo">
+<a href="/sim/"><img src="/site_media/images/countryx_logo.png" alt="Country X" /></a>
+</div>
+
+ <!--  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>
+           <div id="masthead_desc">Descriptive Tag Line Goes Here</div>-->
+         
+         
+         <div id="login_credentials">
+            <a href="/about/">About</a> | <a href="/help/">Help</a> | <a href="/contact/">Contact</a>
+            <br />
+            <br />
+            
+         </div><!-- div  id="login_credentials" -->
+{% endblock %}
+
 {% block content %}
+
+<br />
+<div id="loginbox">
+
 <form method="get" action="{{ wind_base }}login">
 <input type="hidden" name="service" value="{{ wind_service }}" />
 <input type="hidden" name="destination"
 value="http://{{ request.get_host }}/accounts/windlogin/?next={{ next }}" />
-<p>If you have a Columbia UNI, you already have an account and can
-login through WIND with it</p>
+<h2>Login to Country X...</h2>
+<hr />
+<p><b>For Columbia users:</b></p>
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
-<input type="submit" value="Here" />
+<input type="submit" value="Log in with Columbia UNI" />
 </form>
-<p>otherwise: </p>
+<hr />
+<p><b>For all other users:</b></p>
 <form method="post" action=".">
 <table>
 <tr><td><label for="id_username">Username:</label></td><td>{{ form.username }}</td></tr>
 <tr><td><label for="id_password">Password:</label></td><td>{{ form.password }}</td></tr>
 </table>
-<input type="submit" value="login" />
+<input type="submit" value="Log in" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
+
+
+</div><!-- id=loginbox -->
+
+
 {% endblock %}

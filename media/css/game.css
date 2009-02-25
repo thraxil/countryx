@@ -399,3 +399,15 @@ div.player_choice:hover
 	background-image: url('/site_media/images/choices/default_option_button_over.png') !important;
 	border: 0;
 }
+
+
+
+/* ---- Login page ---- */
+#loginbox
+{
+	width: 300px;
+	margin: 20px auto 0 auto;
+	padding: 10px;
+	border: 10px solid #ccc;
+	background-color: #999;
+}
