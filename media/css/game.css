@@ -292,7 +292,7 @@
 .choice_title
 {
 	display: block;
-	font-size: 15px;
+	font-size: 14px;
 	font-weight: bold;
 	margin-bottom: 6px;
 }
@@ -386,10 +386,10 @@
 {
 	background-image: url(/site_media/images/choices/default_option_button.png);
 	display: block;
-	height: 85px;
+	height: 95px;
 	margin: 5px 0 -12px 0;
-	padding: 15px;
-	width: 190px;
+	padding: 10px;
+	width: 200px;
 	color: #fff;
 	cursor: pointer;
 }
