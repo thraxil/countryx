@@ -394,8 +394,8 @@
 	cursor: pointer;
 }
 
-.player_choice:hover
+div.player_choice:hover
 {
-	background-image: url(/site_media/images/choices/default_option_button_over.png);
-	border: 1px solid red;
+	background-image: url('/site_media/images/choices/default_option_button_over.png') !important;
+	border: 0;
 }
