@@ -298,9 +298,13 @@ def player_game(request, group_id, turn_id=0):
 
     try:
         your_player['saved_turn'] = SectionGroupPlayerTurn.objects.get(player=your_player['model'], turn=working_state.turn)
-        your_player['saved_choice'] = StateRoleChoice.objects.get(state=working_state, role=your_player['model'].role, choice=your_player['saved_turn'].choice)
     except SectionGroupPlayerTurn.DoesNotExist:
-        pass
+        raise Http404
+
+    try:
+        your_player['saved_choice'] = StateRoleChoice.objects.get(state=working_state, role=your_player['model'].role, choice=your_player['saved_turn'].choice)
+    except StateRoleChoice.DoesNotExist:
+        raise Http404
     
     # setup player list attributes
     players = [dict(model=p, submit_status=p.status(working_state)) 
