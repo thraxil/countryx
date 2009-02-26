@@ -8,6 +8,8 @@ from django.forms.util import ErrorList
 from django.contrib.admin.widgets import AdminSplitDateTime
 import datetime
 import simplejson
+from django.http import Http404
+
 
 class rendered_with(object):
     def __init__(self, template_name):
@@ -360,7 +362,10 @@ def player_choose(request):
     reasoning = request.POST.get('reasoning', '')
 
     group = get_object_or_404(SectionGroup,id=groupid)
-    player = group.sectiongroupplayer_set.get(user__id=request.user.id, group=group)
+    try:
+        player = group.sectiongroupplayer_set.get(user__id=request.user.id, group=group)
+    except SectionGroupPlayer.DoesNotExist:
+        raise Http404
     current_state = group.sectiongroupstate_set.latest().state
 
     # create or update the player's choice
