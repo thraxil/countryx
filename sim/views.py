@@ -281,7 +281,7 @@ def tab_viewable(group,i):
 @login_required
 def player_game(request, group_id, turn_id=0):
     group = get_object_or_404(SectionGroup,id=group_id)
-    
+
     if turn_id == 0:
         working_state = group.sectiongroupstate_set.latest().state
     else:
@@ -298,14 +298,10 @@ def player_game(request, group_id, turn_id=0):
 
     try:
         your_player['saved_turn'] = SectionGroupPlayerTurn.objects.get(player=your_player['model'], turn=working_state.turn)
-    except SectionGroupPlayerTurn.DoesNotExist:
-        raise Http404
-
-    try:
         your_player['saved_choice'] = StateRoleChoice.objects.get(state=working_state, role=your_player['model'].role, choice=your_player['saved_turn'].choice)
-    except StateRoleChoice.DoesNotExist:
-        raise Http404
-    
+    except SectionGroupPlayerTurn.DoesNotExist:
+        your_player['saved_turn'] = None
+
     # setup player list attributes
     players = [dict(model=p, submit_status=p.status(working_state)) 
                for p in group.sectiongroupplayer_set.all()
