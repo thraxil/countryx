@@ -28,6 +28,8 @@ class GameStateMiddleware(object):
                     group_state = group.sectiongroupstate_set.latest().state
                 except SectionGroupState.DoesNotExist:
                     group_state = State.objects.get(state_no=1,turn=1)
+                    sgs = SectionGroupState.objects.create(state=group_state,group=group,
+                                                           date_updated=datetime.datetime.now())
                 if (section_turn != group_state.turn):
                     group.force_response_all_players()
                     # update the group state to the next turn based on the player choices
