@@ -90,6 +90,11 @@
 
 #login_credentials a:hover { color: yellow; }
 
+#gameinfo {
+
+	padding: 10px 20px;
+}
+
 /** Column 1  **/
 .player_description,  
 .your_description,
@@ -399,6 +404,8 @@ div.player_choice:hover
 	background-image: url('/site_media/images/choices/default_option_button_over.png') !important;
 	border: 0;
 }
+
+#errorMsg.error.invisible {border: 1px solid green;}
 
 
 
