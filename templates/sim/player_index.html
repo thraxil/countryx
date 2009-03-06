@@ -9,20 +9,22 @@
 {% endblock %}
 
 {% block content %}
-    {{ block.super }}
+   <div id="gameinfo">
+   
+   {{ block.super }}
         
-    {% if not groups %}
-    	You currently are not participating in any games. Please contact the administrator
+   {% if not groups %}
+    	<h4>You currently are not participating in any games. Please contact the administrator</h4>
     	<br />
     {% else %}
    
 	    {% for group in groups %}
-	      <h3>{{group.section}} Group &mdash; {{ group.name }}</h3>   
-	      You are playing the role of the 
+	     <h3>{{group.section}} Group &mdash; {{ group.name }}</h3> 
+	     <h4> You are playing the role of the 
 		    	
 		   {% for player in group.sectiongroupplayer_set.all  %}
 	         {% ifequal player.user user %}
-	            {{ player.role.name }}<br />
+	            {{ player.role.name }}</h4>
             {% endifequal %}
          {% endfor %}
 		   <br />
@@ -35,8 +37,12 @@
 	    	    {% endifequal %}
 	    	{% endfor %}
 	    	<br />
-	    	<a href="/sim/player/game/{{group.id}}/">Play The Game</a>
 	    	<hr />
+	    	 	<br />
+	      <form method="post" action="/sim/player/game/{{group.id}}/">  <input class="center" type="submit" value="Play The Game" /></form>
+	    
+	    	
+	    	</div>
 	    {% endfor %}
 	 {% endif %}      
 {% endblock %}
