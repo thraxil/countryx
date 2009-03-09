@@ -49,7 +49,7 @@
 		<div class="invisible"></div>
         
         <div id="{{player.model.role.name}}_description" class="player_description">
-        <div id="{{player.model.role.name}}_image" class="player_image"><img src="/site_media/images/{{ player.model.role.name }}_silhouette.jpg"></div>
+        <div id="{{player.model.role.name}}_image" class="player_image"><img src="/site_media/images/profiles/{{ player.model.role.name }}_silhouette.jpg"></div>
         {{ player.model.role.description }}
         </div>
 		{% endfor %}
@@ -195,9 +195,9 @@
 			                     <!--  in draft -->
 			                     {% for c in you.choices %}
 			                        {% ifequal c.choice you.saved_choice.choice %}
-			                           <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
+			                           <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div>
 			                        {% else %}
-			                           <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div><br />
+			                           <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div>
 			                        {% endifequal %}
 			                     {% endfor %}
 			                     <div id="reasoning_form" style="display: block">
