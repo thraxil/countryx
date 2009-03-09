@@ -266,11 +266,12 @@
 #elapsed_time_clock
 {
 	background-color: #1e1e1e;
+	border: 1px solid #666;
 	border-bottom: 2px solid red;
 	display: block;
 	border-top: 1px solid #3e3e3e;
-	margin: -1px 0 15px 0;
-	width: 230px;
+	margin: -1px 0 12px 0;
+	width: 228px;
 	color: #fff;
 	text-align: center;
 	padding: 5px;
@@ -392,7 +393,7 @@
 	background-image: url(/site_media/images/choices/default_option_button.png);
 	display: block;
 	height: 95px;
-	margin: 5px 0 -12px 0;
+	margin: 0px 0 10px 0;
 	padding: 10px;
 	width: 200px;
 	color: #fff;
@@ -405,7 +406,7 @@ div.player_choice:hover
 	border: 0;
 }
 
-#errorMsg.error.invisible {border: 1px solid green;}
+
 
 
 
