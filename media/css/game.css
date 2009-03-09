@@ -7,6 +7,7 @@
 	margin: 0 auto;
 	z-index: 1;
 	font-family: "lucida grande", arial, sans-serif;
+
 }
 
 .main
@@ -19,6 +20,7 @@
 	height: 540px;
 	margin: 0 auto;
 	z-index: 1;
+
 }
 
 #masthead
@@ -78,6 +80,7 @@
 	font-size: 12px;
 	line-height: 20px;
 	color: #fff;
+	font-weight: bold;
 }
 
 #login_credentials a:link, #login_credentials a:visited
@@ -86,9 +89,18 @@
 	color: #fff;
 	z-index: 5;
 	cursor: pointer;
+	font-weight: normal;
+	text-decoration: underline;
 }
 
 #login_credentials a:hover { color: yellow; }
+
+label
+{
+
+	font-size: 12px;
+	font-weight: bold;
+}
 
 #gameinfo {
 
@@ -173,11 +185,18 @@
 	background-image: url(/site_media/images/tabs/toptab_off.png);
 }
 
-.activetab
+.activetab 
 {
-	color: #302226;
+	
 	background-image: url(/site_media/images/tabs/toptab_on.png);
 }
+
+#tabs ul li.activetab a:link, #tabs ul li.activetab a:visited
+{
+	color: #302226;
+	font-weight: bold;
+}
+
 
 .country_conditions
 {
@@ -406,6 +425,7 @@ div.player_choice:hover
 {
 	background-image: url('/site_media/images/choices/default_option_button_over.png') !important;
 	border: 0;
+	color: yellow;
 }
 
 
