@@ -172,14 +172,17 @@
 			               <div id="successMsg" class="success invisible"></div>
 			               			               
 			               <!--  Choices -->
+			              
+			               
 			               <div id="choices">
 			                  <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
 			                  {% ifequal 1 you.submit_status %}
 			                     <!--  not yet selected -->
 			                     {% for c in you.choices %}
+			                      
 			                        <div id="{{c.choice}}" class="player_choice_{{c.choice}} player_choice" onclick="choose(this, {{ c.choice }}); return true;">
-			                      <div class="choice_title">Choice {{c.choice}}:</div>
-			                           {{ c.desc }}
+			                     
+			                           <div class="choice_title">Choice {{c.choice}}</div> {{ c.desc }}
 			                        </div>
 			                     {% endfor %}
 			                     <div id="reasoning_form" style="display: none">
@@ -195,9 +198,11 @@
 			                     <!--  in draft -->
 			                     {% for c in you.choices %}
 			                        {% ifequal c.choice you.saved_choice.choice %}
-			                           <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div>
+			                       
+			                           <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div>
 			                        {% else %}
-			                           <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;">{{ c.desc }}</div>
+			                         
+			                           <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div>
 			                        {% endifequal %}
 			                     {% endfor %}
 			                     <div id="reasoning_form" style="display: block">
