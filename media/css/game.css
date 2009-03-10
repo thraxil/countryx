@@ -213,6 +213,7 @@ label
 }
 
 .country_conditions_graph table { border-collapse: collapse; }
+
 .negative_row { background-image: url(/site_media/images/gradient_red.jpg); }
 .positive_row { background-image: url(/site_media/images/gradient_green.jpg); }
 
@@ -271,6 +272,7 @@ label
 
 .condition_row_name
 {
+	width: 90px !important;
 	max-width: 90px;
 	min-width: 90px;
 	font-size: 10px;
@@ -279,6 +281,7 @@ label
 	vertical-align: top;
 	padding-top: 4px;
 	color: #eee;
+
 }
 
 /** Column 3 **/
@@ -289,7 +292,7 @@ label
 	border-bottom: 2px solid red;
 	display: block;
 	border-top: 1px solid #3e3e3e;
-	margin: -1px 0 12px 0;
+	margin: -1px 0px 12px 0px;
 	width: 228px;
 	color: #fff;
 	text-align: center;

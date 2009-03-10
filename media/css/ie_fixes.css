@@ -1,0 +1,90 @@
+#login_credentials, #login_credentials a:link, #login_credentials a:visited {	font-family: "lucida grande", arial, sans-serif;}
+
+
+#tabs ul li {height: 34px; padding-bottom: 11px;}
+
+
+#column_1 h1 {
+
+	margin-bottom: 0px;
+	
+}
+
+#rightcolumns h1 {
+
+	margin-bottom: 10px;
+	
+}
+
+#column_1 h2, #column_2 h2, #column_3 h2 {
+
+	margin-top: 10px;
+	
+}
+
+#column_1 {
+
+	height: 549px !important;
+	
+}
+
+#column_3 {
+
+	height: 501px;
+	padding: 0px;
+	
+	
+}
+
+body
+{
+	text-align: center;
+}
+
+#main
+{
+	text-align: left;
+	height: 552px;
+}
+
+.main
+{
+	text-align: left;
+	height: 552px;
+}
+
+.country_conditions_textarea {
+
+	height:200px !important;
+
+
+}
+
+.player_choice
+{
+
+	height: 115px !important;
+	width: 220px !important;
+
+}
+
+#elapsed_time_clock
+{
+
+	width: 240px !important;
+
+}
+
+
+
+.country_conditions_graph table tr.negative_row td.condition_row_block_filled {  background-image: url(/site_media/images/solid_red.gif); }
+.country_conditions_graph table tr.positive_row  td.condition_row_block_filled {  background-image: url(/site_media/images/solid_green.gif); }
+
+td.condition_row_block_empty {  background-image: url(/site_media/images/solid_gray.gif); }
+
+
+td.condition_row_description
+{
+	font-size: 9px;
+
+}
