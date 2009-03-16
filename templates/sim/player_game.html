@@ -233,7 +233,8 @@
 			                  
 			                  {% ifequal 4 you.submit_status %}
 			                     <!--  submitted -->    
-			                     <div id="{{you.saved_choice.choice}}" class="player_choice">{{ you.saved_choice.desc }}</div>
+			                    
+			                     <div id="{{you.saved_choice.choice}}" class="player_choice"><div class="choice_title">Choice {{you.saved_choice.choice}}</div> {{ you.saved_choice.desc }}</div>
 				                  <div id="reasoning_form" style="display: block">
 				                     <div id="errorClient" class="error invisible"></div>
 				                     <textarea id="reasoning" class="reasoning" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
