@@ -1,13 +1,46 @@
 {% extends "base.html" %}
-{% load markup %}
-{% load thumbnail %}
-
-{% block title %}{{ flatpage.title }}{% endblock %}
-{% block masthead %}{{ flatpage.title }}{% endblock %}
-{% block bodyclass %}{{ flatpage.title|lower }}{% endblock %}
-{% block content %}
-{{ flatpage.content|markdown}}
-<p>
-Country X is a Web-based educational simulation created in response to challenges surrounding the training and education of prospective genocide prevention practitioners. The simulation takes place in fictitious Country X, a nation experiencing rapid instability. Participants work in groups of four, each person assuming the identity of one of four characters representing the perspectives of diplomatic, intelligence, military, and civil society communities. After analyzing a starting condition, players must address the situation from within their role by independently making a strategic policy decision and providing a rationale for it. The combination of player decisions at each phase of the simulation determines a resulting condition for Country X--for better or worse. Participants work through three such decision phases and then confront and attempt to deconstruct a final condition. The simulation was created to work in an integrated way with class discussions facilitated by an instructor.
-</p>
+{% block css %}
+{{ block.super }}
+<style type='text/css'>
+     @import "/site_media/css/style.css";
+  @import "/site_media/css/game.css";
+</style>
 {% endblock %}
+{% block js %}
+   {{ block.super }}
+   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
+   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/Visual.js"></script>
+   <script type="text/javascript" src="/site_media/js/json2.js"></script>
+   <script type="text/javascript" src="/site_media/js/SortableTable.js"></script>
+{% endblock %}
+
+
+{% block masthead %}
+<div id="simlogo">
+<a href="/sim/"><img src="/site_media/images/countryx_logo.png" alt="Country X" /></a>
+</div>
+
+ <!--  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>
+           <div id="masthead_desc">Descriptive Tag Line Goes Here</div>-->
+         
+         
+         <div id="login_credentials">
+            <a href="/about/">About</a> | <a href="/help/">Help</a> | <a href="/contact/">Contact</a>
+            <br />
+            <br />
+            
+         </div><!-- div  id="login_credentials" -->
+{% endblock %}
+
+{% block content %}
+
+<div class="static_text">
+
+<h2>About Country X</h2>
+Country X is a Web-based educational simulation created in response to challenges surrounding the training and education of prospective genocide prevention practitioners. The simulation takes place in fictitious Country X, a nation experiencing rapid instability. Participants work in groups of four, each person assuming the identity of one of four characters representing the perspectives of diplomatic, intelligence, military, and civil society communities. After analyzing a starting condition, players must address the situation from within their role by independently making a strategic policy decision and providing a rationale for it. The combination of player decisions at each phase of the simulation determines a resulting condition for Country X--for better or worse. Participants work through three such decision phases and then confront and attempt to deconstruct a final condition. The simulation was created to work in an integrated way with class discussions facilitated by an instructor.
+</div>
+
+{% endblock %}
+
+
+
