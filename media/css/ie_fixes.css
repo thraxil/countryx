@@ -88,3 +88,34 @@ td.condition_row_description
 	font-size: 9px;
 
 }
+
+div#loginbox {
+
+ margin-left: 350px;
+
+}
+
+a:link div.player_choice
+{
+	background-image: url(/site_media/images/choices/default_option_button.png);
+	display: block;
+	height: 95px;
+	margin: 0px 0 10px 0;
+	padding: 10px;
+	width: 200px;
+	color: #fff;
+	cursor: pointer;
+	font-size: 11px;
+	text-decoration: none;
+	
+}
+
+a:hover div.player_choice
+{
+	background-image: url(/site_media/images/choices/default_option_button_over.png) !important;
+	border: 0;
+	color: yellow;
+	
+}
+
+

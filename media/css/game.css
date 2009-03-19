@@ -1,3 +1,8 @@
+body {
+	
+	font-family: "lucida grande", arial, sans-serif	
+}
+
 #main
 {
 	background-color: #464646;
@@ -402,13 +407,14 @@ label
 	max-height: 490px;
 	min-height: 490px;
 	overflow: hidden;
-	width: 240px;
+	max-width: 240px;
 	color: #000;
 	padding-top: 0;
 }
 
 /** Choice button styles **/
 #choices { margin: 0; padding: 0 5px 0 10px;}
+#choices a { text-decoration: none;}
 
 .buttonlink a:hover { color: yellow; }
 
@@ -423,13 +429,16 @@ label
 	color: #fff;
 	cursor: pointer;
 	font-size: 11px;
+	text-decoration: none;
+	
 }
 
 div.player_choice:hover
 {
-	background-image: url('/site_media/images/choices/default_option_button_over.png') !important;
+	background-image: url(/site_media/images/choices/default_option_button_over.png) !important;
 	border: 0;
 	color: yellow;
+	
 }
 
 

@@ -197,10 +197,10 @@
 			                     <!--  not yet selected -->
 			                     {% for c in you.choices %}
 			                      
-			                        <div id="{{c.choice}}" class="player_choice_{{c.choice}} player_choice" onclick="choose(this, {{ c.choice }}); return true;">
+			                       <a href="#"> <div id="{{c.choice}}" class="player_choice_{{c.choice}} player_choice" onclick="choose(this, {{ c.choice }}); return true;">
 			                     
 			                           <div class="choice_title">Choice {{c.choice}}</div> {{ c.desc }}
-			                        </div>
+			                        </div></a>
 			                     {% endfor %}
 			                     <div id="reasoning_form" style="display: none">
 				                     <div id="errorClient" class="error invisible"></div>
@@ -216,10 +216,10 @@
 			                     {% for c in you.choices %}
 			                        {% ifequal c.choice you.saved_choice.choice %}
 			                       
-			                           <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div>
+			                        <a href="#">   <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
 			                        {% else %}
 			                         
-			                           <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div>
+			                        <a href="#">   <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
 			                        {% endifequal %}
 			                     {% endfor %}
 			                     <div id="reasoning_form" style="display: block">
@@ -234,7 +234,7 @@
 			                  {% ifequal 4 you.submit_status %}
 			                     <!--  submitted -->    
 			                    
-			                     <div id="{{you.saved_choice.choice}}" class="player_choice"><div class="choice_title">Choice {{you.saved_choice.choice}}</div> {{ you.saved_choice.desc }}</div>
+			               <a href="#">      <div id="{{you.saved_choice.choice}}" class="player_choice"><div class="choice_title">Choice {{you.saved_choice.choice}}</div> {{ you.saved_choice.desc }}</div></a>
 				                  <div id="reasoning_form" style="display: block">
 				                     <div id="errorClient" class="error invisible"></div>
 				                     <textarea id="reasoning" class="reasoning" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
