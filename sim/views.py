@@ -283,7 +283,15 @@ def player_game(request, group_id, turn_id=0):
     group = get_object_or_404(SectionGroup,id=group_id)
 
     if turn_id == 0:
-        working_state = group.sectiongroupstate_set.latest().state
+        try:
+            working_state = group.sectiongroupstate_set.latest().state
+        except SectionGroupState.DoesNotExist:
+            # put them in the start state automatically
+            start_state = State.objects.get(turn=1, state_no=1)
+            sgs = SectionGroupState.objects.create(group=group,
+                                                   state=start_state, 
+                                                   date_updated=datetime.datetime.now())
+            working_state = start_state
     else:
         working_state = group.sectiongroupstate_set.get(state__turn=turn_id).state
     
