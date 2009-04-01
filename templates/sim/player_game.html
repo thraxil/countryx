@@ -25,13 +25,13 @@
 <div id="column_1">
 	<h1>REPRESENTATIVE PROFILES</h1>
 		 <!--  You --> 
-		 <h2>{{ you.model.role.name }} (You)</h2>
+		 <h2>{{ you.model.role.display_name }} (You)</h2>
 		 <div id="{{you.model.role.name}}_description" class="your_description">{{ you.model.role.description }}</div>
 		
 		<!--  Everyone Else -->
         {% for player in players %}
 		
-		<h2>{{ player.model.role.name }}</h2>
+		<h2>{{ player.model.role.display_name }}</h2>
 		   <div class="character_choice toggle" onclick="toggleCharacterProfile(this, '{{player.model.role.name}}')">Hide Profile</div>
                         <!--<div class="character_choice" onclick="requestOfflineNegotiations(this)">Request<br />Offline<br />Negotiation</div>-->
 		<div id="{{player.model.role.name}}_choice" class="character_choice">

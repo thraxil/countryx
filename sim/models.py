@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import signals
 from django.dispatch import dispatcher
 import datetime, random
+import re
 
 class Role(models.Model):
     """
@@ -14,6 +15,10 @@ class Role(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def display_name(self):
+        p = re.compile("[A-Z][a-z]*")
+        return " ".join(p.findall(self.name))
 
 class State(models.Model):
     """
