@@ -92,65 +92,56 @@
 		     {% autoescape off %}{{ country_condition }}{% endautoescape %}
 		     </div>
 		</div>
-		
 	
-			          <h2>Snapshot</h2>  
+		<h2>Snapshot</h2>  
 			               
-			               <div class="country_conditions_graph">
-			                 
-                        
-			                  {% for condition in conditions %}
-			                     <table>
-			                        <tr><td rowspan="4" class="condition_row_name" >{{condition.name}}<img src="/site_media/images/spacer.gif"  /></td></tr>
-			                        <tr>
-			                            {% num_range 10 as row_count %}
-											    
-											    {% for i in row_count %}
-											      {% ifequal forloop.counter condition.value %}
-											         <td class="condition_row_indicator" rowspan="2">{{condition.value}}</td>
-											      {% else %}
-											         <td class="condition_row_dummy">&nbsp;</td>
-											      {% endifequal %}
-											    {% endfor %}
-			                        </tr>
-			                       
-			                       
-			                       {%if condition.good_inverse %} 
-			                        <tr class="negative_row">
-			                           {% num_range 9 as row_count %}
-			                            
-			                           {% for i in row_count %}
-			                              {% iflessthan forloop.counter condition.value %}
-			                                 <td class="condition_row_block_filled">&nbsp;</td>
-			                              {% else %}
-			                                 <td class="condition_row_block_empty">&nbsp;</td>
-			                              {% endiflessthan %}
-			                           {% endfor %}
-			                       </tr>
-			                       
-			                       {%else%} 
-			                       <tr class="positive_row">
-			                           {% num_range 9 as row_count %}
-			                            
-			                           {% for i in row_count %}
-			                              {% iflessthan forloop.counter condition.value %}
-			                                 <td class="condition_row_block_filled">&nbsp;</td>
-			                              {% else %}
-			                                 <td class="condition_row_block_empty">&nbsp;</td>
-			                              {% endiflessthan %}
-			                           {% endfor %}
-			                           
-			                        {%endif%}
-			                       </tr>
-			                       <tr>
-			                           <td colspan="5" class="condition_row_description" style="text-align: left">{{condition.most}}</td>
-			                           <td colspan="5" class="condition_row_description" style="text-align: right">{{condition.least}}</td>
-			                       </tr>
-			                  
-			                       
-			                     </table>
-			                  {% endfor %}
-			               </div>
+		<div class="country_conditions_graph">
+		  {% for condition in conditions %}
+		  <table>
+		    <tr>
+		      <td rowspan="4" class="condition_row_name" >{{condition.name}}<img src="/site_media/images/spacer.gif" /></td>
+		    </tr>
+		    <tr>
+		      {% num_range 10 as row_count %}
+		      {% for i in row_count %}
+		        {% ifequal forloop.counter condition.value %}
+		          <td class="condition_row_indicator" rowspan="2">{{condition.value}}</td>
+			{% else %}
+		          <td class="condition_row_dummy">&nbsp;</td>
+		        {% endifequal %}
+		      {% endfor %}
+		    </tr>
+		    {% if condition.good_inverse %} 
+		    <tr class="negative_row">
+		      {% num_range 9 as row_count %}
+		      {% for i in row_count %}
+		        {% iflessthan forloop.counter condition.value %}
+		          <td class="condition_row_block_filled">&nbsp;</td>
+		        {% else %}
+		          <td class="condition_row_block_empty">&nbsp;</td>
+		        {% endiflessthan %}
+		      {% endfor %}
+		    </tr>
+		    {% else %} 
+		    <tr class="positive_row">
+		      {% num_range 9 as row_count %}
+		      {% for i in row_count %}
+		        {% iflessthan forloop.counter condition.value %}
+		          <td class="condition_row_block_filled">&nbsp;</td>
+			{% else %}
+		          <td class="condition_row_block_empty">&nbsp;</td>
+			{% endiflessthan %}
+		      {% endfor %}
+		    </tr>
+	            {% endif%}
+		    
+		    <tr>
+		      <td colspan="5" class="condition_row_description" style="text-align: left">{{condition.most}}</td>
+		      <td colspan="5" class="condition_row_description" style="text-align: right">{{condition.least}}</td>
+		    </tr>
+		  </table>
+		  {% endfor %}
+		</div>
 </div>
 
 

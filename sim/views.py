@@ -314,7 +314,7 @@ def player_game(request, group_id, turn_id=0):
     players = [dict(model=p, submit_status=p.status(working_state)) 
                for p in group.sectiongroupplayer_set.all()
                if (p != your_player['model'])]
-                        
+    print str(__current_conditions(working_state))
     return dict(user = request.user,
                 group = group,
                 state = working_state,
@@ -403,7 +403,6 @@ def player_choose(request):
     return HttpResponse(simplejson.dumps(response), 'application/json')
                 
 def __current_conditions(state):
-    conditions = []
     details = {'Violence Level':{'most': 'non-violent',
                                  'least': 'genocide',
                                  'good_inverse':True},
@@ -419,14 +418,11 @@ def __current_conditions(state):
                                'least': 'uncontrolled weapons smuggling',
                                'good_inverse':True},
                }
+    conditions = []
     for k,var_dict in details.items():
         var = state.statevariable_set.get(name=k)
         var_dict['name'] =var.name
-        if var_dict.get('good_inverse',False):
-            var_dict['value'] =11-int(var.value)
-        else:
-            var_dict['value'] =int(var.value)
-            
+        var_dict['value'] = int(var.value)
         conditions.append(var_dict)
     return conditions
 
