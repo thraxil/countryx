@@ -314,7 +314,6 @@ def player_game(request, group_id, turn_id=0):
     players = [dict(model=p, submit_status=p.status(working_state)) 
                for p in group.sectiongroupplayer_set.all()
                if (p != your_player['model'])]
-    print str(__current_conditions(working_state))
     return dict(user = request.user,
                 group = group,
                 state = working_state,
