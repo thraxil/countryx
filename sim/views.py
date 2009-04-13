@@ -582,3 +582,46 @@ def cheat(request):
 
     return render_to_response("sim/cheat.html",dict(cf=cf,turns=turns, roles=roles,user=request.user))
 
+@login_required
+def check_statechanges(request):
+    missing = []
+    duplicates = []
+    for s in State.objects.all():
+        if s.turn == 4:
+            continue # no transitions out of the last state
+        for p in [1,2,3]:
+            for e in [1,2,3]:
+                for r in [1,2,3]:
+                    for o in [1,2,3]:
+                        c = StateChange.objects.filter(
+                            state=s,
+                            president=p,
+                            envoy=e,
+                            regional=r,
+                            opposition=o).count()
+                        if c == 0:
+                            missing.append(dict(
+                                    state=s,
+                                    president=p,
+                                    envoy=e,
+                                    opposition=o,
+                                    regional=r,
+                                    ))
+                        if c > 1:
+                            duplicates.append(dict(
+                                    state=s,
+                                    president=p,
+                                    envoy=e,
+                                    opposition=o,
+                                    regional=r,
+                                    ))
+
+        
+
+    return render_to_response("sim/check_statechanges.html",
+                              dict(missing=missing,
+                                   duplicates=duplicates,
+                                   user=request.user,
+                                   ))
+
+

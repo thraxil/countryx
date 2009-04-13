@@ -31,4 +31,5 @@ urlpatterns = patterns('',
                        (r'^faculty/feedback/$', 'countryx.sim.views.faculty_feedback_submit'),
 
                        (r'^cheat/$', 'countryx.sim.views.cheat'),
+                       (r'^check_statechanges/$', 'countryx.sim.views.check_statechanges'),
 )
