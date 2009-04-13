@@ -12,7 +12,7 @@
 missing statechanges:
 <ul>
 {% for s in missing %}
-<li>Turn {{s.state.turn}} {{ s.state.name }}
+<li><a href="/admin/sim/state/{{s.state.id}}/">Turn {{s.state.turn}} {{ s.state.name }}</a>
 P={{s.president}}
 E={{s.envoy}}
 R={{s.regional}}
@@ -28,7 +28,7 @@ no missing statechanges
 duplicate statechanges:
 <ul>
 {% for s in duplicates %}
-<li>Turn {{s.state.turn}} {{ s.state.name }}
+<li><a href="/admin/sim/state/{{s.state.id}}/">Turn {{s.state.turn}} {{ s.state.name }}</a>
 P={{s.president}}
 E={{s.envoy}}
 R={{s.regional}}
