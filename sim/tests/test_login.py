@@ -61,7 +61,7 @@ class LoginTestCases(TestCase):
         self.assert_(c.login(username=u'testuser', password=u'test'))
         
         response = c.get('/sim/logout/')
-        self.assertContains(response, "logged out", status_code=200)   
+        self.assertContains(response, "Logged Out", status_code=200)   
         self.assertTemplateUsed(response, "sim/logged_out.html")
         
     def test_django_faculty_login(self):
