@@ -310,6 +310,11 @@ def player_game(request, group_id, turn_id=0):
     except SectionGroupPlayerTurn.DoesNotExist:
         your_player['saved_turn'] = None
 
+    endgame_results = []
+    if working_state.turn == 4:
+        turns = SectionGroupPlayerTurn.objects.filter(player=your_player['model']).order_by('turn')
+        endgame_results = zip(turns, tabs)
+        
     # setup player list attributes
     players = [dict(model=p, submit_status=p.status(working_state)) 
                for p in group.sectiongroupplayer_set.all()
@@ -322,6 +327,7 @@ def player_game(request, group_id, turn_id=0):
                 tabs = tabs,
                 players = players,
                 you = your_player,
+                endgame_results = endgame_results,
                 )
 
 #actually needs to be faculty only

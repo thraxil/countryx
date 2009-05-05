@@ -147,24 +147,40 @@
 
 <!--begin col3 for results screen faculty feedback  -->
 
-<!--If {{state}} = results
+{% ifequal state.turn 4 %}
 
 <div id="column_3">
 	<h2>Faculty Feedback</h2>
-	<div id="feedback">
-	--><!--If faculty feedback
-	No feedback yet
+	<div id="elapsed_time_clock">
+<br />
+
+<br/>
 	</div>
+
+	<div id="errorMsg" class="error invisible"></div>
+	<div id="successMsg" class="success invisible"></div>
+			               			               
+	<div id="choices">
+	  <div id="current_choice"></div> <!-- putting this stub in to avoid js error -->
+	  {% for choice, t in endgame_results %}
+	    <div id="{{t.id}}" class="player_choice_{{t.id}} player_choice">
+	      <div class="choice_title">Phase {{t.id}}</div>
+	      {% if choice.feedback %}Feedback:{{choice.feedback}}{% else %}No faculty feedback yet.{% endif %}
+	    </div>
+	  {% endfor %}
+
+	</div>
+
+
 </div>
--->
 
 <!--end results screen col3-->
 
 
-
+{% else %} 
 <div id="column_3">
+
 	<h2>Options</h2>
-	
 	 
 	<div id="elapsed_time_clock">DEADLINE FOR DECISION<br />
 			                {{group.section.current_turn_close_date}}
@@ -183,7 +199,7 @@
 			              
 			               
 			               <div id="choices">
-			                  <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
+			                 <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
 			                  {% ifequal 1 you.submit_status %}
 			                     <!--  not yet selected -->
 			                     {% for c in you.choices %}
@@ -235,7 +251,7 @@
 
 
 </div>
-
+{% endifequal %}
 
 </div>
 
