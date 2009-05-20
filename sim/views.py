@@ -298,7 +298,7 @@ def player_game(request, group_id, turn_id=0):
     tabs = [dict(id=i, activetab=(working_state.turn == i), 
                  viewable=tab_viewable(group,i), name=tab_name(i),      
                  ) for i in range(1,5)]
-        
+    
     # setup set of special attributes for current user
     your_player = { 'model': group.sectiongroupplayer_set.get(user__id=request.user.id), 'saved_turn': None, 'saved_choice': None }
     your_player['submit_status'] = your_player['model'].status(working_state)
@@ -311,10 +311,12 @@ def player_game(request, group_id, turn_id=0):
         your_player['saved_turn'] = None
 
     endgame_results = []
+    feedback = None
     if working_state.turn == 4:
         turns = SectionGroupPlayerTurn.objects.filter(player=your_player['model']).order_by('turn')
         endgame_results = zip(turns, tabs)
-        
+        feedback = SectionGroupPlayerTurn.objects.get(player=your_player['model'], turn=3).feedback
+
     # setup player list attributes
     players = [dict(model=p, submit_status=p.status(working_state)) 
                for p in group.sectiongroupplayer_set.all()
@@ -328,6 +330,7 @@ def player_game(request, group_id, turn_id=0):
                 players = players,
                 you = your_player,
                 endgame_results = endgame_results,
+                feedback = feedback,
                 )
 
 #actually needs to be faculty only

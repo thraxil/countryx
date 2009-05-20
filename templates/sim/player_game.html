@@ -162,13 +162,13 @@
 			               			               
 	<div id="choices">
 	  <div id="current_choice"></div> <!-- putting this stub in to avoid js error -->
-	  {% for choice, t in endgame_results %}
-	    <div id="{{t.id}}" class="player_choice_{{t.id}} player_choice">
-	      <div class="choice_title">Phase {{t.id}}</div>
-	      {% if choice.feedback %}Feedback:{{choice.feedback}}{% else %}No faculty feedback yet.{% endif %}
-	    </div>
-	  {% endfor %}
-
+{% if feedback %}
+	  <textarea readonly="1" id="feedback" class="reasoning">
+	    {{feedback}}
+	  </textarea>
+{% else %}
+No faculty feedback yet.
+{% endif %}
 	</div>
 
 
