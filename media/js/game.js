@@ -9,16 +9,16 @@ function debug(string)
 function toggleCharacterProfile(control, characterName)
 {
    debug("toggle: " + characterName)
-   
+
    desc = $(characterName + "_description")
    img = $(characterName + "_image")
-      
+
    toggle(desc, 'blind')
    // nit: have to add the overflow style back for text field. it stays set as 'hidden'
    setStyle(desc, {'overflow': 'auto'})
-      
+
    toggle(img, 'slide')
-      
+
    if ('none' == getStyle(desc, 'display'))
       control.innerHTML = 'Hide Profile'
    else
@@ -30,16 +30,16 @@ function clearChoice(control)
    clearMessages()
    gCurrentChoice = 0
    effect = 'blind'
-   
+
    // hide the other choices, leaving the one the user chose
    elements = getElementsByTagAndClassName(null, "player_choice")
    forEach(elements,
-           function(elem) 
+           function(elem)
            {
                if (elem.id != gCurrentChoice && 'none' == getStyle(elem, 'display'))
                   toggle(elem, effect)
-           }); 
-   
+           });
+
    // hide the feedback form underneath
    toggle($('reasoning_form'), effect)
 }
@@ -50,16 +50,16 @@ function choose(control, choice)
    {
       gCurrentChoice = choice
       effect = 'blind'
-      
+
       // hide the other choices, leaving the one the user chose
       elements = getElementsByTagAndClassName(null, "player_choice")
       forEach(elements,
-              function(elem) 
+              function(elem)
               {
                   if (elem.id != choice)
                      toggle(elem, effect)
-              });   
-         
+              });
+
       // show the feedback form underneath
       toggle($('reasoning_form'), effect)
    }
@@ -75,7 +75,7 @@ function clearMessages()
 function saveChoiceSuccess(response)
 {
    debug("chooseSuccess: " + response.status)
-   
+
    doc = JSON.parse(response.responseText, null)
    if (doc.result == 0)
    {
@@ -96,7 +96,7 @@ function saveChoiceSuccess(response)
       // submit -- leave the screen the way it was
       $('successMsg').innerHTML = "Your choices have been submitted."
       setStyle($('successMsg'), {'display': 'block'})
-      
+
       $(gCurrentChoice).onclick = ''
       setNodeAttribute($('reasoning'), 'readonly', 'true')
       setStyle($('savedraft'), {'display': 'none'})
@@ -109,14 +109,14 @@ function saveChoiceSuccess(response)
 function saveChoiceError(err)
 {
    debug("chooseError: " + err)
-   $('errorMsg').innerHTML = err
+   $('errorMsg').innerHTML = err + ". This is probably a temporary error. we recommend that you log out and log back in again and try to resubmit."
    setStyle($('errorMsg'), {'display': 'block'})
 }
 
 function saveChoice(control, finalsubmit)
 {
    clearMessages()
-   
+
    if (finalsubmit && $('reasoning').value.length < 1)
    {
       $('errorClient').innerHTML = "Please enter your reasoning before submitting a final answer."
@@ -135,13 +135,16 @@ function saveChoice(control, finalsubmit)
       parts = location.href.split('/')
       groupid = parts[parts.length - 2]
       url = 'http://' + location.hostname + ':' + location.port + "/sim/player/choose/"
-      
-      deferred = doXHR(url, 
-            { 
-               method: 'POST', 
+//      try {
+	deferred = doXHR(url,
+	  {
+               method: 'POST',
                sendContent: queryString({'groupid': groupid, 'choiceid': gCurrentChoice, 'final': finalsubmit, 'reasoning': $('reasoning').value})
             });
-      deferred.addCallbacks(saveChoiceSuccess, saveChoiceError);
+         deferred.addCallbacks(saveChoiceSuccess, saveChoiceError);
+//      } catch (err) {
+	// do nothing for now.
+//      }
    }
 }
 
