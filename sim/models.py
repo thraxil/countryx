@@ -354,16 +354,17 @@ class SectionGroup(models.Model):
     
     def update_state(self):
         state = self.sectiongroupstate_set.latest().state
-        president = SectionGroupPlayerTurn.objects.get(player__role__name='President', player__group=self, turn=state.turn, submit_date__isnull=False)
-        regional = SectionGroupPlayerTurn.objects.get(player__role__name='SubRegionalRep', player__group=self, turn=state.turn, submit_date__isnull=False)
-        opposition = SectionGroupPlayerTurn.objects.get(player__role__name='OppositionLeadership', player__group=self, turn=state.turn, submit_date__isnull=False)
-        envoy = SectionGroupPlayerTurn.objects.get(player__role__name='FirstWorldEnvoy', player__group=self, turn=state.turn, submit_date__isnull=False)
-                   
-        try:                     
+        try:
+            president = SectionGroupPlayerTurn.objects.get(player__role__name='President', player__group=self, turn=state.turn, submit_date__isnull=False)
+            regional = SectionGroupPlayerTurn.objects.get(player__role__name='SubRegionalRep', player__group=self, turn=state.turn, submit_date__isnull=False)
+            opposition = SectionGroupPlayerTurn.objects.get(player__role__name='OppositionLeadership', player__group=self, turn=state.turn, submit_date__isnull=False)
+            envoy = SectionGroupPlayerTurn.objects.get(player__role__name='FirstWorldEnvoy', player__group=self, turn=state.turn, submit_date__isnull=False)
+                     
             next_state = StateChange.objects.get(state=state, president=president.choice, envoy=envoy.choice, regional=regional.choice, opposition=opposition.choice).next_state
             SectionGroupState.objects.create(state=next_state, group=self, date_updated=datetime.datetime.now())
         except:
-            pass
+            pass # something is wrong with the group. 
+      
             
 class SectionGroupState(models.Model):
     state = models.ForeignKey(State)
