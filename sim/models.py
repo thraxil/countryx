@@ -244,7 +244,28 @@ class Section(models.Model):
             sa.delete()
         except SectionAdministrator.DoesNotExist:
             pass
-     
+          
+    def reset(self):
+      """ reset the section back to its Start state """
+      self.set_sectionturndates_to_default()
+      start_state = State.objects.get(turn=1, state_no=1)
+        
+      for g in self.sectiongroup_set.all():
+        # Remove all state rows for this group
+        g.sectiongroupstate_set.all().delete()
+        
+        players = SectionGroupPlayer.objects.filter(group=g)
+        for player in players:
+            # remove all player responses
+            player_response = SectionGroupPlayerTurn.objects.filter(player=player)
+            player_response.delete()
+          
+        # put group in the start state automatically
+        SectionGroupState.objects.create(group=g,
+                                         state=start_state, 
+                                         date_updated=datetime.datetime.now())
+
+      
 class SectionAdministrator(models.Model):
     user = models.ForeignKey(User)
     section = models.ForeignKey(Section)

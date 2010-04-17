@@ -54,6 +54,19 @@ def faculty_section_byplayer(request, section_id):
             'section': section,
             'players': all_players,
             }
+    
+@login_required
+def faculty_section_reset(request, section_id):
+  section = get_object_or_404(Section,id=section_id)
+  section.reset()
+  
+  tm = SectionTurnDates.objects.get(section=section)
+  response = {}
+  response['turn1'] = tm.turn1.ctime()
+  response['turn2'] = tm.turn2.ctime()
+  response['turn3'] = tm.turn3.ctime()
+  
+  return HttpResponse(simplejson.dumps(response), 'application/json')
 
 @login_required
 @rendered_with('sim/faculty_group_detail.html')

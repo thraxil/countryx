@@ -16,6 +16,9 @@ urlpatterns = patterns('',
                        # player ajax requests
                        (r'^player/choose/$', 'countryx.sim.views.player_choose'),
                        
+                       # faculty ajax requests
+                       (r'^faculty/reset/(?P<section_id>\d+)/$', 'countryx.sim.views.faculty_section_reset'),
+                       
                        # faculty management pages
                        (r'^allpaths/$', 'countryx.sim.views.allpaths'),
                        (r'^allpaths/questions$', 'countryx.sim.views.allquestions'),
@@ -25,6 +28,7 @@ urlpatterns = patterns('',
                        (r'^faculty/groups/(?P<section_id>\d+)/$', 'countryx.sim.views.faculty_section_bygroup'),
                        (r'^faculty/players/(?P<section_id>\d+)/$', 'countryx.sim.views.faculty_section_byplayer'),
                        (r'^faculty/group/(?P<group_id>\d+)/$', 'countryx.sim.views.faculty_group_detail'),
+                       
                        
                        (r'^faculty/player/turn/(?P<group_id>\d+)/(?P<player_id>\d+)/(?P<state_id>\d+)/$', 'countryx.sim.views.faculty_player_detail_byturn'),
                        (r'^faculty/player/(?P<player_id>\d+)/$', 'countryx.sim.views.faculty_player_detail'),

@@ -37,6 +37,7 @@
 				<td><a href="/sim/faculty/manage/{{section.id}}/">Turn Management</a></td>
 				<td><a href="/sim/faculty/groups/{{section.id}}/">View by Groups</a></td>
 				<td><a href="/sim/faculty/players/{{section.id}}/">View by Player</a></td>
+                <td><a onclick="submitResetRequest(this); return false;" href="/sim/faculty/reset/{{section.id}}/">Reset</a></td>
 			</tr>
 		{% endfor %}
 	</table>

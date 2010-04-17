@@ -123,6 +123,44 @@ class ModelTestCases(TestCase):
         # now, try to update the state
         group.update_state()
         state = group.sectiongroupstate_set.latest().state
-        self.assertEquals(State.objects.get(turn=2, name="Violence - COIN"), state)        
+        self.assertEquals(State.objects.get(turn=2, name="Violence - COIN"), state)
+        self.assertEquals(group.section.current_turn(), 2)     
+        
+    def test_section_reset(self):
+      # use another test to setup an in progress game
+      self.test_sectiongroup_updatestate()
+
+      section = Section.objects.get(name="Test")
+      self.assertEquals(section.current_turn(), 2);
+      
+      section.reset()
+      
+      # at turn #1, not turn #2
+      self.assertEquals(section.current_turn(), 1);
+      
+      dates = (datetime.datetime.now() + datetime.timedelta(hours=24),
+               datetime.datetime.now() + datetime.timedelta(hours=48),
+               datetime.datetime.now() + datetime.timedelta(hours=72))
+      
+      # turn dates reset
+      turn_dates = SectionTurnDates.objects.get(section=section)
+      self.assertEquals(turn_dates.turn1.strftime('%m%d%Y'), dates[0].strftime('%m%d%Y'))
+      self.assertEquals(turn_dates.turn2.strftime('%m%d%Y'), dates[1].strftime('%m%d%Y'))
+      self.assertEquals(turn_dates.turn3.strftime('%m%d%Y'), dates[2].strftime('%m%d%Y'))
+      
+      for group in section.sectiongroup_set.all():
+        self.assertEquals(group.status(), GROUP_STATUS_NOACTION)
+        state = group.sectiongroupstate_set.latest().state
+        self.assertEquals(State.objects.get(turn=1, name="Start"), state)
+        self.assertEquals(group.section.current_turn(), 1)
+        
+        players = SectionGroupPlayer.objects.filter(group=group)
+        for player in players:
+            player_response = SectionGroupPlayerTurn.objects.filter(player=player)
+            self.assertEquals(len(player_response), 0)
+      
+      
+      
+      
         
         

@@ -17,7 +17,6 @@ function clearMessages()
 
 function submitFeedback(form, player_id)
 {
-   alert("submitFeedback")
    clearMessages()
    
    if (form.feedback.value.length < 1)
@@ -35,7 +34,7 @@ function submitFeedback(form, player_id)
                method: 'POST', 
                sendContent: queryString({'player_id': player_id, 'turn_id': form.turn_id.value, 'feedback': form.feedback.value, 'faculty_id': form.faculty_id.value})
             });
-      deferred.addCallbacks(submitFeedbackSuccess, submitFeedbackError);
+      deferred.addCallbacks(submitFeedbackSuccess, submitError);
    }
    
    return false;
@@ -58,7 +57,21 @@ function submitFeedbackSuccess(response)
    }
 }
 
-function submitFeedbackError(err)
-{
+function submitError(err) {
    alert(err)
+}
+
+function submitResetRequest(anchor) {
+    if (!confirm("Reset deletes all player turns and moves the game back to the Start state. The delete process is permanent and irrevocable.\n\nAre you REALLY sure you want to reset this section? ")) {
+        return false;
+    } else {
+        deferred = doXHR(anchor.href, 
+              { 
+                 method: 'GET' 
+              });
+        deferred.addCallbacks(function(response) { 
+                doc = JSON.parse(response.responseText, null)
+                alert('Reset complete. Turn end dates were defaulted.\n\nTurn 1: ' + doc.turn1 + '\nTurn 2: ' + doc.turn2 + '\nTurn 3: ' + doc.turn3);
+            }, submitError);
+    }
 }
