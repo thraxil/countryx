@@ -71,7 +71,12 @@ function submitResetRequest(anchor) {
               });
         deferred.addCallbacks(function(response) { 
                 doc = JSON.parse(response.responseText, null)
-                alert('Reset complete. Turn end dates were defaulted.\n\nTurn 1: ' + doc.turn1 + '\nTurn 2: ' + doc.turn2 + '\nTurn 3: ' + doc.turn3);
+                if (doc.message) {
+                    alert(doc.message)
+                } else {
+                    alert('Reset complete. Turn end dates were defaulted.\n\nTurn 1: ' + doc.turn1 + '\nTurn 2: ' + doc.turn2 + '\nTurn 3: ' + doc.turn3);
+                    window.location.reload();
+                }
             }, submitError);
     }
 }

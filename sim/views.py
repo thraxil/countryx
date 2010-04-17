@@ -10,7 +10,6 @@ import datetime
 import simplejson
 from django.http import Http404
 
-
 class rendered_with(object):
     def __init__(self, template_name):
         self.template_name = template_name
@@ -57,14 +56,18 @@ def faculty_section_byplayer(request, section_id):
     
 @login_required
 def faculty_section_reset(request, section_id):
-  section = get_object_or_404(Section,id=section_id)
-  section.reset()
-  
-  tm = SectionTurnDates.objects.get(section=section)
   response = {}
-  response['turn1'] = tm.turn1.ctime()
-  response['turn2'] = tm.turn2.ctime()
-  response['turn3'] = tm.turn3.ctime()
+
+  if not request.user.is_superuser:
+    response['message'] = "Access denied"
+  else:
+    section = get_object_or_404(Section,id=section_id)
+    section.reset()
+    
+    tm = SectionTurnDates.objects.get(section=section)
+    response['turn1'] = tm.turn1.ctime()
+    response['turn2'] = tm.turn2.ctime()
+    response['turn3'] = tm.turn3.ctime()
   
   return HttpResponse(simplejson.dumps(response), 'application/json')
 

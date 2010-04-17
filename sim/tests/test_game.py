@@ -8,7 +8,7 @@ class GameTestCases(TestCase):
     
     def _login(self, client, uname, pwd):
             # Do a fake login via the handy client login fixture
-        self.assert_(client.login(username=uname, password=pwd))
+        self.assertTrue(client.login(username=uname, password=pwd))
         
         response = client.get('/sim/')
         self.assertContains(response, uname, status_code=200)
@@ -173,4 +173,30 @@ class GameTestCases(TestCase):
         self.assert_(turn.submit_date != None)
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')       
         
+    def test_faculty_reset(self):
+        c = self.client
+        self._login(c, 'playerA', 'aaaa')
         
+        section = Section.objects.get(name='Test')
+        url = '/sim/faculty/reset/%d/' % section.id
+        response = c.post(url, '', content_type="text/xml")
+        
+        doc = simplejson.loads(response.content)
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(doc['message'], 'Access denied')
+        
+        admin = User(username="admin", is_superuser="true")
+        admin.set_password("admin")
+        admin.save()
+        
+        c.get('/sim/logout/')
+        self._login(c, 'admin', 'admin')
+        
+        response = c.post(url, '', content_type="text/xml")
+        doc = simplejson.loads(response.content)
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(len(doc['turn1']) > 0)
+        
+        
+        
+                
