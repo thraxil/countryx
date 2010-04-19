@@ -74,12 +74,11 @@ function clearMessages()
 
 function saveChoiceSuccess(response)
 {
-   debug("chooseSuccess: " + response.status)
-
    doc = JSON.parse(response.responseText, null)
+      
    if (doc.result == 0)
    {
-      $('errorMsg').innerHTML = "An error occurred while saving your choices. Please try again."
+      $('errorMsg').innerHTML = "An error occurred while saving your choices. Please logout and log back in again and try to resubmit."
       setStyle($('errorMsg'), {'display': 'block'})
    }
    else if (doc.result == 1)
@@ -87,7 +86,11 @@ function saveChoiceSuccess(response)
       // draft -- leave the screen the way it was
       $('successMsg').innerHTML = "Your choices have been saved."
       setStyle($('successMsg'), {'display': 'block'})
-      $('submit_state_desc').innerHTML = "Decision Pending"
+          
+      // enable the buttons
+      $('savedraft').disabled = false;
+      $('submit').disabled = false;
+      $('clear').disabled = false;
    }
    else if (doc.result == 2)
    {
@@ -108,8 +111,7 @@ function saveChoiceSuccess(response)
 
 function saveChoiceError(err)
 {
-   debug("chooseError: " + err)
-   $('errorMsg').innerHTML = err + ". This is probably a temporary error. we recommend that you log out and log back in again and try to resubmit."
+   $('errorMsg').innerHTML = err + ". This is probably a temporary error. We recommend that you log out and log back in again and try to resubmit."
    setStyle($('errorMsg'), {'display': 'block'})
 }
 
@@ -132,6 +134,11 @@ function saveChoice(control, finalsubmit)
    }
    else
    {
+      // disable the buttons
+       $('savedraft').disabled = true;
+       $('submit').disabled = true;
+       $('clear').disabled = true;
+       
       parts = location.href.split('/')
       groupid = parts[parts.length - 2]
       url = 'http://' + location.hostname + ':' + location.port + "/sim/player/choose/"
