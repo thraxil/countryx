@@ -108,12 +108,11 @@ class ModelTestCases(TestCase):
         state = group.sectiongroupstate_set.latest().state
          
         # update_state should choke in this situation 
+        # but, will fail quietly. Exception being caught to prevent front end agita
         try:
             group.update_state()
         except:
             pass
-        else:
-            fail("expected an error in cases where the group does not have submitted answers for each player")
         
         # pick the responses for each player so we can verify the state choice
         players = SectionGroupPlayer.objects.filter(group=group)

@@ -401,10 +401,11 @@ def player_choose(request):
     current_state = group.sectiongroupstate_set.latest().state
 
     # create or update the player's choice
-    try:
-        turn = SectionGroupPlayerTurn.objects.get(player=player, turn=current_state.turn)
-    except SectionGroupPlayerTurn.DoesNotExist:
-        turn = SectionGroupPlayerTurn.objects.create(player=player, turn=current_state.turn)
+    turnList = SectionGroupPlayerTurn.objects.filter(player=player, turn=current_state.turn)
+    if len(turnList) > 0:
+      turn = turnList[0]
+    else:
+      turn = SectionGroupPlayerTurn.objects.create(player=player, turn=current_state.turn)
 
     if turn.submit_date != None:
         # player has already submitted data
