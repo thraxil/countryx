@@ -5,7 +5,7 @@ import os.path
 admin.autodiscover()
 
 site_media_root = os.path.join(os.path.dirname(__file__),"media")
-admin_media_root = os.path.join(os.path.dirname(__file__), "ve/lib/python2.5/site-packages/Django-1.0_final-py2.5.egg/django/contrib/admin/media")
+admin_media_root = os.path.join(os.path.dirname(__file__), "ve/lib/python2.6/site-packages/django/contrib/admin/media")
 
 urlpatterns = patterns('',
                        (r'^$', 'countryx.views.root'),
