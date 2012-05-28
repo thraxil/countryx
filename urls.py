@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.conf import settings
+from django.views.generic.simple import direct_to_template
 import os.path
 admin.autodiscover()
 
@@ -12,6 +13,7 @@ urlpatterns = patterns('',
                        ('^accounts/',include('djangowind.urls')),
                        (r'^admin/', include(admin.site.urls)),
                        (r'^sim/', include('countryx.sim.urls')),
+                       ('^stats/',direct_to_template, {'template': 'stats.html'}),                       
                        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': site_media_root}),
                        (r'^admin_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': admin_media_root}),
                        (r'^uploads/(?P<path>.*)$','django.views.static.serve',{'document_root' : settings.MEDIA_ROOT}),
