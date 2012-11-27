@@ -191,9 +191,11 @@ class Section(models.Model):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
             return 1
-        elif (turn_dates.turn2 is None or turn_dates.turn2 > datetime.datetime.now()):
+        elif (turn_dates.turn2 is None
+              or turn_dates.turn2 > datetime.datetime.now()):
             return 2
-        elif (turn_dates.turn3 is None or turn_dates.turn3 > datetime.datetime.now()):
+        elif (turn_dates.turn3 is None
+              or turn_dates.turn3 > datetime.datetime.now()):
             return 3
         return 4
 
@@ -201,9 +203,11 @@ class Section(models.Model):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
             return turn_dates.turn1
-        elif (turn_dates.turn2 is None or turn_dates.turn2 > datetime.datetime.now()):
+        elif (turn_dates.turn2 is None
+              or turn_dates.turn2 > datetime.datetime.now()):
             return turn_dates.turn2
-        elif (turn_dates.turn3 is None or turn_dates.turn3 > datetime.datetime.now()):
+        elif (turn_dates.turn3 is None
+              or turn_dates.turn3 > datetime.datetime.now()):
             return turn_dates.turn3
 
         return turn_dates.turn1
@@ -245,7 +249,8 @@ class Section(models.Model):
             return std
 
     def clear_all(self):
-        """ clear out all the groups in the section (and their games by extension) """
+        """ clear out all the groups in the section
+        (and their games by extension) """
         for g in self.sectiongroup_set.all():
             g.delete()
 
@@ -274,13 +279,15 @@ class Section(models.Model):
             players = SectionGroupPlayer.objects.filter(group=g)
             for player in players:
                 # remove all player responses
-                player_response = SectionGroupPlayerTurn.objects.filter(player=player)
+                player_response = SectionGroupPlayerTurn.objects.filter(
+                    player=player)
                 player_response.delete()
 
             # put group in the start state automatically
-            SectionGroupState.objects.create(group=g,
-                                             state=start_state,
-                                             date_updated=datetime.datetime.now())
+            SectionGroupState.objects.create(
+                group=g,
+                state=start_state,
+                date_updated=datetime.datetime.now())
 
 
 class SectionAdministrator(models.Model):
@@ -359,15 +366,19 @@ class SectionGroup(models.Model):
         for player in players:
             # create or update the player's choice
             try:
-                #check to see if player has a "draft" saved. Use this if possible.
-                player_response = SectionGroupPlayerTurn.objects.get(player=player, turn=state.turn)
-                if (player_response.submit_date is None):
+                # check to see if player has a "draft" saved.
+                # Use this if possible.
+                player_response = SectionGroupPlayerTurn.objects.get(
+                    player=player, turn=state.turn)
+                if player_response.submit_date is None:
                     player_response.submit_date = datetime.datetime.now()
-                    player_response.automatic_update = AUTOMATIC_UPDATE_FROMDRAFT
+                    player_response.automatic_update =\
+                        AUTOMATIC_UPDATE_FROMDRAFT
                     player_response.save()
             except:
                 # player has no choice saved
-                player_response = SectionGroupPlayerTurn.objects.create(player=player, turn=state.turn)
+                player_response = SectionGroupPlayerTurn.objects.create(
+                    player=player, turn=state.turn)
                 player_response.choice = random.randint(1, 3)
                 player_response.submit_date = datetime.datetime.now()
                 player_response.automatic_update = AUTOMATIC_UPDATE_RANDOM
@@ -376,12 +387,31 @@ class SectionGroup(models.Model):
     def update_state(self):
         state = self.sectiongroupstate_set.latest().state
         try:
-            president = SectionGroupPlayerTurn.objects.get(player__role__name='President', player__group=self, turn=state.turn, submit_date__isnull=False)
-            regional = SectionGroupPlayerTurn.objects.get(player__role__name='SubRegionalRep', player__group=self, turn=state.turn, submit_date__isnull=False)
-            opposition = SectionGroupPlayerTurn.objects.get(player__role__name='OppositionLeadership', player__group=self, turn=state.turn, submit_date__isnull=False)
-            envoy = SectionGroupPlayerTurn.objects.get(player__role__name='FirstWorldEnvoy', player__group=self, turn=state.turn, submit_date__isnull=False)
-            next_state = StateChange.objects.get(state=state, president=president.choice, envoy=envoy.choice, regional=regional.choice, opposition=opposition.choice).next_state
-            SectionGroupState.objects.create(state=next_state, group=self, date_updated=datetime.datetime.now())
+            president = SectionGroupPlayerTurn.objects.get(
+                player__role__name='President',
+                player__group=self,
+                turn=state.turn, submit_date__isnull=False)
+            regional = SectionGroupPlayerTurn.objects.get(
+                player__role__name='SubRegionalRep',
+                player__group=self,
+                turn=state.turn, submit_date__isnull=False)
+            opposition = SectionGroupPlayerTurn.objects.get(
+                player__role__name='OppositionLeadership',
+                player__group=self, turn=state.turn,
+                submit_date__isnull=False)
+            envoy = SectionGroupPlayerTurn.objects.get(
+                player__role__name='FirstWorldEnvoy',
+                player__group=self,
+                turn=state.turn, submit_date__isnull=False)
+            next_state = StateChange.objects.get(
+                state=state, president=president.choice,
+                envoy=envoy.choice,
+                regional=regional.choice,
+                opposition=opposition.choice).next_state
+            SectionGroupState.objects.create(
+                state=next_state,
+                group=self,
+                date_updated=datetime.datetime.now())
         except:
             pass  # something is wrong with the group.
 
@@ -433,7 +463,8 @@ class SectionGroupPlayer(models.Model):
 
         if (self.sectiongroupplayerturn_related_player.all().count() > 0):
             try:
-                turn = self.sectiongroupplayerturn_related_player.get(turn=current_state.turn)
+                turn = self.sectiongroupplayerturn_related_player.get(
+                    turn=current_state.turn)
                 if turn.submit_date:
                     action = PLAYER_STATUS_SUBMITTED
                 else:
@@ -448,21 +479,25 @@ AUTOMATIC_UPDATE_RANDOM = 2
 
 
 class SectionGroupPlayerTurn(models.Model):
-    player = models.ForeignKey(SectionGroupPlayer, related_name="%(class)s_related_player")
+    player = models.ForeignKey(SectionGroupPlayer,
+                               related_name="%(class)s_related_player")
     turn = models.IntegerField()
     choice = models.IntegerField(null=True)
     reasoning = models.TextField(null=True)
     automatic_update = models.IntegerField(default=0)
     submit_date = models.DateTimeField('final date submitted', null=True)
     feedback = models.TextField(null=True)
-    faculty = models.ForeignKey(SectionAdministrator, related_name="%(class)s_related_faculty", null=True)
+    faculty = models.ForeignKey(SectionAdministrator,
+                                related_name="%(class)s_related_faculty",
+                                null=True)
     feedback_date = models.DateTimeField('feedback submitted', null=True)
 
     class Meta:
         get_latest_by = 'submit_date'
 
     def __unicode__(self):
-        return "%s: Turn: %s Selected: %s" % (self.player, self.turn, self.choice)
+        return "%s: Turn: %s Selected: %s" % (self.player,
+                                              self.turn, self.choice)
 
     def is_submitted(self):
         return self.submit_date != None
