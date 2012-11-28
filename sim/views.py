@@ -1,12 +1,21 @@
-from countryx.sim.models import *
+from countryx.sim.models import SectionAdministrator, Section
+from countryx.sim.models import SectionGroupPlayer
+from countryx.sim.models import SectionGroup, SectionTurnDates
+from countryx.sim.models import State, SectionGroupPlayerTurn
+from countryx.sim.models import StateRoleChoice, Role
+from countryx.sim.models import StateChange, StateVariable
+from countryx.sim.models import SectionGroupState
+from countryx.sim.models import get_or_create_user
+from countryx.sim.models import get_or_create_section
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 from django import forms
 from django.forms.util import ErrorList
 from django.contrib.admin.widgets import AdminSplitDateTime
 import datetime
+import random
 import simplejson
 from django.http import Http404
 
@@ -364,7 +373,7 @@ def player_game(request, group_id, turn_id=0):
         except SectionGroupState.DoesNotExist:
             # put them in the start state automatically
             start_state = State.objects.get(turn=1, state_no=1)
-            sgs = SectionGroupState.objects.create(
+            SectionGroupState.objects.create(
                 group=group,
                 state=start_state,
                 date_updated=datetime.datetime.now())
@@ -668,7 +677,7 @@ def cheat(request):
             # now go through in order and set up the turns
             turn = 1
             for (s, sc) in zip(path, scs):
-                sgs = SectionGroupState.objects.create(
+                SectionGroupState.objects.create(
                     state=s, group=group,
                     date_updated=datetime.datetime.now())
                 if turn < 4:
@@ -685,7 +694,7 @@ def cheat(request):
                                 choice = sc.envoy
                             if r.name == 'SubRegionalRep':
                                 choice = sc.regional
-                            sgpt = SectionGroupPlayerTurn.objects.create(
+                            SectionGroupPlayerTurn.objects.create(
                                 player=sgp,
                                 turn=turn,
                                 choice=choice,
