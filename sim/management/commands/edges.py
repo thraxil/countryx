@@ -1,8 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.core import serializers
-from optparse import make_option
-from countryx.sim.models import *
-import random as  rn
+from django.core.management.base import BaseCommand
+from countryx.sim.models import State, StateChange
 
 
 class Command(BaseCommand):
@@ -18,7 +15,6 @@ class Command(BaseCommand):
         transitions = StateChange.objects.filter(state=state).order_by(
             'next_state__state_no')
         stack = []
-        color = '#' + "".join(["%02x" % rn.randint(50, 200) for x in range(3)])
 
         for transition in transitions:
             if transition.next_state not in self.states[state]:
@@ -50,8 +46,6 @@ class Command(BaseCommand):
         print ''
 
     def handle(self, *app_labels, **options):
-        from django.db.models import get_app, get_apps, get_models
-
         self.states = {}
 
         print 'digraph G {'

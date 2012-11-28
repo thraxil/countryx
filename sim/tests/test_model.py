@@ -1,7 +1,16 @@
-from django.test import TestCase, Client
-from countryx.sim.models import *
-import simplejson
-import datetime, time
+from django.test import TestCase
+from countryx.sim.models import Section, SectionGroup
+from countryx.sim.models import SectionGroupPlayer
+from countryx.sim.models import SectionGroupPlayerTurn
+from countryx.sim.models import GROUP_STATUS_NOACTION, PLAYER_STATUS_NOACTION
+from countryx.sim.models import PLAYER_STATUS_SUBMITTED, PLAYER_STATUS_PENDING
+from countryx.sim.models import GROUP_STATUS_PENDING, GROUP_STATUS_SUBMITTED
+from countryx.sim.models import State, SectionTurnDates
+from countryx.sim.models import AUTOMATIC_UPDATE_FROMDRAFT
+from countryx.sim.models import AUTOMATIC_UPDATE_NONE
+from countryx.sim.models import AUTOMATIC_UPDATE_RANDOM
+import datetime
+import time
 
 
 class ModelTestCases(TestCase):
@@ -22,7 +31,7 @@ class ModelTestCases(TestCase):
 
         count = 0
         for player in players:
-            turn = SectionGroupPlayerTurn.objects.create(
+            SectionGroupPlayerTurn.objects.create(
                 player=player, turn=current_state.turn, choice=1,
                 submit_date=datetime.datetime.now(), reasoning="foobar")
             if count < 3:

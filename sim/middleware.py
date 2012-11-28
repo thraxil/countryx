@@ -1,5 +1,7 @@
-from countryx.sim.models import *
-import random, threading
+from countryx.sim.models import Section, SectionGroupState
+from countryx.sim.models import State
+import datetime
+import threading
 
 
 class GameStateMiddleware(object):
@@ -16,7 +18,7 @@ class GameStateMiddleware(object):
                 or request.path.startswith("/accounts") \
                 or request.path.startswith("/site_media") \
                 or request.META['SERVER_NAME'] == 'testserver':
-            return # skip it in admin otherwise we can't add a section
+            return  # skip it in admin otherwise we can't add a section
         self.write_lock.acquire()
         try:
             sections = Section.objects.all()
@@ -32,7 +34,7 @@ class GameStateMiddleware(object):
                                        .state)
                     except SectionGroupState.DoesNotExist:
                         group_state = State.objects.get(state_no=1, turn=1)
-                        sgs = SectionGroupState.objects.create(
+                        SectionGroupState.objects.create(
                             state=group_state, group=group,
                             date_updated=datetime.datetime.now())
                     if (section_turn != group_state.turn):

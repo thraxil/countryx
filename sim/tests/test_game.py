@@ -1,7 +1,11 @@
-from django.test import TestCase, Client
-from countryx.sim.models import *
+from django.test import TestCase
+from countryx.sim.models import User, Section, SectionGroup
+from countryx.sim.models import SectionGroupPlayer
+from countryx.sim.models import SectionGroupPlayerTurn
+from countryx.sim.models import StateRoleChoice
+from countryx.sim.models import GROUP_STATUS_NOACTION, PLAYER_STATUS_NOACTION
+from countryx.sim.models import PLAYER_STATUS_SUBMITTED, PLAYER_STATUS_PENDING
 import simplejson
-import datetime
 
 
 class GameTestCases(TestCase):

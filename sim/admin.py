@@ -1,6 +1,10 @@
-from countryx.sim.models import *
+from countryx.sim.models import StateVariable, Role, State
+from countryx.sim.models import StateChange, Section
+from countryx.sim.models import SectionGroup, StateRoleChoice
+from countryx.sim.models import SectionTurnDates, SectionAdministrator
+from countryx.sim.models import SectionGroupPlayer, SectionGroupState
 from django.contrib import admin
-from django import forms
+
 
 admin.site.register(Role)
 

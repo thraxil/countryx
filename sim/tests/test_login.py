@@ -1,6 +1,6 @@
 from django.test.client import Client
 from django.test import TestCase
-from countryx.sim.models import *
+from countryx.sim.models import User
 
 
 class LoginTestCases(TestCase):

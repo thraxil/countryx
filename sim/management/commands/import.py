@@ -1,21 +1,11 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.core import serializers
+from django.core.management.base import BaseCommand
 from optparse import make_option
-from countryx.sim.models import *
-try:
-    from xml.etree import ElementTree
-except ImportError:
-    from elementtree import ElementTree
+from countryx.sim.models import StateChange, StateRoleChoice
+from countryx.sim.models import State, Role, StateVariable
 import gdata.spreadsheet.service
 import gdata.service
-import atom.service
 import gdata.spreadsheet
-import atom
-import getopt
-import sys
-import string
 import re
-from psycopg2 import IntegrityError
 
 
 class Command(BaseCommand):
@@ -106,7 +96,6 @@ class Command(BaseCommand):
     def process_choices(self, sheetKey, worksheetId, state):
         print "process choices for state: %s" % state
         feed = self.gd_client.GetListFeed(sheetKey, worksheetId)
-        choices = []
         role = None
 
         for i, entry in enumerate(feed.entry):
@@ -156,7 +145,7 @@ class Command(BaseCommand):
     def process_worksheets(self, sheetKey, state):
         feed = self.gd_client.GetWorksheetsFeed(sheetKey)
 
-        if (len(feed.entry) <> 3):
+        if (len(feed.entry) != 3):
             print ("%s does not have three required worksheets. Skipping..."
                    % state)
             return
@@ -193,8 +182,6 @@ class Command(BaseCommand):
                 self.process_worksheets(key, state)
 
     def handle(self, *app_labels, **options):
-        from django.db.models import get_app, get_apps, get_models
-
         args = 'Usage: python manage.py import --user user --pwd password]'
 
         if (not self.init_google_client(options.get('user'),

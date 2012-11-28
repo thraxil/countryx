@@ -1,8 +1,11 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.core import serializers
-from optparse import make_option
-from countryx.sim.models import *
-import csv, time, datetime, sys
+from django.core.management.base import BaseCommand
+from countryx.sim.models import SectionGroupPlayerTurn
+from countryx.sim.models import SectionGroupPlayer
+from countryx.sim.models import SectionGroupState
+from countryx.sim.models import SectionGroup
+from countryx.sim.models import SectionTurnDates
+from countryx.sim.models import SectionAdministrator
+from countryx.sim.models import Section
 
 
 class Command(BaseCommand):

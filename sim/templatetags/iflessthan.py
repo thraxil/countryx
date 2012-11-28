@@ -1,6 +1,6 @@
-from django.template import Node, NodeList, Template, Context, Variable
+from django.template import Node, NodeList, Variable, VariableDoesNotExist
 from django.template import TemplateSyntaxError
-from django.template import Library, InvalidTemplateLibrary
+from django.template import Library
 
 
 register = Library()
@@ -32,7 +32,7 @@ class IfLessThanNode(Node):
 def do_iflessthan(parser, token, negate):
     bits = list(token.split_contents())
     if len(bits) != 3:
-        raise TemplateSyntaxError, "%r takes two arguments" % bits[0]
+        raise TemplateSyntaxError("%r takes two arguments" % bits[0])
     end_tag = 'end' + bits[0]
     nodelist_true = parser.parse(('else', end_tag))
     token = parser.next_token()

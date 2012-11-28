@@ -1,8 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.core import serializers
+from django.core.management.base import BaseCommand
 from optparse import make_option
-from countryx.sim.models import *
-import csv, time, datetime
+from countryx.sim.models import User
+import csv
 
 
 class Command(BaseCommand):
@@ -20,7 +19,6 @@ class Command(BaseCommand):
         for row in rows:
             (last, first, uni) = row
             self.get_or_create_user(uni, first, last)
-
 
     def get_or_create_user(self, uni, first, last):
         try:
