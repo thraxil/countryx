@@ -1,8 +1,15 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.core import serializers
+from django.core.management.base import BaseCommand
 from optparse import make_option
-from countryx.sim.models import *
-import csv, time, datetime
+from countryx.sim.models import SectionGroup, State
+from countryx.sim.models import Section, Role
+from countryx.sim.models import SectionTurnDates
+from countryx.sim.models import User, SectionGroupState
+from countryx.sim.models import SectionAdministrator
+from countryx.sim.models import SectionGroupPlayer
+from countryx.sim.models import SectionGroupPlayerTurn
+import csv
+import time
+import datetime
 
 
 class Command(BaseCommand):
@@ -111,30 +118,30 @@ class Command(BaseCommand):
                                         user=user, group=game_group,
                                         role=game_role)
 
-                option_list = BaseCommand.option_list + (
-                        make_option(
-                                '--csv', dest='csv',
-                                help='Base CSV file to import'),
-                        make_option(
-                                '--section', dest='section',
-                                help='Short descriptive class name'),
-                        make_option(
-                                '--term', dest='term',
-                                help='Valid values: Spring, Summer, Fall'),
-                        make_option(
-                                '--year', dest='year',
-                                help='Year the class is taking place'),
-                        make_option(
-                                '--first_turn', dest='first_turn',
-                                help='Date of the section first turn close'),
-                        make_option(
-                                '--clean',
-                                dest='clean',
-                                help=('Whether the player tables for this '
-                                      'section should be cleaned before '
-                                      'continuing'),
-                                action='store_const', const=True),
-                        )
+        option_list = BaseCommand.option_list + (
+                make_option(
+                        '--csv', dest='csv',
+                        help='Base CSV file to import'),
+                make_option(
+                        '--section', dest='section',
+                        help='Short descriptive class name'),
+                make_option(
+                        '--term', dest='term',
+                        help='Valid values: Spring, Summer, Fall'),
+                make_option(
+                        '--year', dest='year',
+                        help='Year the class is taking place'),
+                make_option(
+                        '--first_turn', dest='first_turn',
+                        help='Date of the section first turn close'),
+                make_option(
+                        '--clean',
+                        dest='clean',
+                        help=('Whether the player tables for this '
+                              'section should be cleaned before '
+                              'continuing'),
+                        action='store_const', const=True),
+                )
 
         def clean(self):
                 SectionGroupPlayerTurn.objects.all().delete()
