@@ -11,22 +11,22 @@ class Command(BaseCommand):
         if not options.get('csv'):
             print args
             return
-            
+
         fh = open(options.get('csv'), 'r')
         table = csv.reader(fh)
         self.process_rows(list(table))
 
-    def process_rows(self,rows):
+    def process_rows(self, rows):
         for row in rows:
-            (last,first,uni) = row
-            self.get_or_create_user(uni,first,last)
-	
+            (last, first, uni) = row
+            self.get_or_create_user(uni, first, last)
+
 
     def get_or_create_user(self, uni, first, last):
         try:
             user = User.objects.get(username=uni)
         except User.DoesNotExist:
-            password='wind user'
+            password = 'wind user'
             user = User(username=uni,
                         first_name=first,
                         last_name=last,
@@ -42,4 +42,3 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--csv', dest='csv', help='Base CSV file to import'),
     )
-

@@ -5,6 +5,7 @@ from django.template import Library, InvalidTemplateLibrary
 
 register = Library()
 
+
 class IfLessThanNode(Node):
     def __init__(self, var1, var2, nodelist_true, nodelist_false, negate):
         self.var1, self.var2 = Variable(var1), Variable(var2)
@@ -27,6 +28,7 @@ class IfLessThanNode(Node):
             return self.nodelist_true.render(context)
         return self.nodelist_false.render(context)
 
+
 def do_iflessthan(parser, token, negate):
     bits = list(token.split_contents())
     if len(bits) != 3:
@@ -39,24 +41,25 @@ def do_iflessthan(parser, token, negate):
         parser.delete_first_token()
     else:
         nodelist_false = NodeList()
-    return IfLessThanNode(bits[1], bits[2], nodelist_true, nodelist_false, negate)
+    return IfLessThanNode(bits[1], bits[2], nodelist_true,
+                          nodelist_false, negate)
 
-#@register.tag                                                                                                                       
+
 def iflessthan(parser, token):
-    """                                                                                                                              
-    Outputs the contents of the block if arg1 is less than arg2                                                  
-                                                                                                                                     
-    Examples::                                                                                                                       
-                                                                                                                                     
-        {% iflessthan user.id comment.user_id %}                                                                                        
-            ...                                                                                                                      
-        {% endiflessthan %}                                                                                                             
-                                                                                                                                     
-        {% iflessthan user.id comment.user_id %}                                                                                     
-            ...                                                                                                                      
-        {% else %}                                                                                                                   
-            ...                                                                                                                      
-        {% endiflessthan %}                                                                                                          
+    """
+    Outputs the contents of the block if arg1 is less than arg2
+
+    Examples::
+
+        {% iflessthan user.id comment.user_id %}
+            ...
+        {% endiflessthan %}
+
+        {% iflessthan user.id comment.user_id %}
+            ...
+        {% else %}
+            ...
+        {% endiflessthan %}
     """
     return do_iflessthan(parser, token, False)
 
