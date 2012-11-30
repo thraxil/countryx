@@ -36,6 +36,11 @@ if 'test' in sys.argv:
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=countryx.sim',
+]
+
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
