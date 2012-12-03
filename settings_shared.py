@@ -48,7 +48,7 @@ USE_I18N = False
 MEDIA_ROOT = "/var/www/countryx/uploads/"
 MEDIA_URL = '/uploads/'
 ADMIN_MEDIA_PREFIX = '/media/'
-SECRET_KEY = ')ng#)ef_u@_^zvvu@dxm7ql-yb^_!a6%v3v^j3b(mp+)l+5%@h'
+SECRET_KEY = 'dummy-)ng#)ef_u@_^zvvu@dxm7ql-yb^_!a6%v3v^j3b(mp+)l+5%@h'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
@@ -89,7 +89,10 @@ INSTALLED_APPS = (
     'countryx.sim',
     'django_statsd',
     'django_nose',
+    'south',
 )
+
+SOUTH_TESTS_MIGRATE = False
 
 STATSD_CLIENT = 'statsd.client'
 STATSD_PREFIX = 'countryx'
