@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'django_statsd',
     'django_nose',
     'south',
+    'raven.contrib.django',
 )
 
 SOUTH_TESTS_MIGRATE = False
