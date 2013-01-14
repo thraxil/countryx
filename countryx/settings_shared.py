@@ -49,7 +49,7 @@ SITE_ID = 1
 USE_I18N = False
 MEDIA_ROOT = "/var/www/countryx/uploads/"
 MEDIA_URL = '/uploads/'
-ADMIN_MEDIA_PREFIX = '/media/'
+STATIC_URL = '/media/'
 SECRET_KEY = 'dummy-)ng#)ef_u@_^zvvu@dxm7ql-yb^_!a6%v3v^j3b(mp+)l+5%@h'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
