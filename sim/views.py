@@ -1,3 +1,4 @@
+from annoying.decorators import render_to
 from countryx.sim.models import SectionAdministrator, Section
 from countryx.sim.models import SectionGroupPlayer
 from countryx.sim.models import SectionGroup, SectionTurnDates
@@ -20,20 +21,6 @@ import simplejson
 from django.http import Http404
 
 
-class rendered_with(object):
-    def __init__(self, template_name):
-        self.template_name = template_name
-
-    def __call__(self, func):
-        def rendered_func(request, *args, **kwargs):
-            items = func(request, *args, **kwargs)
-            return render_to_response(
-                self.template_name, items,
-                context_instance=RequestContext(request))
-
-        return rendered_func
-
-
 @login_required
 def root(request):
     # is the user a player or an administrator?
@@ -47,7 +34,7 @@ def root(request):
 ###############################################################################
 
 
-@rendered_with("sim/faculty_index.html")
+@render_to("sim/faculty_index.html")
 def __faculty_index(request):
     sections = Section.objects.filter(sectionadministrator__user=request.user)
     return dict(sections=sections, user=request.user,
@@ -56,13 +43,13 @@ def __faculty_index(request):
 
 
 @login_required
-@rendered_with("sim/faculty_section_bygroup.html")
+@render_to("sim/faculty_section_bygroup.html")
 def faculty_section_bygroup(request, section_id):
     return dict(user=request.user, section=Section.objects.get(id=section_id))
 
 
 @login_required
-@rendered_with('sim/faculty_section_byplayer.html')
+@render_to('sim/faculty_section_byplayer.html')
 def faculty_section_byplayer(request, section_id):
     section = Section.objects.get(id=section_id)
     all_players = SectionGroupPlayer.objects.filter(group__section=section)
@@ -92,7 +79,7 @@ def faculty_section_reset(request, section_id):
 
 
 @login_required
-@rendered_with('sim/faculty_group_detail.html')
+@render_to('sim/faculty_group_detail.html')
 def faculty_group_detail(request, group_id):
     group = SectionGroup.objects.get(id=group_id)
 
@@ -134,7 +121,7 @@ def faculty_group_detail(request, group_id):
 
 
 @login_required
-@rendered_with('sim/faculty_player_detail_byturn.html')
+@render_to('sim/faculty_player_detail_byturn.html')
 def faculty_player_detail_byturn(request, group_id, player_id,
                                  state_id, updated=False):
     group = get_object_or_404(SectionGroup, id=group_id)
@@ -162,7 +149,7 @@ def faculty_player_detail_byturn(request, group_id, player_id,
 
 
 @login_required
-@rendered_with('sim/faculty_player_detail.html')
+@render_to('sim/faculty_player_detail.html')
 def faculty_player_detail(request, player_id):
     player = get_object_or_404(SectionGroupPlayer, id=player_id)
     group = player.group
@@ -341,7 +328,7 @@ class TurnManagementForm(forms.Form):
 ###############################################################################
 
 
-@rendered_with("sim/player_index.html")
+@render_to("sim/player_index.html")
 def __player_index(request):
     groups = SectionGroup.objects.filter(sectiongroupplayer__user=request.user)
     return dict(user=request.user, groups=groups)
@@ -362,7 +349,7 @@ def tab_viewable(group, i):
         return False
 
 
-@rendered_with('sim/player_game.html')
+@render_to('sim/player_game.html')
 @login_required
 def player_game(request, group_id, turn_id=0):
     group = get_object_or_404(SectionGroup, id=group_id)
@@ -454,7 +441,7 @@ def allvariables(request):
     return HttpResponse(simplejson.dumps(response), 'application/json')
 
 
-@rendered_with('sim/allpaths.html')
+@render_to('sim/allpaths.html')
 @login_required
 def allpaths(request):
     turns = []
