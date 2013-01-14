@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block css %}
+   {{ block.super }}
+   <style type='text/css'>
+     @import "/site_media/css/style.css";
+   </style>
+{% endblock %}
+
+{% block js %}
+   {{ block.super }}
+   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
+   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/Visual.js"></script>
+   <script type="text/javascript" src="/site_media/js/json2.js"></script>
+   <script type="text/javascript" src="/site_media/js/SortableTable.js"></script>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

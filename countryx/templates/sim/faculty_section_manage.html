@@ -1,0 +1,71 @@
+{% extends "sim/base_faculty.html" %}
+
+{% block breadcrumbs %}
+   <a href="/sim/">Home</a> > Manage
+{% endblock %}
+
+{% block js %} 
+   {{ block.super }}
+      
+   <script type="text/javascript" src="/admin_media/js/core.js"></script>
+   <script type="text/javascript" src="/admin_media/js/calendar.js"></script>
+   <script type="text/javascript" src="/admin_media/js/admin/DateTimeShortcuts.js"></script>
+{% endblock %}
+
+{% block content %}
+   {{ block.super }}
+
+
+
+   {% ifnotequal section.current_turn 4 %}
+
+   <form action="end_turn/" method="post">
+     <fieldset><legend>Manually Advance Turn</legend>
+       <!-- todo: put in options for selecting choices on roles
+	    that haven't submitted -->
+
+       <table>
+	 <tr}><th>group</th><th>status</th><th>action</th></tr>
+	 {% for group in section.sectiongroup_set.all %}
+	 <tr class="{% cycle "even" "odd" %}">
+	   <th>{{ group.name }}</th>
+	   <td>{{ group.status_name }}</td>
+	   <td>{% ifnotequal group.status 4 %}
+	     {% ifequal group.status 1 %}
+	     No players have submitted yet. All choices will be made randomly.
+	     {% else %}
+	     Some players have not submitted yet. Their choices will be
+	     made randomly.
+	     {% endifequal %}
+	     {% endifnotequal %}
+	   </td>
+	 </tr>
+	 {% endfor %}
+       </table>
+       <br />
+       <input type="submit" value="turn advance" />
+       <br /><br />
+     </fieldset>
+   </form>
+   <br /><br />
+   {% endifnotequal %}
+
+   {% ifequal section.current_turn 4 %}
+   <p>This section has completed all four turns</p>
+   {% endifequal %}
+
+
+    <form action="." method="POST">
+      <fieldset>
+	<legend>Adjust Section Info</legend>
+	<div class="fieldWrapper">
+	  <table>
+            {{ form.as_table }}
+	  </table>
+          <input type="submit" value="Submit" />
+	</div>
+	</fieldset>
+    </form>
+    
+    
+{% endblock %}

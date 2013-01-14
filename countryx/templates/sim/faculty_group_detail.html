@@ -1,0 +1,101 @@
+{% extends "sim/base_faculty.html" %}
+
+{% block breadcrumbs %}
+   <a href="/sim/">Home</a> >
+   <a href="/sim/faculty/groups/{{section.id}}/">{{section}}</a> >
+   Group {{ group.name }}
+{% endblock %}
+
+{% load iflessthan %}
+
+{% block content %}
+   {{ block.super }}
+   
+   {% for t in turns %}
+      <a name="turn{{t.group_state.state.turn}}"/>
+      
+      {% iflessthan t.group_state.state.turn 4 %}
+	      <h2>Turn {{t.group_state.state.turn}} {{t.group_state.state.name}}</h2>
+      
+	      Group Status:        
+		      {% ifequal t.group_state.status 1 %}
+		         No Action Taken
+		      {% endifequal %}
+		      {% ifequal t.group_state.status 2 %}
+		         In Progress
+		      {% endifequal %}
+		      {% ifequal t.group_state.status 4 %}
+		         Completed Turn
+		      {% endifequal %}
+	      <br />
+	      Updated: {{ t.group_state.date_updated }}<br />
+	      <br />
+	      <div class="scrollable_text">{% autoescape off %}<b>Country Conditions</b><br />{{ t.country_condition }}{% endautoescape %}</div>
+         <br />   
+	      <table id="sortable_table" class="datagrid">
+	      <thead>
+	         <tr>
+	            <th mochi:format="str">Status</th>
+	            <th mochi:format="str">First Name</th>
+	            <th mochi:format="str">Last Name</th>
+	            <th mochi:format="str">Uni</th>
+	            <th mochi:format="str">Role</th>
+	            <th mochi:format="date">Date Submitted</th>
+	            <th mochi:format="str">Feedback</th>
+	            <th>Action</th>
+	         </tr>
+	      </thead>
+	      <tfoot class="invisible">
+	          <tr>
+	              <td colspan="0"></td>
+	          </tr>
+	      </tfoot>
+	      <tbody>
+	          {% for p in t.players %}
+	            <tr>
+	               <td>
+	                  {% ifequal p.submit_status 1 %}
+	                     No Action Taken
+	                  {% endifequal %}
+	                  {% ifequal p.submit_status 2 %}
+	                     Choice Pending
+	                  {% endifequal %}
+	                  {% ifequal p.submit_status 4 %}
+	                     {% if p.turn.feedback %}
+	                        Submitted - Feedback Complete
+	                     {% else %}
+	                        Submitted - Feedback Required 
+	                     {% endif %}
+	                  {% endifequal %}
+	               </td>
+	               <td>{{ p.model.user.first_name }}</td>
+	               <td>{{ p.model.user.last_name }}</td>
+	               <td>{{ p.model.user.username }}</td>
+	               <td>{{ p.model.role.display_name }}</td>
+			         {% ifequal p.submit_status 4 %}
+			            <td>{{ p.turn.submit_date }}</td>
+			            <td>
+			               {% if p.turn.feedback %}
+			                  Completed<br />{{ p.turn.feedback_date }}<br />by {{ p.turn.faculty.user }}
+			               {% else %}
+			                  Pending
+			               {% endif %}
+			            </td>
+			            <td><a href="/sim/faculty/player/turn/{{ group.id }}/{{ p.model.id }}/{{t.group_state.state.id}}/">Detail</a></td>
+			         {% else %}
+			             <td/><td/><td/>
+			         {% endifequal %}
+			      </tr>
+			    {% endfor %}
+			 </tbody>
+	       <tr><td colspan="8" style="border-bottom: 1px solid #4B4545;"/></tr>
+	    </table>
+	    {% else %}
+	       <h2>Final Outcome: {{t.group_state.state.name}}</h2>
+	       Updated: {{ t.group_state.date_updated }}<br />
+	       <br />
+	       <div class="scrollable_text">{% autoescape off %}<b>Country Conditions</b><br />{{ t.country_condition }}{% endautoescape %}</div>
+	    {% endiflessthan %}
+	{% endfor %}
+    
+{% endblock %}

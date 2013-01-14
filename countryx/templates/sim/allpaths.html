@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block js %}
+   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
+   <script type="text/javascript" src="/site_media/js/sim_allpaths.js"></script>
+{% endblock %}
+{% block css %}
+   <link href="/site_media/css/sim_allpaths.css" rel="stylesheet" type="text/css" />
+   <style type="text/css">
+     {%for r in roles%}
+     .s{{forloop.counter}}-1 .o{{forloop.counter}}-1 {background-color:yellow;}
+     .s{{forloop.counter}}-2 .o{{forloop.counter}}-2 {background-color:yellow;}
+     .s{{forloop.counter}}-3 .o{{forloop.counter}}-3 {background-color:yellow;}
+     {%endfor%}
+   </style>
+{% endblock %}
+
+{% block content %}
+	{{ block.super }}
+	<div id="explanation">
+	  <h2>How to read this</h2>
+	  <p>Each state has an 9x9 grid for 'From'-states and 'To'-destination states.  
+	  
+	  On the key, in the upper right, you'll see that each combination of choices for each role will
+	  have a single pixel in the 9x9 grid.  We place the major actors on the outside, so when
+	  they have a significant effect you will see large stripes--vertical or horizontal in the TO chart.
+	  If the minor roles affect the outcome, you will see narrower stripes.
+	  </p>
+	  <p>The colors represent the states that the combination goes TO or FROM.  Since FROM pixels represent
+	  outcomes from multiple states, if there's an overlap, we represent it as black.  In that case, 
+	  just look in the TO grids of the preceding turn for that state, to see how you get there
+	  </p>
+	</div>
+	<div id="turns">
+	  {% for t in turns %}
+	    <div class="overview-turn t{{forloop.counter}}">
+	      <div class="turn-details">
+		<h2 class="turn-name">Turn {{forloop.counter}}</h2>
+	      </div>
+	      {% for s in t.states %}	      
+	        <div class="overview-state s{{s.id}}">
+		  <div class="state-name" style="background-color:#{{s.color}}">
+		    {{s.name}}
+		  </div>
+		  <!--Transition FROM -->
+		  {%if not forloop.parentloop.first %}
+		  <div class="transition-from">
+		    <div class="table-label">FROM</div>
+		    {%for trans in s.full_from %}
+		      <div class="transition-permutation{%for i in trans.ids%} tran{{i}}{%endfor%}" 
+			   style="background-color:#{{trans.color}}"
+			   data-index="{{forloop.counter}}"></div>
+		    {%endfor %}
+		  </div>
+		  {%endif%}
+		  <!--Transition TO -->
+		  {%if not forloop.parentloop.last %}
+		  <div class="transition-to">
+		    <div class="table-label">TO</div>
+		    <div class="transitions">
+		      {%for trans in s.full_to %}
+		        <div class="transition-permutation tran{{trans.ids.0}}" 
+			     style="background-color:#{{trans.color}}"
+			     data-stateid="{{trans.ids.0}}"
+			     data-index="{{forloop.counter}}"></div>
+		      {%endfor %}
+		    </div>
+		  </div>
+		  {%endif%}
+		</div>
+	      {% endfor %}	  
+	    </div>
+	  {% endfor %}	  
+	</div>
+
+	<!--KEY-->
+	<table id="gridkey" class="" border="1">
+	  <tr><td id="key-label" class="key-label" colspan="2">KEY</td>
+	      <td class="o3-1 option" colspan="3">1</td><td class="o3-2 option" colspan="3">2</td><td class="o3-3 option" colspan="3">3</td>
+	      <td class="role role-3">{{roles.2}}</td>
+	  </tr>
+	  <tr><td class="role role-1">{{roles.0}}</td>
+	      <td class="role role-2">{{roles.1}}</td>
+	      <td class="o4-1 smalltrans option">1</td>
+	      <td class="o4-2 smalltrans option">2</td><td class="o4-3 smalltrans option">3</td><td class="o4-1 smalltrans option">1</td><td class="o4-2 smalltrans option">2</td><td class="o4-3 smalltrans option">3</td><td class="o4-1 smalltrans option">1</td><td class="o4-2 smalltrans option">2</td><td class="o4-3 smalltrans option">3</td>
+	      <td class="role role-4">{{roles.3}}</td>
+	  </tr>
+	  <tr><td rowspan="3" class="o1-1 option" >1</td><td class="o2-1 option">1</td>
+	      <td id="fillmeup" rowspan="9" colspan="9">
+		Click a TO box to zoom in
+	      </td>
+	  </tr>
+	  <tr><td class="o2-2 option">2</td></tr><tr><td class="o2-3 option">3</td></tr>
+	  <tr><td rowspan="3" class="o1-2 option" >2</td><td class="o2-1 option">1</td></tr><tr><td class="o2-2 option">2</td></tr><tr><td class="o2-3 option">3</td></tr>
+	  <tr><td rowspan="3" class="o1-3 option" >3</td><td class="o2-1 option">1</td></tr><tr><td class="o2-2 option">2</td></tr><tr><td class="o2-3 option">3</td></tr>
+	</table>
+
+
+
+{% endblock %}

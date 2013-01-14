@@ -1,0 +1,57 @@
+Retrieved the data thus. Using syntax for all applications
+./manage.py dumpdata > sim/fixtures/test_data.json
+
+This doesn't always work, sometimes, the whole db needs to be flushed & readded:
+./manage.py flush
+./manage.py import --user columbiasim --pwd cicr2008
+./manage.py import_groups --clean --csv static-data/users.csv --section Test --term Spring --year 2009 --first_turn "2009-01-20 12:00"
+
+and, do the following:
+update sim_statevariable set name='Economy' where name like '%Economy';
+update sim_statevariable set name='Violence Level' where name='Levels of Violence';
+
+Manually add the role descriptions from the wiki.
+http://wiki.ccnmtl.columbia.edu/index.php/Walkthrough_Narrative-Gen_Sim 
+
+./manage.py dumpdata > sim/fixtures/test_data.json
+
+General Data Overview
+
+Users
+-----------------------
+ccnmtl silverpair
+testfaculty faculty
+
+playerA aaaa
+playerB bbbb
+playerC cccc
+playerD dddd
+playerE eeee
+playerF ffff
+playerG gggg
+playerH hhhh
+testuser test
+
+State/Sim Data
+-----------------------
+Everything is there
+
+Sections/Groups
+-----------------------
+Test Spring 2009
+
+> admins -- ccnmtl/testfaculty
+
+> group -- A -- T1_S1_Start
+playerA - President
+playerB - FirstWorldEnvoy
+playerC - SubRegionalRep
+playerD - OppositionLeadership
+
+
+> group -- B -- T1_S1_Start, T2_S8_SupportInsurgents
+playerE -- President
+playerF -- FirstWorldEnvoy
+playerG -- SubRegionalRep
+playerH -- OppositionLeadership
+
