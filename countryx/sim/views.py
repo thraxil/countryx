@@ -53,10 +53,10 @@ def faculty_section_byplayer(request, section_id):
     section = Section.objects.get(id=section_id)
     all_players = SectionGroupPlayer.objects.filter(group__section=section)
     return {
-            'user': request.user,
-            'section': section,
-            'players': all_players,
-            }
+        'user': request.user,
+        'section': section,
+        'players': all_players,
+    }
 
 
 @login_required
@@ -98,19 +98,21 @@ def faculty_group_detail(request, group_id):
             except SectionGroupPlayerTurn.DoesNotExist:
                 turn = None
 
-            player_turns.append({
+            player_turns.append(
+                {
                     'model': p,
                     'turn': turn,
                     'submit_status': p.status(gs.state)
-                    })
+                })
 
         conditions = gs.state.statevariable_set.get(
             name='Country Condition').value
-        turns.append({
+        turns.append(
+            {
                 'group_state': gs,
                 'players': player_turns,
                 'country_condition': conditions
-                })
+            })
 
     return dict(user=request.user,
                 group=group,
@@ -144,7 +146,7 @@ def faculty_player_detail_byturn(request, group_id, player_id,
                                    'feedback': turn.feedback,
                                    'turn_id': state.turn}),
         updated=updated
-        )
+    )
 
 
 @login_required
@@ -176,7 +178,7 @@ def faculty_player_detail(request, player_id):
                     'faculty_id': request.user.id,
                     'feedback': t.feedback,
                     'turn_id': t.turn}),
-            }
+        }
 
         player_turns.append(player_turn)
 
@@ -272,12 +274,13 @@ def faculty_section_manage(request, section_id, updated=False):
 
         form = TurnManagementForm(initial=initial)
 
-    return render_to_response('sim/faculty_section_manage.html', {
+    return render_to_response(
+        'sim/faculty_section_manage.html', {
             'user': request.user,
             'section': section,
             'form': form,
             'updated': updated
-            })
+        })
 
 EMPTY_VALUES = (None, '')
 
@@ -285,8 +288,8 @@ EMPTY_VALUES = (None, '')
 class DateTimeFieldEx(forms.DateTimeField):
     def clean(self, value):
         if (not self.required
-            and value[0] in EMPTY_VALUES
-            and value[1] in EMPTY_VALUES):
+                and value[0] in EMPTY_VALUES
+                and value[1] in EMPTY_VALUES):
             return None
         return super(DateTimeFieldEx, self).clean(value)
 
@@ -305,10 +308,11 @@ class TurnManagementForm(forms.Form):
 
     def __compare(self, cleaned_data, fieldOne, fieldTwo, labelOne, labelTwo):
         if (fieldTwo in cleaned_data
-            and not cleaned_data[fieldTwo] in EMPTY_VALUES):
+                and not cleaned_data[fieldTwo] in EMPTY_VALUES):
             if (fieldOne in cleaned_data
-                and not cleaned_data[fieldOne] in EMPTY_VALUES
-                and cmp(cleaned_data[fieldOne], cleaned_data[fieldTwo]) > -1):
+                    and not cleaned_data[fieldOne] in EMPTY_VALUES
+                    and cmp(cleaned_data[fieldOne],
+                            cleaned_data[fieldTwo]) > -1):
                 msg = "%s close date must be after %s close date" % (
                     labelTwo, labelOne)
                 self._errors[fieldTwo] = ErrorList([msg])
@@ -416,7 +420,7 @@ def player_game(request, group_id, turn_id=0):
         you=your_player,
         endgame_results=endgame_results,
         feedback=feedback,
-        )
+    )
 
 
 #actually needs to be faculty only
@@ -425,9 +429,8 @@ def allquestions(request):
     response = {}
     for x in StateRoleChoice.objects.all():
         response.setdefault(
-            x.state.id, {}).setdefault(
-            x.role.name, {}).setdefault(
-                x.choice, x.desc)
+            x.state.id,
+            {}).setdefault(x.role.name, {}).setdefault(x.choice, x.desc)
     return HttpResponse(simplejson.dumps(response), 'application/json')
 
 
@@ -448,13 +451,19 @@ def allpaths(request):
     #NOTE: we currently assume 4 turns indexed at 1
     for turn in range(1, 5):
         states = State.objects.filter(turn=turn).order_by("state_no")
-        turn = dict(states=[{'id':s.id,
-                             'state_no':s.state_no,
-                             'name':s.name,
-                             'full_from':s.full_from(roles),
-                             'full_to':s.full_to(roles),
-                             'color':s.get_color(),
-                             } for s in states])
+        turn = dict(
+            states=[
+                {
+                    'id': s.id,
+                    'state_no': s.state_no,
+                    'name': s.name,
+                    'full_from': s.full_from(roles),
+                    'full_to': s.full_to(roles),
+                    'color': s.get_color(),
+                }
+                for s in states
+            ]
+        )
         turns.append(turn)
 
     return dict(turns=turns, roles=roles)
@@ -486,7 +495,7 @@ def player_choose(request):
         turn = SectionGroupPlayerTurn.objects.create(player=player,
                                                      turn=current_state.turn)
 
-    if turn.submit_date != None:
+    if turn.submit_date is not None:
         # player has already submitted data
         response['result'] = 0
         response['message'] = 'Player has already submitted a final choice'
@@ -509,25 +518,38 @@ def player_choose(request):
 
 
 def __current_conditions(state):
-    details = {'Violence Level': {'most': 'non-violent',
-                                 'least': 'genocide',
-                                 'good_inverse': True},
-               'Economy': {'least': 'depression',
-                          'most': 'stable',
-                          'good_inverse': True},
-               'Prestige': {'least': 'globally isolated',
-                           'most': 'respected world player',
-                           'good_inverse': True},
-               'Awareness': {'least': 'zero media coverage',
-                            'most': 'regular media coverage',
-                            'good_inverse': True},
-               'Political Discourse': {'least': 'state control of information',
-                                      'most': 'free and open system',
-                                      'good_inverse': True},
-               'Weapons Flow': {'most': 'minimal/no weapons smuggling',
-                               'least': 'uncontrolled weapons smuggling',
-                               'good_inverse': True},
-               }
+    details = {
+        'Violence Level': {
+            'most': 'non-violent',
+            'least': 'genocide',
+            'good_inverse': True
+        },
+        'Economy': {
+            'least': 'depression',
+            'most': 'stable',
+            'good_inverse': True
+        },
+        'Prestige': {
+            'least': 'globally isolated',
+            'most': 'respected world player',
+            'good_inverse': True
+        },
+        'Awareness': {
+            'least': 'zero media coverage',
+            'most': 'regular media coverage',
+            'good_inverse': True
+        },
+        'Political Discourse': {
+            'least': 'state control of information',
+            'most': 'free and open system',
+            'good_inverse': True
+        },
+        'Weapons Flow': {
+            'most': 'minimal/no weapons smuggling',
+            'least': 'uncontrolled weapons smuggling',
+            'good_inverse': True
+        },
+    }
     conditions = []
     for k, var_dict in details.items():
         var = state.statevariable_set.get(name=k)
@@ -609,7 +631,7 @@ def cheat(request):
                     last_name="D", email="cheaterD@ccnmtl.columbia.edu",
                     password="dddd", is_staff=False,
                     is_superuser=False),
-                ]
+            ]
             for (player, r) in zip(players, Role.objects.all()):
                 sgp = SectionGroupPlayer.objects.create(user=player,
                                                         group=group,
@@ -638,7 +660,8 @@ def cheat(request):
                 sc = None
                 if turn > 1:
                     # turn 1 doesn't have any StateChanges leading up to it
-                    allowed_statechanges = list(StateChange.objects.filter(
+                    allowed_statechanges = list(
+                        StateChange.objects.filter(
                             next_state=current_state))
                     # just pick one of the paths that led to the state
                     sc = random.choice(allowed_statechanges)
@@ -687,7 +710,7 @@ def cheat(request):
                                 reasoning="automatic. cheat-mode",
                                 automatic_update=False,
                                 submit_date=datetime.datetime.now(),
-                                )
+                            )
 
                 turn += 1
 
@@ -700,12 +723,12 @@ def cheat(request):
     #NOTE: we currently assume 4 turns indexed at 1
     for turn in range(1, 5):
         states = State.objects.filter(turn=turn).order_by("state_no")
-        turn = dict(states=[{'id':s.id,
-                             'state_no':s.state_no,
-                             'name':s.name,
-                             'full_from':s.full_from(roles),
-                             'full_to':s.full_to(roles),
-                             'color':s.get_color(),
+        turn = dict(states=[{'id': s.id,
+                             'state_no': s.state_no,
+                             'name': s.name,
+                             'full_from': s.full_from(roles),
+                             'full_to': s.full_to(roles),
+                             'color': s.get_color(),
                              } for s in states])
         turns.append(turn)
 
@@ -732,21 +755,23 @@ def check_statechanges(request):
                             regional=r,
                             opposition=o).count()
                         if c == 0:
-                            missing.append(dict(
+                            missing.append(
+                                dict(
                                     state=s,
                                     president=p,
                                     envoy=e,
                                     opposition=o,
                                     regional=r,
-                                    ))
+                                ))
                         if c > 1:
-                            duplicates.append(dict(
+                            duplicates.append(
+                                dict(
                                     state=s,
                                     president=p,
                                     envoy=e,
                                     opposition=o,
                                     regional=r,
-                                    ))
+                                ))
     return render_to_response("sim/check_statechanges.html",
                               dict(missing=missing,
                                    duplicates=duplicates,

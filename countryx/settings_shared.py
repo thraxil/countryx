@@ -12,26 +12,26 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default' : {
-        'ENGINE' : 'django.db.backends.postgresql_psycopg2',
-        'NAME' : 'countryx',
-        'HOST' : '',
-        'PORT' : 5432,
-        'USER' : '',
-        'PASSWORD' : '',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'countryx',
+        'HOST': '',
+        'PORT': 5432,
+        'USER': '',
+        'PASSWORD': '',
+    }
 }
 
 if 'test' in sys.argv:
     DATABASES = {
-        'default' : {
-            'ENGINE' : 'django.db.backends.sqlite3',
-            'NAME' : ':memory:',
-            'HOST' : '',
-            'PORT' : '',
-            'USER' : '',
-            'PASSWORD' : '',
-            }
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+            'HOST': '',
+            'PORT': '',
+            'USER': '',
+            'PASSWORD': '',
+        }
     }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -60,7 +60,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
-    )
+)
 
 MIDDLEWARE_CLASSES = (
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
@@ -78,7 +78,7 @@ ROOT_URLCONF = 'countryx.urls'
 
 TEMPLATE_DIRS = (
     "/var/www/countryx/templates/",
-    os.path.join(os.path.dirname(__file__),"templates"),
+    os.path.join(os.path.dirname(__file__), "templates"),
 )
 
 INSTALLED_APPS = (
@@ -134,4 +134,4 @@ WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper',
                        'djangowind.auth.StaffMapper',
                        'djangowind.auth.SuperuserMapper']
 WIND_STAFF_MAPPER_GROUPS = ['tlc.cunix.local:columbia.edu']
-WIND_SUPERUSER_MAPPER_GROUPS = ['anp8','jb2410','zm4','sld2131']
+WIND_SUPERUSER_MAPPER_GROUPS = ['anp8', 'jb2410', 'zm4', 'sld2131']

@@ -200,7 +200,7 @@ class GameTestCases(TestCase):
         turn = SectionGroupPlayerTurn.objects.get(
             player=player, turn=current_state.turn)
         self.assertEquals(turn.choice, 1)
-        self.assert_(turn.submit_date != None)
+        self.assert_(turn.submit_date is not None)
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')
 
         # now, try it again, an error should be thrown this time.
@@ -217,7 +217,7 @@ class GameTestCases(TestCase):
         turn = SectionGroupPlayerTurn.objects.get(player=player,
                                                   turn=current_state.turn)
         self.assertEquals(turn.choice, 1)
-        self.assert_(turn.submit_date != None)
+        self.assert_(turn.submit_date is not None)
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')
 
     def test_faculty_reset(self):

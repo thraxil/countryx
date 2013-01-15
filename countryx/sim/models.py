@@ -85,7 +85,7 @@ class State(models.Model):
             return str(hex(592191 * key))[2:]
 
     def full_to(self, roles):
-        return [{'color': x.next_state.get_color(), 'ids':[x.next_state.id]}
+        return [{'color': x.next_state.get_color(), 'ids': [x.next_state.id]}
                 for x in StateChange.objects.filter(
                 state=self).order_by(*roles)]
 
@@ -112,14 +112,14 @@ class State(models.Model):
             StateChange._meta.get_field('state').column,
             StateChange._meta.get_field('next_state').column,
             extra
-            )
+        )
 
     def from_count(self, extra=''):
         return self._countedges(
             StateChange._meta.get_field('next_state').column,
             StateChange._meta.get_field('state').column,
             extra
-            )
+        )
 
     def influence(self, role, func, count):
         rv = []
@@ -500,4 +500,4 @@ class SectionGroupPlayerTurn(models.Model):
                                               self.turn, self.choice)
 
     def is_submitted(self):
-        return self.submit_date != None
+        return self.submit_date is not None

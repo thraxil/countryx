@@ -19,7 +19,7 @@ urlpatterns = patterns(
     # player ajax requests
     (r'^player/choose/$', 'countryx.sim.views.player_choose'),
 
-                       # faculty ajax requests
+    # faculty ajax requests
     (r'^faculty/reset/(?P<section_id>\d+)/$',
      'countryx.sim.views.faculty_section_reset'),
 
