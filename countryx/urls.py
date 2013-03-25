@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, include
+from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic.simple import direct_to_template
@@ -17,6 +17,7 @@ urlpatterns = patterns(
     (r'^$', 'countryx.sim.views.root'),
     ('^accounts/', include('djangowind.urls')),
     (r'^admin/', include(admin.site.urls)),
+    url(r'^impersonate/', include('impersonate.urls')),
     (r'^sim/', include('countryx.sim.urls')),
     (r'^smoketest/$', include('smoketest.urls')),
     ('^stats/', direct_to_template,

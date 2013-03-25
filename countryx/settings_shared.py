@@ -84,6 +84,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'waffle.middleware.WaffleMiddleware',
+    'impersonate.middleware.ImpersonateMiddleware',
     'countryx.sim.middleware.GameStateMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
@@ -111,6 +112,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'django_jenkins',
     'waffle',
+    'impersonate',
 )
 
 INTERNAL_IPS = ('127.0.0.1', )
@@ -151,3 +153,4 @@ WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper',
                        'djangowind.auth.SuperuserMapper']
 WIND_STAFF_MAPPER_GROUPS = ['tlc.cunix.local:columbia.edu']
 WIND_SUPERUSER_MAPPER_GROUPS = ['anp8', 'jb2410', 'zm4', 'sld2131']
+LOGIN_REDIRECT_URL = "/"
