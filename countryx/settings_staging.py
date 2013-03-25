@@ -9,6 +9,7 @@ MEDIA_ROOT = '/var/www/countryx/uploads/'
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+STAGING_ENV = True
 
 DATABASES = {
     'default' : {
