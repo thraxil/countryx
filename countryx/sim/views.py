@@ -51,7 +51,8 @@ def faculty_section_bygroup(request, section_id):
 @render_to('sim/faculty_section_byplayer.html')
 def faculty_section_byplayer(request, section_id):
     section = Section.objects.get(id=section_id)
-    all_players = SectionGroupPlayer.objects.filter(group__section=section)
+    all_players = SectionGroupPlayer.objects.select_related().filter(
+        group__section=section)
     return {
         'user': request.user,
         'section': section,
