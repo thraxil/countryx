@@ -83,6 +83,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
+    'waffle.middleware.WaffleMiddleware',
     'countryx.sim.middleware.GameStateMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
@@ -109,6 +110,7 @@ INSTALLED_APPS = (
     'raven.contrib.django',
     'debug_toolbar',
     'django_jenkins',
+    'waffle',
 )
 
 INTERNAL_IPS = ('127.0.0.1', )
