@@ -20,9 +20,10 @@ DATABASES = {
         'PASSWORD' : '',
         }
 }
+STATSD_PREFIX = 'countryx-staging'
 
 if 'migrate' not in sys.argv:
-    SENTRY_SITE = 'countryx'
+    SENTRY_SITE = 'countryx-staging'
     SENTRY_SERVERS = ['http://sentry.ccnmtl.columbia.edu/sentry/store/']
 
     import logging
