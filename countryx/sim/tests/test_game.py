@@ -59,10 +59,13 @@ class GameTestCases(TestCase):
         player = SectionGroupPlayer.objects.get(user=user, group=group)
 
         # choose a draft item, assume it's correct, that's checked later
-        payload = "groupid=%s&choiceid=1&final=0&reasoning=foobar" % group.id
-        self.client.post('/sim/player/choose/',
-                         payload,
-                         content_type="text/xml")
+        payload = dict(
+            groupid=group.id,
+            choiceid="1",
+            final="0",
+            reasoning="foobar",
+        )
+        self.client.post('/sim/player/choose/', payload)
 
         # now get the game screen
         url = '/sim/player/game/%s/' % group.id
@@ -98,9 +101,13 @@ class GameTestCases(TestCase):
         player = SectionGroupPlayer.objects.get(user=user, group=group)
 
         # choose a draft item, assume it's correct, that's checked later
-        payload = "groupid=%s&choiceid=1&final=1&reasoning=foobar" % (group.id)
-        self.client.post('/sim/player/choose/', payload,
-                         content_type="text/xml")
+        payload = dict(
+            groupid=group.id,
+            choiceid="1",
+            final="1",
+            reasoning="foobar",
+        )
+        self.client.post('/sim/player/choose/', payload)
 
         # now get the game screen
         url = '/sim/player/game/%s/' % group.id
@@ -134,7 +141,7 @@ class GameTestCases(TestCase):
             response,
             expected_url="/accounts/login/?next=/sim/player/choose/",
             status_code=302, target_status_code=200)
-        self.assertEquals(response.template, None)
+        self.assertEquals(response.templates, [])
         self.assertEquals(response.content, '')
 
     def test_choose_savedraft_invalid(self):
@@ -154,14 +161,15 @@ class GameTestCases(TestCase):
 
         group = SectionGroup.objects.get(
             name='A', section=Section.objects.get(name='Test'))
-        payload = "groupid=%s" % group.id
-        payload += ("&choiceid=1&final=0&reasoning="
-                    "Enter%20your%20reasoning%20here")
-        response = c.post('/sim/player/choose/', payload,
-                          content_type="text/xml")
-
-        doc = simplejson.loads(response.content)
+        payload = {
+            'groupid': group.id,
+            'choiceid': "1",
+            'final': "0",
+            'reasoning': "Enter your reasoning here",
+        }
+        response = c.post('/sim/player/choose/', payload)
         self.assertEquals(response.status_code, 200)
+        doc = simplejson.loads(response.content)
         self.assertEquals(doc['result'], 1)
 
         # verify my choice was saved in the database
@@ -182,14 +190,16 @@ class GameTestCases(TestCase):
         group = SectionGroup.objects.get(
             name='A',
             section=Section.objects.get(name='Test'))
-        payload = "groupid=%s" % group.id
-        payload += ("&choiceid=1&final=1&reasoning="
-                    "Enter%20your%20reasoning%20here")
-        response = c.post('/sim/player/choose/', payload,
-                          content_type="text/xml")
+        payload = dict(
+            groupid=group.id,
+            choiceid="1",
+            final="1",
+            reasoning="Enter your reasoning here",
+        )
+        response = c.post('/sim/player/choose/', payload)
 
-        doc = simplejson.loads(response.content)
         self.assertEquals(response.status_code, 200)
+        doc = simplejson.loads(response.content)
         self.assertEquals(doc['result'], 2)
 
         # verify my choice was saved in the database
@@ -204,10 +214,13 @@ class GameTestCases(TestCase):
         self.assertEquals(turn.reasoning, 'Enter your reasoning here')
 
         # now, try it again, an error should be thrown this time.
-        payload = "groupid=%s" % group.id
-        payload += "&choiceid=1&final=0&reasoning=Trying%20Again"
-        response = c.post('/sim/player/choose/', payload,
-                          content_type="text/xml")
+        payload = dict(
+            groupid=group.id,
+            choiceid="1",
+            final="0",
+            reasoning="Trying Again",
+        )
+        response = c.post('/sim/player/choose/', payload)
 
         doc = simplejson.loads(response.content)
         self.assertEquals(response.status_code, 200)

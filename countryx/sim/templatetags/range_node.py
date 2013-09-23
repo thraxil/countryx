@@ -35,9 +35,11 @@ def num_range(parser, token):
     try:
         fnctn, num, trash, context_name = token.split_contents()
     except ValueError:
-        raise TemplateSyntaxError, "%s takes the syntax %s number_to_iterate\
-            as context_variable" % (fnctn, fnctn)
+        raise TemplateSyntaxError(
+            ("%s takes the syntax %s number_to_iterate"
+             "as context_variable") % (fnctn, fnctn))
     if not trash == 'as':
-        raise TemplateSyntaxError, "%s takes the syntax %s number_to_iterate\
-            as context_variable" % (fnctn, fnctn)
+        raise TemplateSyntaxError(
+            ("%s takes the syntax %s number_to_iterate"
+             "as context_variable") % (fnctn, fnctn))
     return range_node(num, context_name)

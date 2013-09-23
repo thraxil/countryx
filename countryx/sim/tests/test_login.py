@@ -57,7 +57,7 @@ class LoginTestCases(TestCase):
         self.assertFormError(
             response, "form", "__all__",
             ("Please enter a correct username and password. "
-             "Note that both fields are case-sensitive."))
+             "Note that both fields may be case-sensitive."))
 
     def test_django_already_loggedin(self):
         # Do a fake login via the handy client login fixture

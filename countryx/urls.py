@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
 import os.path
 admin.autodiscover()
 
@@ -20,8 +20,7 @@ urlpatterns = patterns(
     url(r'^impersonate/', include('impersonate.urls')),
     (r'^sim/', include('countryx.sim.urls')),
     (r'^smoketest/$', include('smoketest.urls')),
-    ('^stats/', direct_to_template,
-     {'template': 'stats.html'}),
+    ('^stats/', TemplateView.as_view(template_name='stats.html')),
     (r'^site_media/(?P<path>.*)$',
      'django.views.static.serve', {'document_root': site_media_root}),
     (r'^admin_media/(?P<path>.*)$',
@@ -32,10 +31,8 @@ urlpatterns = patterns(
 
 urlpatterns += patterns(
     'django.views.generic.simple',
-    (r'^about', 'direct_to_template',
-     {'template': 'flatpages/about.html'}),
-    (r'^help', 'direct_to_template',
-     {'template': 'flatpages/help.html'}),
-    (r'^contact', 'direct_to_template',
-     {'template': 'flatpages/contact.html'}),
+    (r'^about', TemplateView.as_view(template_name='flatpages/about.html')),
+    (r'^help', TemplateView.as_view(template_name='flatpages/help.html')),
+    (r'^contact',
+     TemplateView.as_view(template_name='flatpages/contact.html')),
 )
