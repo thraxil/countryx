@@ -24,19 +24,7 @@ DATABASES = {
 STATSD_PREFIX = 'countryx-staging'
 
 if 'migrate' not in sys.argv:
-    SENTRY_SITE = 'countryx-staging'
-    SENTRY_SERVERS = ['http://sentry.ccnmtl.columbia.edu/sentry/store/']
-
-    import logging
-    from raven.contrib.django.handlers import SentryHandler
-    logger = logging.getLogger()
-    # ensure we havent already registered the handler
-    if SentryHandler not in map(type, logger.handlers):
-        logger.addHandler(SentryHandler())
-        logger = logging.getLogger('sentry.errors')
-        logger.propagate = False
-        logger.addHandler(logging.StreamHandler())
-
+    INSTALLED_APPS.append('raven.contrib.django.raven_compat')
 
 try:
     from local_settings import *
