@@ -566,16 +566,6 @@ class FeedbackForm(forms.Form):
     turn_id = forms.IntegerField(widget=forms.HiddenInput)
 
 
-class CheatForm(forms.Form):
-    mode = forms.ChoiceField(choices=[('faculty', 'Faculty'),
-                                      ('player', 'Player')])
-    role = forms.ChoiceField(choices=[(r.id, r.name)
-                                      for r in Role.objects.all()])
-    turn = forms.IntegerField(max_value=4, min_value=1,
-                              widget=forms.HiddenInput)
-    state = forms.IntegerField(widget=forms.HiddenInput)
-
-
 def get_players():
     return [
         get_or_create_user(
@@ -687,7 +677,6 @@ def handle_valid_cheat_form(request, cf):
         sgp.save()
 
     # figure out the proper history
-
     path = []
     scs = []
 
@@ -728,6 +717,19 @@ def handle_valid_cheat_form(request, cf):
 def cheat(request):
     """ allows an admin to set up a game at a particular point.
     useful for dev, QA, and demoing """
+
+    # inlining CheatForm here because the role attribute
+    # requires an already set up database connection to run
+    # if you put this at the top level, it will be trying
+    # to make database queries on import
+    class CheatForm(forms.Form):
+        mode = forms.ChoiceField(choices=[('faculty', 'Faculty'),
+                                          ('player', 'Player')])
+        role = forms.ChoiceField(choices=[(r.id, r.name)
+                                          for r in Role.objects.all()])
+        turn = forms.IntegerField(max_value=4, min_value=1,
+                                  widget=forms.HiddenInput)
+        state = forms.IntegerField(widget=forms.HiddenInput)
 
     if request.method == "POST":
         cf = CheatForm(request.POST)
