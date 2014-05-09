@@ -576,6 +576,154 @@ class CheatForm(forms.Form):
     state = forms.IntegerField(widget=forms.HiddenInput)
 
 
+def get_players():
+    return [
+        get_or_create_user(
+            "cheaterA", first_name="cheater",
+            last_name="A", email="cheaterA@ccnmtl.columbia.edu",
+            password="aaaa", is_staff=False,
+            is_superuser=False),
+        get_or_create_user(
+            "cheaterB", first_name="cheater",
+            last_name="B", email="cheaterB@ccnmtl.columbia.edu",
+            password="bbbb", is_staff=False,
+            is_superuser=False),
+        get_or_create_user(
+            "cheaterC", first_name="cheater",
+            last_name="C", email="cheaterC@ccnmtl.columbia.edu",
+            password="cccc", is_staff=False,
+            is_superuser=False),
+        get_or_create_user(
+            "cheaterD", first_name="cheater",
+            last_name="D", email="cheaterD@ccnmtl.columbia.edu",
+            password="dddd", is_staff=False,
+            is_superuser=False),
+    ]
+
+
+def choice_from_role(r, sc):
+    if r.name == 'President':
+        return sc.president
+    if r.name == 'OppositionLeadership':
+        return sc.opposition
+    if r.name == 'FirstWorldEnvoy':
+        return sc.envoy
+    if r.name == 'SubRegionalRep':
+        return sc.regional
+    return None
+
+
+def setup_std(std, turn):
+    # fake out dates but make sure they stay in order
+    pastdates = (
+        datetime.datetime.now() - datetime.timedelta(hours=72),
+        datetime.datetime.now() - datetime.timedelta(hours=48),
+        datetime.datetime.now() - datetime.timedelta(hours=24))
+    if turn > 1:
+        std.turn1 = pastdates[0]
+    if turn > 2:
+        std.turn2 = pastdates[1]
+    if turn > 3:
+        std.turn3 = pastdates[2]
+    std.save()
+
+
+def set_up_turns(path, scs, group):
+    # now go through in order and set up the turns
+    turn = 1
+    for (s, sc) in zip(path, scs):
+        SectionGroupState.objects.create(
+            state=s, group=group,
+            date_updated=datetime.datetime.now())
+        if turn < 4:
+            # the last turn will have no StateChanges out of it
+            if sc is not None:
+                for sgp in group.sectiongroupplayer_set.all():
+                    r = sgp.role
+                    choice = choice_from_role(r, sc)
+                    SectionGroupPlayerTurn.objects.create(
+                        player=sgp,
+                        turn=turn,
+                        choice=choice,
+                        reasoning="automatic. cheat-mode",
+                        automatic_update=False,
+                        submit_date=datetime.datetime.now(),
+                    )
+        turn += 1
+
+
+def handle_valid_cheat_form(request, cf):
+    state = get_object_or_404(State, id=cf.cleaned_data['state'])
+    role = get_object_or_404(Role, id=cf.cleaned_data['role'])
+
+    section = get_or_create_section("cheat")
+    # clear out all existing groups/games
+    section.clear_all()
+    group = SectionGroup.objects.create(section=section,
+                                        name="cheaters")
+
+    # set any turn dates necessary to the past
+    std = section.set_sectionturndates_to_default()
+    turn = cf.cleaned_data['turn']
+    setup_std(std, turn)
+
+    # populate with players in regularly assigned roles
+    players = get_players()
+    for (player, r) in zip(players, Role.objects.all()):
+        sgp = SectionGroupPlayer.objects.create(user=player,
+                                                group=group,
+                                                role=r)
+
+    if cf.cleaned_data['mode'] == 'faculty':
+        # set the game up with the user as faculty
+        section.add_faculty(request.user)
+    else:
+        # set the game up with the user as player
+        section.remove_faculty(request.user)
+        # just replace the one that we populated earlier
+        sgp = SectionGroupPlayer.objects.get(group=group,
+                                             role=role)
+        sgp.user = request.user
+        sgp.save()
+
+    # figure out the proper history
+
+    path = []
+    scs = []
+
+    # start from the desired end state and work backwards to the start
+    current_state = state
+    while turn > 0:
+        sc = None
+        if turn > 1:
+            # turn 1 doesn't have any StateChanges leading up to it
+            allowed_statechanges = list(
+                StateChange.objects.filter(
+                    next_state=current_state))
+            # just pick one of the paths that led to the state
+            sc = random.choice(allowed_statechanges)
+            scs.append(sc)
+
+        path.append(current_state)
+
+        if turn > 1:
+            current_state = sc.state
+        turn -= 1
+
+    # reverse our lists
+    path.reverse()
+    scs.reverse()
+    # put an extra None on the end to make zip() happy
+    scs.append(None)
+
+    # at this point, 'path' contains the list of states
+    # for each turn in order
+    # and 'scs' contains the list of StateChanges out of each turn
+
+    set_up_turns(path, scs, group)
+    return HttpResponseRedirect("/sim/")
+
+
 @login_required
 def cheat(request):
     """ allows an admin to set up a game at a particular point.
@@ -584,138 +732,7 @@ def cheat(request):
     if request.method == "POST":
         cf = CheatForm(request.POST)
         if cf.is_valid():
-            state = get_object_or_404(State, id=cf.cleaned_data['state'])
-            role = get_object_or_404(Role, id=cf.cleaned_data['role'])
-
-            section = get_or_create_section("cheat")
-            # clear out all existing groups/games
-            section.clear_all()
-            group = SectionGroup.objects.create(section=section,
-                                                name="cheaters")
-
-            # set any turn dates necessary to the past
-            std = section.set_sectionturndates_to_default()
-            turn = cf.cleaned_data['turn']
-
-            # fake out dates but make sure they stay in order
-            pastdates = (
-                datetime.datetime.now() - datetime.timedelta(hours=72),
-                datetime.datetime.now() - datetime.timedelta(hours=48),
-                datetime.datetime.now() - datetime.timedelta(hours=24))
-            if turn > 1:
-                std.turn1 = pastdates[0]
-            if turn > 2:
-                std.turn2 = pastdates[1]
-            if turn > 3:
-                std.turn3 = pastdates[2]
-            std.save()
-
-            # populate with players in regularly assigned roles
-            players = [
-                get_or_create_user(
-                    "cheaterA", first_name="cheater",
-                    last_name="A", email="cheaterA@ccnmtl.columbia.edu",
-                    password="aaaa", is_staff=False,
-                    is_superuser=False),
-                get_or_create_user(
-                    "cheaterB", first_name="cheater",
-                    last_name="B", email="cheaterB@ccnmtl.columbia.edu",
-                    password="bbbb", is_staff=False,
-                    is_superuser=False),
-                get_or_create_user(
-                    "cheaterC", first_name="cheater",
-                    last_name="C", email="cheaterC@ccnmtl.columbia.edu",
-                    password="cccc", is_staff=False,
-                    is_superuser=False),
-                get_or_create_user(
-                    "cheaterD", first_name="cheater",
-                    last_name="D", email="cheaterD@ccnmtl.columbia.edu",
-                    password="dddd", is_staff=False,
-                    is_superuser=False),
-            ]
-            for (player, r) in zip(players, Role.objects.all()):
-                sgp = SectionGroupPlayer.objects.create(user=player,
-                                                        group=group,
-                                                        role=r)
-
-            if cf.cleaned_data['mode'] == 'faculty':
-                # set the game up with the user as faculty
-                section.add_faculty(request.user)
-            else:
-                # set the game up with the user as player
-                section.remove_faculty(request.user)
-                # just replace the one that we populated earlier
-                sgp = SectionGroupPlayer.objects.get(group=group,
-                                                     role=role)
-                sgp.user = request.user
-                sgp.save()
-
-            # figure out the proper history
-
-            path = []
-            scs = []
-
-            # start from the desired end state and work backwards to the start
-            current_state = state
-            while turn > 0:
-                sc = None
-                if turn > 1:
-                    # turn 1 doesn't have any StateChanges leading up to it
-                    allowed_statechanges = list(
-                        StateChange.objects.filter(
-                            next_state=current_state))
-                    # just pick one of the paths that led to the state
-                    sc = random.choice(allowed_statechanges)
-                    scs.append(sc)
-
-                path.append(current_state)
-
-                if turn > 1:
-                    current_state = sc.state
-                turn -= 1
-
-            # reverse our lists
-            path.reverse()
-            scs.reverse()
-            # put an extra None on the end to make zip() happy
-            scs.append(None)
-
-            # at this point, 'path' contains the list of states
-            # for each turn in order
-            # and 'scs' contains the list of StateChanges out of each turn
-
-            # now go through in order and set up the turns
-            turn = 1
-            for (s, sc) in zip(path, scs):
-                SectionGroupState.objects.create(
-                    state=s, group=group,
-                    date_updated=datetime.datetime.now())
-                if turn < 4:
-                    # the last turn will have no StateChanges out of it
-                    if sc is not None:
-                        for sgp in group.sectiongroupplayer_set.all():
-                            r = sgp.role
-                            choice = None
-                            if r.name == 'President':
-                                choice = sc.president
-                            if r.name == 'OppositionLeadership':
-                                choice = sc.opposition
-                            if r.name == 'FirstWorldEnvoy':
-                                choice = sc.envoy
-                            if r.name == 'SubRegionalRep':
-                                choice = sc.regional
-                            SectionGroupPlayerTurn.objects.create(
-                                player=sgp,
-                                turn=turn,
-                                choice=choice,
-                                reasoning="automatic. cheat-mode",
-                                automatic_update=False,
-                                submit_date=datetime.datetime.now(),
-                            )
-
-                turn += 1
-
-            return HttpResponseRedirect("/sim/")
+            return handle_valid_cheat_form(request, cf)
     else:
         cf = CheatForm()
 
@@ -738,6 +755,18 @@ def cheat(request):
         dict(cf=cf, turns=turns, roles=roles, user=request.user))
 
 
+def check_statechange(s, p, e, r, o, c, missing, duplicates):
+    c = StateChange.objects.filter(
+        state=s, president=p, envoy=e, regional=r, opposition=o).count()
+    if c == 0:
+        missing.append(
+            dict(state=s, president=p, envoy=e, opposition=o, regional=r))
+    if c > 1:
+        duplicates.append(
+            dict(state=s, president=p, envoy=e, opposition=o, regional=r))
+    return (missing, duplicates)
+
+
 @login_required
 def check_statechanges(request):
     missing = []
@@ -749,30 +778,8 @@ def check_statechanges(request):
             for e in [1, 2, 3]:
                 for r in [1, 2, 3]:
                     for o in [1, 2, 3]:
-                        c = StateChange.objects.filter(
-                            state=s,
-                            president=p,
-                            envoy=e,
-                            regional=r,
-                            opposition=o).count()
-                        if c == 0:
-                            missing.append(
-                                dict(
-                                    state=s,
-                                    president=p,
-                                    envoy=e,
-                                    opposition=o,
-                                    regional=r,
-                                ))
-                        if c > 1:
-                            duplicates.append(
-                                dict(
-                                    state=s,
-                                    president=p,
-                                    envoy=e,
-                                    opposition=o,
-                                    regional=r,
-                                ))
+                        (missing, duplicates) = check_statechange(
+                            s, p, e, r, o, missing, duplicates)
     return render_to_response("sim/check_statechanges.html",
                               dict(missing=missing,
                                    duplicates=duplicates,
