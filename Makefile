@@ -2,7 +2,7 @@ MANAGE=./manage.py
 APP=countryx
 FLAKE8=./ve/bin/flake8
 
-jenkins: ./ve/bin/python validate jshint flake8 test
+jenkins: ./ve/bin/python validate jshint jscs flake8 test
 
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
@@ -12,6 +12,9 @@ test: ./ve/bin/python
 
 jshint: node_modules/jshint/bin/jshint
 	./node_modules/jshint/bin/jshint media/js/game.js
+
+jscs: node_modules/jscs/bin/jscs
+	./node_modules/jscs/bin/jscs media/js/game.js
 
 flake8: ./ve/bin/python
 	$(FLAKE8) $(APP) --max-complexity=10
@@ -30,6 +33,9 @@ shell: ./ve/bin/python
 
 node_modules/jshint/bin/jshint:
 	npm install jshint
+
+node_modules/jscs/bin/jscs:
+	npm install jscs
 
 clean:
 	rm -rf ve
