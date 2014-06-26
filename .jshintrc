@@ -1,5 +1,7 @@
 {
     "indent": 4,
+		"white": true,
+		"trailing": true,
 		"undef": true,
 		"browser": true,
 		"predef": [
