@@ -10,7 +10,10 @@ jenkins: ./ve/bin/python validate test flake8
 test: ./ve/bin/python
 	$(MANAGE) jenkins
 
-flake8: ./ve/bin/python
+jshint: node_modules/jshint/bin/jshint
+	./node_modules/jshint/bin/jshint media/js/game.js
+
+flake8: ./ve/bin/python jshint
 	$(FLAKE8) $(APP) --max-complexity=10
 
 runserver: ./ve/bin/python validate
@@ -24,6 +27,9 @@ validate: ./ve/bin/python
 
 shell: ./ve/bin/python
 	$(MANAGE) shell_plus
+
+node_modules/jshint/bin/jshint:
+	npm install jshint
 
 clean:
 	rm -rf ve
