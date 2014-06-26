@@ -488,7 +488,7 @@ def player_choose(request):
     reasoning = request.POST.get('reasoning', '')
 
     sys.stderr.write("groupid: %s\n" % groupid)
-    sys.stderr.write("choice: %s\n" % choice)
+    sys.stderr.write("choice: %s\n" % choiceid)
     sys.stderr.write("final: %s\n" % final)
     sys.stderr.write("reasoning: %s\n" % reasoning)
 
