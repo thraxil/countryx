@@ -17,6 +17,11 @@
 		"getElementsByTagAndClassName",
 		"queryString",
 		"doXHR",
+		"connect",
+		"getFirstElementByTagAndClassName",
+		"replaceChildNodes",
+		"addElementClass",
+		"removeElementClass",
 		"MochiKit"
 		]
 }

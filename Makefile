@@ -11,10 +11,10 @@ test: ./ve/bin/python
 	$(MANAGE) jenkins
 
 jshint: node_modules/jshint/bin/jshint
-	./node_modules/jshint/bin/jshint media/js/game.js
+	./node_modules/jshint/bin/jshint media/js/game.js media/js/sim_allpaths.js
 
 jscs: node_modules/jscs/bin/jscs
-	./node_modules/jscs/bin/jscs media/js/game.js
+	./node_modules/jscs/bin/jscs media/js/game.js media/js/faculty.js media/js/sim_allpaths.js
 
 flake8: ./ve/bin/python
 	$(FLAKE8) $(APP) --max-complexity=10
