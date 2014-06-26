@@ -1,9 +1,9 @@
 var gCurrentChoice = 0;
 
 function debug(string) {
-   if (true) {
-      log(string);
-   }
+    if (true) {
+        log(string);
+    }
 }
 
 function toggleCharacterProfile(control, characterName) {
@@ -27,21 +27,21 @@ function toggleCharacterProfile(control, characterName) {
 }
 
 function clearChoice(control) {
-   clearMessages();
-   gCurrentChoice = 0;
-   var effect = 'blind';
+    clearMessages();
+    gCurrentChoice = 0;
+    var effect = 'blind';
 
-   // hide the other choices, leaving the one the user chose
-   var elements = getElementsByTagAndClassName(null, "player_choice");
-   forEach(elements,
-           function(elem) {
-               if (elem.id != gCurrentChoice && 'none' == getStyle(elem, 'display')) {
-                  toggle(elem, effect);
-               }
-           });
+    // hide the other choices, leaving the one the user chose
+    var elements = getElementsByTagAndClassName(null, "player_choice");
+    forEach(elements,
+            function(elem) {
+                if (elem.id != gCurrentChoice && 'none' == getStyle(elem, 'display')) {
+                    toggle(elem, effect);
+                }
+            });
 
-   // hide the feedback form underneath
-   toggle($('reasoning_form'), effect);
+    // hide the feedback form underneath
+    toggle($('reasoning_form'), effect);
 }
 
 function choose(control, choice) {
@@ -64,14 +64,14 @@ function choose(control, choice) {
 }
 
 function clearMessages() {
-   setStyle($('successMsg'), {'display': 'none'});
-   setStyle($('errorMsg'), {'display': 'none'});
-   setStyle($('errorClient'), {'display': 'none'});
+    setStyle($('successMsg'), {'display': 'none'});
+    setStyle($('errorMsg'), {'display': 'none'});
+    setStyle($('errorClient'), {'display': 'none'});
 }
 
 function saveChoiceSuccess(response) {
     var doc = JSON.parse(response.responseText, null);
-    
+
     if (doc.result === 0) {
         $('errorMsg').innerHTML = "An error occurred while saving your choices. Please logout and log back in again and try to resubmit.";
         setStyle($('errorMsg'), {'display': 'block'});
@@ -79,7 +79,7 @@ function saveChoiceSuccess(response) {
         // draft -- leave the screen the way it was
         $('successMsg').innerHTML = "Your choices have been saved.";
         setStyle($('successMsg'), {'display': 'block'});
-          
+
         // enable the buttons
         $('savedraft').disabled = false;
         $('submit').disabled = false;
@@ -106,7 +106,7 @@ function saveChoiceError(err) {
 }
 
 function saveChoice(control, finalsubmit) {
-    clearMessages(); 
+    clearMessages();
 
     if (finalsubmit && $('reasoning').value.length < 1) {
         $('errorClient').innerHTML = "Please enter your reasoning before submitting a final answer.";
@@ -120,7 +120,7 @@ function saveChoice(control, finalsubmit) {
         $('savedraft').disabled = true;
         $('submit').disabled = true;
         $('clear').disabled = true;
-       
+
         var parts = location.href.split('/');
         var groupid = parts[parts.length - 2];
         var url = 'http://' + location.hostname + ':' + location.port + "/sim/player/choose/";
