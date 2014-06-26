@@ -87,7 +87,6 @@ MIDDLEWARE_CLASSES = (
     'waffle.middleware.WaffleMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
     'countryx.sim.middleware.GameStateMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'countryx.urls'
@@ -110,7 +109,6 @@ INSTALLED_APPS = [
     'django_nose',
     'south',
     'raven.contrib.django',
-    'debug_toolbar',
     'django_jenkins',
     'waffle',
     'impersonate',

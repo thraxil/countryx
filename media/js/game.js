@@ -46,7 +46,9 @@ function clearChoice(control) {
 }
 
 function choose(control, choice) {
-    if (gCurrentChoice === 0) {
+    if (gCurrentChoice === 0 ||
+        gCurrentChoice === undefined ||
+        gCurrentChoice === '') {
         gCurrentChoice = choice;
         var effect = 'blind';
 
@@ -134,16 +136,20 @@ function saveChoice(control, finalsubmit) {
         var groupid = parts[parts.length - 2];
         var url = 'http://' + location.hostname + ':' +
             location.port + '/sim/player/choose/';
+
+        var q = queryString(
+            {
+                'groupid': groupid, 'choiceid': gCurrentChoice,
+                'final': finalsubmit, 'reasoning': $('reasoning').value
+            });
         var deferred = doXHR(
             url,
             {
                 method: 'POST',
-                sendContent: queryString(
-                    {
-                        'groupid': groupid, 'choiceid': gCurrentChoice,
-                        'final': finalsubmit, 'reasoning': $('reasoning').value
-                    })
-            });
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                sendContent: q
+            }
+        );
         deferred.addCallbacks(saveChoiceSuccess, saveChoiceError);
     }
 }

@@ -474,12 +474,9 @@ def allpaths(request):
 @login_required
 def player_choose(request):
     response = {}
-
+    sys.stderr.write(request.body)
     sys.stderr.write("POST\n")
     sys.stderr.write(str(request.POST))
-    sys.stderr.write("\n")
-    sys.stderr.write("GET\n")
-    sys.stderr.write(str(request.GET))
     sys.stderr.write("\n")
 
     groupid = request.POST.get('groupid', None)
