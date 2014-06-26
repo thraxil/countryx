@@ -18,6 +18,7 @@ import datetime
 import random
 import simplejson
 from django.http import Http404
+import sys
 
 
 @login_required
@@ -474,16 +475,30 @@ def allpaths(request):
 def player_choose(request):
     response = {}
 
+    sys.stderr.write("POST\n")
+    sys.stderr.write(str(request.POST))
+    sys.stderr.write("\n")
+    sys.stderr.write("GET\n")
+    sys.stderr.write(str(request.GET))
+    sys.stderr.write("\n")
+
     groupid = request.POST.get('groupid', None)
     choiceid = request.POST.get('choiceid', None)
     final = int(request.POST.get('final', False))
     reasoning = request.POST.get('reasoning', '')
 
+    sys.stderr.write("groupid: %s\n" % groupid)
+    sys.stderr.write("choice: %s\n" % choice)
+    sys.stderr.write("final: %s\n" % final)
+    sys.stderr.write("reasoning: %s\n" % reasoning)
+
     group = get_object_or_404(SectionGroup, id=groupid)
+    sys.stderr.write("got group\n")
     try:
         player = group.sectiongroupplayer_set.get(user__id=request.user.id,
                                                   group=group)
     except SectionGroupPlayer.DoesNotExist:
+        sys.stderr.write("404 on sectiongroupplayer\n")
         raise Http404
     current_state = group.sectiongroupstate_set.latest().state
 
