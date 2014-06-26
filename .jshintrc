@@ -1,0 +1,20 @@
+{
+    "indent": 4,
+		"undef": true,
+		"browser": true,
+		"predef": [
+		"setStyle",
+		"$",
+		"setNodeAttribute",	
+		"confirm",
+		"alert",
+		"toggle",
+		"forEach",
+		"log",
+		"getStyle",
+		"getElementsByTagAndClassName",
+		"queryString",
+		"doXHR",
+		"MochiKit"
+		]
+}

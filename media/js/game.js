@@ -9,8 +9,8 @@ function debug(string) {
 function toggleCharacterProfile(control, characterName) {
     debug("toggle: " + characterName);
 
-    desc = $(characterName + "_description");
-    img = $(characterName + "_image");
+    var desc = $(characterName + "_description");
+    var img = $(characterName + "_image");
 
     toggle(desc, 'blind');
     // nit: have to add the overflow style back for text field.
@@ -29,10 +29,10 @@ function toggleCharacterProfile(control, characterName) {
 function clearChoice(control) {
    clearMessages();
    gCurrentChoice = 0;
-   effect = 'blind';
+   var effect = 'blind';
 
    // hide the other choices, leaving the one the user chose
-   elements = getElementsByTagAndClassName(null, "player_choice");
+   var elements = getElementsByTagAndClassName(null, "player_choice");
    forEach(elements,
            function(elem) {
                if (elem.id != gCurrentChoice && 'none' == getStyle(elem, 'display')) {
@@ -47,10 +47,10 @@ function clearChoice(control) {
 function choose(control, choice) {
     if (gCurrentChoice === 0) {
         gCurrentChoice = choice;
-        effect = 'blind';
+        var effect = 'blind';
 
         // hide the other choices, leaving the one the user chose
-        elements = getElementsByTagAndClassName(null, "player_choice");
+        var elements = getElementsByTagAndClassName(null, "player_choice");
         forEach(elements,
                 function(elem) {
                     if (elem.id != choice) {
@@ -70,7 +70,7 @@ function clearMessages() {
 }
 
 function saveChoiceSuccess(response) {
-    doc = JSON.parse(response.responseText, null);
+    var doc = JSON.parse(response.responseText, null);
     
     if (doc.result === 0) {
         $('errorMsg').innerHTML = "An error occurred while saving your choices. Please logout and log back in again and try to resubmit.";
@@ -106,7 +106,7 @@ function saveChoiceError(err) {
 }
 
 function saveChoice(control, finalsubmit) {
-    clearMessages();
+    clearMessages(); 
 
     if (finalsubmit && $('reasoning').value.length < 1) {
         $('errorClient').innerHTML = "Please enter your reasoning before submitting a final answer.";
@@ -121,10 +121,10 @@ function saveChoice(control, finalsubmit) {
         $('submit').disabled = true;
         $('clear').disabled = true;
        
-        parts = location.href.split('/');
-        groupid = parts[parts.length - 2];
-        url = 'http://' + location.hostname + ':' + location.port + "/sim/player/choose/";
-        deferred = doXHR(
+        var parts = location.href.split('/');
+        var groupid = parts[parts.length - 2];
+        var url = 'http://' + location.hostname + ':' + location.port + "/sim/player/choose/";
+        var deferred = doXHR(
             url,
             {
                 method: 'POST',
