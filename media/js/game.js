@@ -7,10 +7,10 @@ function debug(string) {
 }
 
 function toggleCharacterProfile(control, characterName) {
-    debug("toggle: " + characterName);
+    debug('toggle: ' + characterName);
 
-    var desc = $(characterName + "_description");
-    var img = $(characterName + "_image");
+    var desc = $(characterName + '_description');
+    var img = $(characterName + '_image');
 
     toggle(desc, 'blind');
     // nit: have to add the overflow style back for text field.
@@ -32,10 +32,11 @@ function clearChoice(control) {
     var effect = 'blind';
 
     // hide the other choices, leaving the one the user chose
-    var elements = getElementsByTagAndClassName(null, "player_choice");
+    var elements = getElementsByTagAndClassName(null, 'player_choice');
     forEach(elements,
             function(elem) {
-                if (elem.id != gCurrentChoice && 'none' == getStyle(elem, 'display')) {
+                if (elem.id != gCurrentChoice &&
+                    'none' == getStyle(elem, 'display')) {
                     toggle(elem, effect);
                 }
             });
@@ -50,7 +51,7 @@ function choose(control, choice) {
         var effect = 'blind';
 
         // hide the other choices, leaving the one the user chose
-        var elements = getElementsByTagAndClassName(null, "player_choice");
+        var elements = getElementsByTagAndClassName(null, 'player_choice');
         forEach(elements,
                 function(elem) {
                     if (elem.id != choice) {
@@ -73,11 +74,12 @@ function saveChoiceSuccess(response) {
     var doc = JSON.parse(response.responseText, null);
 
     if (doc.result === 0) {
-        $('errorMsg').innerHTML = "An error occurred while saving your choices. Please logout and log back in again and try to resubmit.";
+        $('errorMsg').innerHTML = 'An error occurred while saving your ' +
+            'choices. Please logout and log back in again and try to resubmit.';
         setStyle($('errorMsg'), {'display': 'block'});
     } else if (doc.result == 1) {
         // draft -- leave the screen the way it was
-        $('successMsg').innerHTML = "Your choices have been saved.";
+        $('successMsg').innerHTML = 'Your choices have been saved.';
         setStyle($('successMsg'), {'display': 'block'});
 
         // enable the buttons
@@ -88,7 +90,7 @@ function saveChoiceSuccess(response) {
         // submit succeeded -- hide the selection divs
 
         // submit -- leave the screen the way it was
-        $('successMsg').innerHTML = "Your choices have been submitted.";
+        $('successMsg').innerHTML = 'Your choices have been submitted.';
         setStyle($('successMsg'), {'display': 'block'});
 
         $(gCurrentChoice).onclick = '';
@@ -96,12 +98,14 @@ function saveChoiceSuccess(response) {
         setStyle($('savedraft'), {'display': 'none'});
         setStyle($('submit'), {'display': 'none'});
         setStyle($('clear'), {'display': 'none'});
-        $('submit_state_desc').innerHTML = "Final Submission";
+        $('submit_state_desc').innerHTML = 'Final Submission';
     }
 }
 
 function saveChoiceError(err) {
-    $('errorMsg').innerHTML = err + ". This is probably a temporary error. We recommend that you log out and log back in again and try to resubmit.";
+    $('errorMsg').innerHTML = err + '. This is probably a temporary error. ' +
+        'We recommend that you log out and log back in again and try to ' +
+        'resubmit.';
     setStyle($('errorMsg'), {'display': 'block'});
 }
 
@@ -109,12 +113,17 @@ function saveChoice(control, finalsubmit) {
     clearMessages();
 
     if (finalsubmit && $('reasoning').value.length < 1) {
-        $('errorClient').innerHTML = "Please enter your reasoning before submitting a final answer.";
+        $('errorClient').innerHTML = 'Please enter your reasoning ' +
+            'before submitting a final answer.';
         setStyle($('errorClient'), {'display': 'block'});
-    } else if (finalsubmit && !confirm("Are you sure you're ready to submit your choice and reasoning? Your responses are final once you hit OK")) {
+    } else if (finalsubmit && !confirm(
+        'Are you sure you\'re ready to ' +
+            'submit your choice and reasoning? ' +
+            'Your responses are final once you ' +
+            'hit OK')) {
         return; // do nothing
     } else if (gCurrentChoice === 0) {
-        alert("DEBUG: Current Choice is 0");
+        alert('DEBUG: Current Choice is 0');
     } else {
         // disable the buttons
         $('savedraft').disabled = true;
@@ -123,12 +132,17 @@ function saveChoice(control, finalsubmit) {
 
         var parts = location.href.split('/');
         var groupid = parts[parts.length - 2];
-        var url = 'http://' + location.hostname + ':' + location.port + "/sim/player/choose/";
+        var url = 'http://' + location.hostname + ':' +
+            location.port + '/sim/player/choose/';
         var deferred = doXHR(
             url,
             {
                 method: 'POST',
-                sendContent: queryString({'groupid': groupid, 'choiceid': gCurrentChoice, 'final': finalsubmit, 'reasoning': $('reasoning').value})
+                sendContent: queryString(
+                    {
+                        'groupid': groupid, 'choiceid': gCurrentChoice,
+                        'final': finalsubmit, 'reasoning': $('reasoning').value
+                    })
             });
         deferred.addCallbacks(saveChoiceSuccess, saveChoiceError);
     }
@@ -137,4 +151,4 @@ function saveChoice(control, finalsubmit) {
 function initializeGame() {
     gCurrentChoice = $('current_choice').innerHTML;
 }
-MochiKit.Signal.connect(window, "onload", initializeGame);
+MochiKit.Signal.connect(window, 'onload', initializeGame);
