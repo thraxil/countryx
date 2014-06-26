@@ -2,7 +2,7 @@ MANAGE=./manage.py
 APP=countryx
 FLAKE8=./ve/bin/flake8
 
-jenkins: ./ve/bin/python validate test jshint flake8
+jenkins: ./ve/bin/python validate jshint flake8 test
 
 ./ve/bin/python: requirements.txt bootstrap.py virtualenv.py
 	./bootstrap.py
