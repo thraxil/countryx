@@ -37,10 +37,9 @@
 <br />
 <div id="loginbox">
 
-<form method="get" action="{{ wind_base }}login">
-<input type="hidden" name="service" value="{{ wind_service }}" />
+<form method="get" action="{{ CAS_BASE }}cas/login">
 <input type="hidden" name="destination"
-value="http://{{ request.get_host }}/accounts/windlogin/?next={{ next }}" />
+value="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/accounts/caslogin/?next={{ next }}" />
 <h2>Login to Country X...</h2>
 <hr />
 <p><b>For Columbia users:</b></p>
