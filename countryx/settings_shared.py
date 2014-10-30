@@ -106,7 +106,6 @@ INSTALLED_APPS = [
     'countryx.sim',
     'django_statsd',
     'django_nose',
-    'south',
     'raven.contrib.django',
     'django_jenkins',
     'waffle',
@@ -124,8 +123,6 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.sql.SQLDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
 )
-
-SOUTH_TESTS_MIGRATE = False
 
 STATSD_CLIENT = 'statsd.client'
 STATSD_PREFIX = 'countryx'

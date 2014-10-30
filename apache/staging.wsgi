@@ -6,5 +6,6 @@ sys.path.append('/var/www/countryx/countryx/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'countryx.settings_staging'
 
 import django.core.handlers.wsgi
-
+import django
+django.setup()
 application = django.core.handlers.wsgi.WSGIHandler()
