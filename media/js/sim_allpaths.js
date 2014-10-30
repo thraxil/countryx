@@ -35,7 +35,7 @@
             this.choices = [0, 0, 0, 0, 0];
         }
 
-        RoleSelector.prototype.selectNums = function (evt) {
+        RoleSelector.prototype.selectNums = function(evt) {
             var num = (typeof(evt.src) == 'function') ?
                 Number(evt.src().getAttribute('data-index')) : evt;
             var classVals = '';
