@@ -8,7 +8,7 @@ jenkins: ./ve/bin/python validate jshint jscs flake8 test
 	./bootstrap.py
 
 test: ./ve/bin/python
-	$(MANAGE) jenkins
+	$(MANAGE) jenkins --pep8-exclude=migrations
 
 jshint: node_modules/jshint/bin/jshint
 	./node_modules/jshint/bin/jshint media/js/game.js media/js/sim_allpaths.js
