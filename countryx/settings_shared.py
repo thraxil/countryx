@@ -46,8 +46,6 @@ NOSE_ARGS = [
 ]
 
 JENKINS_TASKS = (
-    'django_jenkins.tasks.run_pylint',
-    'django_jenkins.tasks.with_coverage',
     'django_jenkins.tasks.run_pep8',
     'django_jenkins.tasks.run_pyflakes',
 )
@@ -72,6 +70,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'stagingcontext.staging_processor',
+    'djangowind.context.context_processor',
     'gacontext.ga_processor',
 )
 
@@ -107,7 +106,6 @@ INSTALLED_APPS = [
     'countryx.sim',
     'django_statsd',
     'django_nose',
-    'south',
     'raven.contrib.django',
     'django_jenkins',
     'waffle',
@@ -125,8 +123,6 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.sql.SQLDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
 )
-
-SOUTH_TESTS_MIGRATE = False
 
 STATSD_CLIENT = 'statsd.client'
 STATSD_PREFIX = 'countryx'
@@ -151,10 +147,10 @@ SERVER_EMAIL = "countryx@ccnmtl.columbia.edu"
 
 # WIND settings
 
-AUTHENTICATION_BACKENDS = ('djangowind.auth.WindAuthBackend',
+AUTHENTICATION_BACKENDS = ('djangowind.auth.SAMLAuthBackend',
                            'django.contrib.auth.backends.ModelBackend',)
-WIND_BASE = "https://wind.columbia.edu/"
-WIND_SERVICE = "cnmtl_full_np"
+CAS_BASE = "https://cas.columbia.edu/"
+
 WIND_PROFILE_HANDLERS = ['djangowind.auth.CDAPProfileHandler']
 WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper',
                        'djangowind.auth.StaffMapper',
