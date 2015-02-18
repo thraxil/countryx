@@ -77,10 +77,10 @@ body
 
 
 
-.country_conditions_graph table tr.negative_row td.condition_row_block_filled {  background-image: url(/site_media/images/solid_red.gif); }
-.country_conditions_graph table tr.positive_row  td.condition_row_block_filled {  background-image: url(/site_media/images/solid_green.gif); }
+.country_conditions_graph table tr.negative_row td.condition_row_block_filled {  background-image: url(../images/solid_red.gif); }
+.country_conditions_graph table tr.positive_row  td.condition_row_block_filled {  background-image: url(../images/solid_green.gif); }
 
-td.condition_row_block_empty {  background-image: url(/site_media/images/solid_gray.gif); }
+td.condition_row_block_empty {  background-image: url(../images/solid_gray.gif); }
 
 
 td.condition_row_description
@@ -97,7 +97,7 @@ div#loginbox {
 
 a:link div.player_choice
 {
-	background-image: url(/site_media/images/choices/default_option_button.png);
+	background-image: url(../images/choices/default_option_button.png);
 	display: block;
 	height: 95px;
 	margin: 0px 0 10px 0;
@@ -112,7 +112,7 @@ a:link div.player_choice
 
 a:hover div.player_choice
 {
-	background-image: url(/site_media/images/choices/default_option_button_over.png) !important;
+	background-image: url(../images/choices/default_option_button_over.png) !important;
 	border: 0;
 	color: yellow;
 	

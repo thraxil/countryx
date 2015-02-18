@@ -3,7 +3,7 @@
 {% block css %}
 {{ block.super }}
 <style type='text/css'>
-  @import "/site_media/css/game.css";
+  @import "{{STATIC_URL}}css/game.css";
 </style>
 {% endblock %}
 
@@ -16,7 +16,7 @@
 
 {% block masthead %}
 <div id="simlogo">
-<a href="/sim/"><img src="/site_media/images/countryx_logo.png" alt="Country X" /></a>
+<a href="/sim/"><img src="{{STATIC_URL}}images/countryx_logo.png" alt="Country X" /></a>
 </div>
 
  <!--  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>

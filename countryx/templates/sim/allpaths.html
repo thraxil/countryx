@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block js %}
-   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
-   <script type="text/javascript" src="/site_media/js/sim_allpaths.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/MochiKit.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/sim_allpaths.js"></script>
 {% endblock %}
 {% block css %}
-   <link href="/site_media/css/sim_allpaths.css" rel="stylesheet" type="text/css" />
+   <link href="{{STATIC_URL}}css/sim_allpaths.css" rel="stylesheet" type="text/css" />
    <style type="text/css">
      {%for r in roles%}
      .s{{forloop.counter}}-1 .o{{forloop.counter}}-1 {background-color:yellow;}

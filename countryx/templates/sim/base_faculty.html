@@ -2,18 +2,18 @@
 
 {% block js %}
    {{ block.super }}
-   <script type="text/javascript" src="/admin_media/js/core.js"></script>
-   <script type="text/javascript" src="/admin_media/js/calendar.js"></script>
-   <script type="text/javascript" src="/admin_media/js/dateparse.js"></script>
-   <script type="text/javascript" src="/admin_media/js/timeparse.js"></script>
-   <script type="text/javascript" src="/admin_media/js/admin/DateTimeShortcuts"></script>
-   <script type="text/javascript" src="/site_media/js/faculty.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}/admin/js/core.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}/admin/js/calendar.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}/admin/js/dateparse.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}/admin/js/timeparse.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}/admin/js/admin/DateTimeShortcuts"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/faculty.js"></script>
 {% endblock %}
 
 {% block css %}
 {{ block.super }}
 	<style type='text/css'>
-	  @import "/site_media/css/faculty.css";
+	  @import "{{STATIC_URL}}css/faculty.css";
 	</style>
 {% endblock %}
 

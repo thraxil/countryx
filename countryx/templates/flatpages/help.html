@@ -2,22 +2,22 @@
 {% block css %}
 {{ block.super }}
 <style type='text/css'>
-     @import "/site_media/css/style.css";
-  @import "/site_media/css/game.css";
+     @import "{{STATIC_URL}}css/style.css";
+  @import "{{STATIC_URL}}css/game.css";
 </style>
 {% endblock %}
 {% block js %}
    {{ block.super }}
-   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/MochiKit.js"></script>
-   <script type="text/javascript" src="/site_media/js/mochikit/MochiKit/Visual.js"></script>
-   <script type="text/javascript" src="/site_media/js/json2.js"></script>
-   <script type="text/javascript" src="/site_media/js/SortableTable.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/MochiKit.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/Visual.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/json2.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/SortableTable.js"></script>
 {% endblock %}
 
 
 {% block masthead %}
 <div id="simlogo">
-<a href="/sim/"><img src="/site_media/images/countryx_logo.png" alt="Country X" /></a>
+<a href="/sim/"><img src="{{STATIC_URL}}images/countryx_logo.png" alt="Country X" /></a>
 </div>
 
  <!--  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>

@@ -2,11 +2,11 @@
 {% load hash %}
 
 {% block js %}
- <script type="text/javascript" src="/site_media/js/sim_allpaths.js"></script>
+ <script type="text/javascript" src="{{STATIC_URL}}js/sim_allpaths.js"></script>
 {% endblock %}
 {% block css %}
  <style type="text/css">
-   @import "/site_media/css/sim_allpaths.css"
+   @import "{{STATIC_URL}}css/sim_allpaths.css"
  </style>
 {% endblock %}
 

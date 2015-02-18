@@ -18,7 +18,7 @@ body {
 .main
 {
 	background-color: #666;
-	background-image: url(/site_media/images/main_bg.jpg);
+	background-image: url(../images/main_bg.jpg);
 	background-repeat: repeat-x;
 	color: #fff;
 	width: 974px;
@@ -32,7 +32,7 @@ body {
 {
 	background-color: #999;
 	z-index: -10000;
-	background-image: url(/site_media/images/masthead_bg.jpg);
+	background-image: url(../images/masthead_bg.jpg);
 	width: 974px;
 	margin: 0 auto;
 	height: 93px;
@@ -182,19 +182,19 @@ label
 .viewableturn
 {
 	color: #302226;
-	background-image: url(/site_media/images/tabs/toptab_visited.png);
+	background-image: url(../images/tabs/toptab_visited.png);
 }
 
 .futureturn
 {
 	color: gray;
-	background-image: url(/site_media/images/tabs/toptab_off.png);
+	background-image: url(../images/tabs/toptab_off.png);
 }
 
 .activetab 
 {
 	
-	background-image: url(/site_media/images/tabs/toptab_on.png);
+	background-image: url(../images/tabs/toptab_on.png);
 }
 
 #tabs ul li.activetab a:link, #tabs ul li.activetab a:visited
@@ -220,8 +220,8 @@ label
 
 .country_conditions_graph table { border-collapse: collapse; }
 
-.negative_row { background-image: url(/site_media/images/gradient_red.jpg); }
-.positive_row { background-image: url(/site_media/images/gradient_green.jpg); }
+.negative_row { background-image: url(../images/gradient_red.jpg); }
+.positive_row { background-image: url(../images/gradient_green.jpg); }
 
 .condition_row_block_filled
 {
@@ -368,7 +368,7 @@ label
 	font-size: 13px;
 	padding: 5px;
 	margin-top: 0;
-	background-image: url(/site_media/images/h1_bg.jpg);
+	background-image: url(../images/h1_bg.jpg);
 	background-repeat: repeat-x;
 	border: 1px solid #555;
 }
@@ -380,14 +380,14 @@ label
 	font-size: 12px;
 	padding: 5px;
 	margin-bottom: 1px;
-	background-image: url(/site_media/images/h2_bg.jpg);
+	background-image: url(../images/h2_bg.jpg);
 	background-repeat: repeat-x;
 }
 
 #column_3 h2
 {
 	margin-top: 0px;
-	background-image: url(/site_media/images/h2_bg_green.jpg);
+	background-image: url(../images/h2_bg_green.jpg);
 	background-repeat: repeat-x;
 }
 
@@ -420,7 +420,7 @@ label
 
 .player_choice
 {
-	background-image: url(/site_media/images/choices/default_option_button.png);
+	background-image: url(../images/choices/default_option_button.png);
 	display: block;
 	height: 95px;
 	margin: 0px 0 10px 0;
@@ -435,7 +435,7 @@ label
 
 div.player_choice:hover
 {
-	background-image: url(/site_media/images/choices/default_option_button_over.png) !important;
+	background-image: url(../images/choices/default_option_button_over.png) !important;
 	border: 0;
 	color: yellow;
 	

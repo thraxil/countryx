@@ -2,18 +2,18 @@
 <head><title>countryx: {% block title %}{% endblock %}</title>
 
 <style media="screen" type="text/css">
-   @import "/site_media/css/site.css";
+   @import "{{STATIC_URL}}css/site.css";
    </style>
  <!-- Internet Explorer Fixes -->
 <!--[if IE]>
-<style type="text/css" media="all">@import "/site_media/css/ie_fixes.css";</style>
+<style type="text/css" media="all">@import "{{STATIC_URL}}css/ie_fixes.css";</style>
 <![endif]-->
 
 
 {% block css %}{% endblock %}
 
 {% block js %}
-   <script type="text/javascript" src="/site_media/js/core.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/core.js"></script>
 {% endblock %}
 
 {% block feeds %}{% endblock %}
