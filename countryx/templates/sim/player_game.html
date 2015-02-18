@@ -5,7 +5,7 @@
 
 {% block js %} 
    {{ block.super }}
-   <script type="text/javascript" src="/site_media/js/game.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}js/game.js"></script>
 
 
 {% endblock %}
@@ -49,7 +49,7 @@
 		<div class="invisible"></div>
         
         <div id="{{player.model.role.name}}_description" class="player_description">
-        <div id="{{player.model.role.name}}_image" class="player_image"><img src="/site_media/images/profiles/{{ player.model.role.name }}_silhouette.jpg"></div>
+        <div id="{{player.model.role.name}}_image" class="player_image"><img src="{{STATIC_URL}}images/profiles/{{ player.model.role.name }}_silhouette.jpg"></div>
         {{ player.model.role.description }}
         </div>
 		{% endfor %}
@@ -99,7 +99,7 @@
 		  {% for condition in conditions %}
 		  <table>
 		    <tr>
-		      <td rowspan="4" class="condition_row_name" >{{condition.name}}<img src="/site_media/images/spacer.gif" /></td>
+		      <td rowspan="4" class="condition_row_name" >{{condition.name}}<img src="{{STATIC_URL}}images/spacer.gif" /></td>
 		    </tr>
 		    <tr>
 		      {% num_range 10 as row_count %}

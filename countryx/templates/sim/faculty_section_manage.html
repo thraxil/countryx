@@ -7,9 +7,9 @@
 {% block js %} 
    {{ block.super }}
       
-   <script type="text/javascript" src="/admin_media/js/core.js"></script>
-   <script type="text/javascript" src="/admin_media/js/calendar.js"></script>
-   <script type="text/javascript" src="/admin_media/js/admin/DateTimeShortcuts.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}admin/js/core.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}/admin/js/calendar.js"></script>
+   <script type="text/javascript" src="{{STATIC_URL}}/admin/js/admin/DateTimeShortcuts.js"></script>
 {% endblock %}
 
 {% block content %}
