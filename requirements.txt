@@ -16,7 +16,7 @@ pep8==1.4
 flake8==1.7.0
 logilab-common==0.59.0
 logilab-astng==0.24.1
-pylint==0.26.0
+pylint==1.4.1
 sqlparse==0.1.11
 
 djangowind==0.13.2
