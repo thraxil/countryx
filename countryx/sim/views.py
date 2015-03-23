@@ -288,9 +288,9 @@ EMPTY_VALUES = (None, '')
 
 class DateTimeFieldEx(forms.DateTimeField):
     def clean(self, value):
-        if (not self.required
-                and value[0] in EMPTY_VALUES
-                and value[1] in EMPTY_VALUES):
+        if (not self.required and
+                value[0] in EMPTY_VALUES and
+                value[1] in EMPTY_VALUES):
             return None
         return super(DateTimeFieldEx, self).clean(value)
 
@@ -308,12 +308,12 @@ class TurnManagementForm(forms.Form):
         widget=AdminSplitDateTime, required=False, label="Turn 3 Close Date")
 
     def __compare(self, cleaned_data, fieldOne, fieldTwo, labelOne, labelTwo):
-        if (fieldTwo in cleaned_data
-                and not cleaned_data[fieldTwo] in EMPTY_VALUES):
-            if (fieldOne in cleaned_data
-                    and not cleaned_data[fieldOne] in EMPTY_VALUES
-                    and cmp(cleaned_data[fieldOne],
-                            cleaned_data[fieldTwo]) > -1):
+        if (fieldTwo in cleaned_data and
+                not cleaned_data[fieldTwo] in EMPTY_VALUES):
+            if (fieldOne in cleaned_data and
+                not cleaned_data[fieldOne] in EMPTY_VALUES and
+                cmp(cleaned_data[fieldOne],
+                    cleaned_data[fieldTwo]) > -1):
                 msg = "%s close date must be after %s close date" % (
                     labelTwo, labelOne)
                 self._errors[fieldTwo] = ErrorList([msg])
@@ -424,7 +424,7 @@ def player_game(request, group_id, turn_id=0):
     )
 
 
-#actually needs to be faculty only
+# actually needs to be faculty only
 @login_required
 def allquestions(request):
     response = {}
@@ -435,7 +435,7 @@ def allquestions(request):
     return HttpResponse(simplejson.dumps(response), 'application/json')
 
 
-#actually needs to be faculty only
+# actually needs to be faculty only
 @login_required
 def allvariables(request):
     response = {}
@@ -449,7 +449,7 @@ def allvariables(request):
 def allpaths(request):
     turns = []
     roles = ('president', 'regional', 'envoy', 'opposition')
-    #NOTE: we currently assume 4 turns indexed at 1
+    # NOTE: we currently assume 4 turns indexed at 1
     for turn in range(1, 5):
         states = State.objects.filter(turn=turn).order_by("state_no")
         turn = dict(
@@ -740,7 +740,7 @@ def cheat(request):
 
     turns = []
     roles = ('president', 'regional', 'envoy', 'opposition')
-    #NOTE: we currently assume 4 turns indexed at 1
+    # NOTE: we currently assume 4 turns indexed at 1
     for turn in range(1, 5):
         states = State.objects.filter(turn=turn).order_by("state_no")
         turn = dict(states=[{'id': s.id,

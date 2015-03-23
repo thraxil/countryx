@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def init_google_client(self, email, password):
 
-        #initialize the spreadsheet service
+        # initialize the spreadsheet service
         self.gd_client = gdata.spreadsheet.service.SpreadsheetsService()
 
         if (not email or email == ''):
@@ -82,8 +82,8 @@ class Command(BaseCommand):
         feed = self.gd_client.GetListFeed(sheetKey, worksheetId)
 
         for i, entry in enumerate(feed.entry):
-            #each row has at least two key values: name, value
-            #these will each translate into a StateVariable object
+            # each row has at least two key values: name, value
+            # these will each translate into a StateVariable object
             var = StateVariable()
             var.state = state
             var.value = entry.custom["value"].text
@@ -168,7 +168,7 @@ class Command(BaseCommand):
                               entry.title.text, re.IGNORECASE)
             if (match):
 
-                #parse out a new state object
+                # parse out a new state object
                 state = self.get_or_create_state(entry.title.text)
 
                 # parse out the sheet's identifying key
@@ -177,7 +177,7 @@ class Command(BaseCommand):
                 id_parts = entry.id.text.split('/')
                 key = id_parts[len(id_parts) - 1]
 
-                #process each of the three expected worksheets
+                # process each of the three expected worksheets
                 print "Processing spreadsheet %s" % state
                 self.process_worksheets(key, state)
 

@@ -63,8 +63,8 @@ class State(models.Model):
             cursor.execute(
                 'SELECT count("%s") FROM "%s" WHERE "%s"=%d AND '
                 '"%s"=%d GROUP BY "%s"' % (
-                role, tablename, myfield, self.id, otherfield, row[0],  role
-                ))
+                    role, tablename, myfield, self.id, otherfield, row[0],
+                    role))
             rv.append(3 - cursor.rowcount)
         return rv
 
@@ -191,11 +191,11 @@ class Section(models.Model):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
             return 1
-        elif (turn_dates.turn2 is None
-              or turn_dates.turn2 > datetime.datetime.now()):
+        elif (turn_dates.turn2 is None or
+              turn_dates.turn2 > datetime.datetime.now()):
             return 2
-        elif (turn_dates.turn3 is None
-              or turn_dates.turn3 > datetime.datetime.now()):
+        elif (turn_dates.turn3 is None or
+              turn_dates.turn3 > datetime.datetime.now()):
             return 3
         return 4
 
@@ -203,11 +203,11 @@ class Section(models.Model):
         turn_dates = SectionTurnDates.objects.get(section=self)
         if (turn_dates.turn1 > datetime.datetime.now()):
             return turn_dates.turn1
-        elif (turn_dates.turn2 is None
-              or turn_dates.turn2 > datetime.datetime.now()):
+        elif (turn_dates.turn2 is None or
+              turn_dates.turn2 > datetime.datetime.now()):
             return turn_dates.turn2
-        elif (turn_dates.turn3 is None
-              or turn_dates.turn3 > datetime.datetime.now()):
+        elif (turn_dates.turn3 is None or
+              turn_dates.turn3 > datetime.datetime.now()):
             return turn_dates.turn3
 
         return turn_dates.turn1

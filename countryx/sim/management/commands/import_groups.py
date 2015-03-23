@@ -112,7 +112,7 @@ class Command(BaseCommand):
                                "Player already exists "
                                "for that role [%s]" %
                                (user, game_group,
-                               game_role, player))
+                                game_role, player))
                         return
                 SectionGroupPlayer.objects.create(
                     user=user, group=game_group,
@@ -163,11 +163,11 @@ class Command(BaseCommand):
             self.clean()
             print "Cleaning complete"
 
-        if (not options.get('csv')
-                or not options.get('section')
-                or not options.get('term')
-                or not options.get('year')
-                or not options.get('first_turn')):
+        if (not options.get('csv') or
+                not options.get('section') or
+                not options.get('term') or
+                not options.get('year') or
+                not options.get('first_turn')):
             print args
             return
 
