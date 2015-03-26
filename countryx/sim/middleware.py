@@ -1,13 +1,34 @@
-from countryx.sim.models import Section, SectionGroupState
-from countryx.sim.models import State
-import datetime
+from countryx.sim.models import Section
 import threading
 
 
-class GameStateMiddleware(object):
-    """
-    """
+def ensure_consistency_of_all_sections():
+    for section in Section.objects.all():
+        section.ensure_consistency()
 
+# Note from AP:
+# this middleware needs to go away. We need better test coverage
+# before we can do that safely, but
+#   1) middleware is just the wrong place to be doing this
+#   2) this middleware runs over every single Section in the
+#      database on every single request that hits the entire site
+#      (minus a few exceptions) even though it's only very
+#      infrequently that it actually does something (the first)
+#      request that goes through after a turn deadline passes. It
+#      appears that this was implemented this way as sort of a
+#      poor replacement for a cronjob or background process that
+#      would enfore the turn deadlines. I would recommend switching
+#      to a Celery periodic task or something similar instead.
+#   3) my understanding is that most of the time now, Country X is
+#      used in "workshop" mode where the whole thing is run through
+#      in a few hours and the instructor just manually advances the
+#      turns when the group indicates that they have all finished. The
+#      original mode where it ran over a week or so with turns switching
+#      automatically at preset points in time is almost never used anymore
+#      (and is the driving force for this entire middleware)
+
+
+class GameStateMiddleware(object):
     __shared_state = dict(write_lock=threading.RLock())
 
     def __init__(self):
@@ -21,27 +42,7 @@ class GameStateMiddleware(object):
             return  # skip it in admin otherwise we can't add a section
         self.write_lock.acquire()
         try:
-            sections = Section.objects.all()
-            for section in sections:
-                section_turn = section.current_turn()
-                # verify each group's current state == the current section turn
-                # if not, then add the state to the group and make sure all
-                # members get automated answers.
-                groups = section.sectiongroup_set.all()
-                for group in groups:
-                    try:
-                        group_state = (group.sectiongroupstate_set.latest()
-                                       .state)
-                    except SectionGroupState.DoesNotExist:
-                        group_state = State.objects.get(state_no=1, turn=1)
-                        SectionGroupState.objects.create(
-                            state=group_state, group=group,
-                            date_updated=datetime.datetime.now())
-                    if (section_turn != group_state.turn):
-                        group.force_response_all_players()
-                        # update the group state to the next turn based on
-                        # the player choices
-                        group.update_state()
+            ensure_consistency_of_all_sections()
         finally:
             self.write_lock.release()
         return None

@@ -12,7 +12,7 @@ from countryx.sim.models import AUTOMATIC_UPDATE_RANDOM
 from .factories import (
     RoleFactory, StateFactory, StateChangeFactory,
     StateVariableFactory, StateRoleChoiceFactory,
-    SectionTurnDatesFactory,
+    SectionTurnDatesFactory, SectionGroupFactory,
 )
 import datetime
 import time
@@ -107,6 +107,18 @@ class TestSection(TestCase):
         std = SectionTurnDatesFactory()
         s = std.section
         s.clear_all()
+
+
+class TestSectionGroup(TestCase):
+    def test_unicode(self):
+        sg = SectionGroupFactory()
+        self.assertTrue(sg.name in str(sg))
+
+    def test_make_state_current(self):
+        sg = SectionGroupFactory()
+        StateFactory(state_no=1, turn=1)
+        sg.make_state_current(1)
+        self.assertEqual(sg.sectiongroupstate_set.count(), 1)
 
 
 class ModelTestCases(TestCase):
