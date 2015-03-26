@@ -3,6 +3,7 @@ import factory
 from countryx.sim.models import (
     Role, State, StateChange, StateVariable,
     StateRoleChoice, Section, SectionTurnDates,
+    SectionGroup,
 )
 
 
@@ -54,3 +55,9 @@ class SectionTurnDatesFactory(factory.DjangoModelFactory):
     FACTORY_FOR = SectionTurnDates
     section = factory.SubFactory(SectionFactory)
     turn1 = datetime.now()
+
+
+class SectionGroupFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = SectionGroup
+    section = factory.SubFactory(SectionFactory)
+    name = factory.Sequence(lambda n: 'group {0}'.format(n))
