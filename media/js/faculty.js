@@ -14,6 +14,7 @@ function clearMessages() {
 function submitFeedback(form, playerId) {
     clearMessages();
     if (form.feedback.value.length < 1) {
+        /*jshint -W069 */
         var id = 'error_client_' + form['turn_id'].value;
         $(id).innerHTML = 'Please enter some feedback before submitting.';
         setStyle($(id), {'display': 'block'});
@@ -27,6 +28,7 @@ function submitFeedback(form, playerId) {
                 sendContent: queryString(
                     {
                         'player_id': playerId,
+                        /*jshint -W069 */
                         'turn_id': form['turn_id'].value,
                         'feedback': form.feedback.value,
                         'faculty_id': form['faculty_id'].value
@@ -41,6 +43,7 @@ function submitFeedbackSuccess(response) {
     var doc = JSON.parse(response.responseText, null);
     var id;
     if (doc.result === 0) {
+        /*jshint -W069 */
         id = 'error_client_' + doc['turn_id'];
         $(id).innerHTML = doc.message;
         setStyle($(id), {'display': 'block'});
