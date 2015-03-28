@@ -11,7 +11,7 @@ test: ./ve/bin/python
 	$(MANAGE) jenkins --pep8-exclude=migrations --enable-coverage --coverage-rcfile=.coveragerc
 
 jshint: node_modules/jshint/bin/jshint
-	./node_modules/jshint/bin/jshint media/js/game.js media/js/sim_allpaths.js
+	./node_modules/jshint/bin/jshint media/js/game.js media/js/faculty.js media/js/sim_allpaths.js
 
 jscs: node_modules/jscs/bin/jscs
 	./node_modules/jscs/bin/jscs media/js/game.js media/js/faculty.js media/js/sim_allpaths.js
