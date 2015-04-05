@@ -1,19 +1,19 @@
+{% load compress %}
 <html>
 <head><title>countryx: {% block title %}{% endblock %}</title>
 
-<style media="screen" type="text/css">
-   @import "{{STATIC_URL}}css/site.css";
-   </style>
- <!-- Internet Explorer Fixes -->
-<!--[if IE]>
-<style type="text/css" media="all">@import "{{STATIC_URL}}css/ie_fixes.css";</style>
-<![endif]-->
-
+{% compress css %}
+<link href="{{STATIC_URL}}css/site.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}css/ie_fixes.css" rel="stylesheet" type="text/css" />
+{% endcompress %}
 
 {% block css %}{% endblock %}
 
 {% block js %}
-   <script type="text/javascript" src="{{STATIC_URL}}js/core.js"></script>
+{% compress js %}
+   <script type="text/javascript"
+   src="{{STATIC_URL}}js/core.js"></script>
+{% endcompress %}
 {% endblock %}
 
 {% block feeds %}{% endblock %}

@@ -112,6 +112,7 @@ INSTALLED_APPS = [
     'waffle',
     'impersonate',
     'django_markwhat',
+    'compressor',
 ]
 
 INTERNAL_IPS = ('127.0.0.1', )
@@ -130,16 +131,19 @@ STATSD_PREFIX = 'countryx'
 STATSD_HOST = 'localhost'
 STATSD_PORT = 8125
 
+MEDIA_URL = "/uploads/"
+MEDIA_ROOT = 'uploads'
 STATIC_URL = "/media/"
-STATICFILES_DIRS = (
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../media/")),
-)
-STATIC_ROOT = ""
+STATIC_ROOT = "/tmp/countryx/static"
+STATICFILES_DIRS = ('media/',)
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
-
+COMPRESS_URL = "/media/"
+COMPRESS_ROOT = "media/"
+AWS_QUERYSTRING_AUTH = False
 
 THUMBNAIL_SUBDIR = "thumbs"
 EMAIL_SUBJECT_PREFIX = "[countryx] "
