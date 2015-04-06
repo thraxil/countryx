@@ -17,6 +17,7 @@ factory_boy==2.4.1
 boto==2.36.0
 python-dateutil==2.4.0
 six==1.9.0
+gunicorn==19.3.0
 
 djangowind==0.13.2
 django-indexer==0.2.1
