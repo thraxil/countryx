@@ -107,7 +107,6 @@ INSTALLED_APPS = [
     'countryx.sim',
     'django_statsd',
     'django_nose',
-    'raven.contrib.django',
     'django_jenkins',
     'waffle',
     'impersonate',
