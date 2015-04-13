@@ -69,9 +69,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
-    'stagingcontext.staging_processor',
     'django.core.context_processors.static',
-    'djangowind.context.context_processor',
     'gacontext.ga_processor',
 )
 
@@ -149,18 +147,6 @@ EMAIL_SUBJECT_PREFIX = "[countryx] "
 EMAIL_HOST = 'localhost'
 SERVER_EMAIL = "countryx@ccnmtl.columbia.edu"
 
-# WIND settings
-
-AUTHENTICATION_BACKENDS = ('djangowind.auth.SAMLAuthBackend',
-                           'django.contrib.auth.backends.ModelBackend',)
-CAS_BASE = "https://cas.columbia.edu/"
-
-WIND_PROFILE_HANDLERS = ['djangowind.auth.CDAPProfileHandler']
-WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper',
-                       'djangowind.auth.StaffMapper',
-                       'djangowind.auth.SuperuserMapper']
-WIND_STAFF_MAPPER_GROUPS = ['tlc.cunix.local:columbia.edu']
-WIND_SUPERUSER_MAPPER_GROUPS = ['anp8', 'jb2410', 'zm4', 'sld2131']
 LOGIN_REDIRECT_URL = "/"
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_HTTPONLY = True

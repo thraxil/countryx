@@ -31,24 +31,6 @@ TIME_ZONE = os.environ.get('TIME_ZONE', 'America/New_York')
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 SERVER_EMAIL = os.environ.get('SERVER_EMAIL', "countryx@ccnmtl.columbia.edu")
 
-CAS_BASE = os.environ.get('CAS_BASE', "https://cas.columbia.edu/")
-if CAS_BASE:
-    AUTHENTICATION_BACKENDS = ('djangowind.auth.SAMLAuthBackend',
-                               'django.contrib.auth.backends.ModelBackend',)
-
-    if 'WIND_PROFILE_HANDLERS' in os.environ:
-        WIND_PROFILE_HANDLERS = os.environ['WIND_PROFILE_HANDLERS'].split(',')
-    else:
-        WIND_PROFILE_HANDLERS = ['djangowind.auth.CDAPProfileHandler']
-
-    WIND_AFFIL_HANDLERS = ['djangowind.auth.AffilGroupMapper',
-                           'djangowind.auth.StaffMapper',
-                           'djangowind.auth.SuperuserMapper']
-    WIND_STAFF_MAPPER_GROUPS = ['tlc.cunix.local:columbia.edu']
-    WIND_SUPERUSER_MAPPER_GROUPS = ['anp8', 'jb2410', 'zm4', 'sld2131']
-else:
-    AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
-
 # -------------------------------------------
 
 DEBUG = False

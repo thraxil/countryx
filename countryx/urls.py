@@ -15,7 +15,9 @@ admin_media_root = os.path.join(
 urlpatterns = patterns(
     '',
     (r'^$', 'countryx.sim.views.root'),
-    ('^accounts/', include('djangowind.urls')),
+    (r'^accounts/logout/$',
+     'django.contrib.auth.views.logout', {'next_page': '/'}),
+    (r'^accounts/', include('django.contrib.auth.urls')),
     (r'^admin/', include(admin.site.urls)),
     url(r'^impersonate/', include('impersonate.urls')),
     (r'^sim/', include('countryx.sim.urls')),
