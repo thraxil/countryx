@@ -31,6 +31,25 @@ validate: ./ve/bin/python
 shell: ./ve/bin/python
 	$(MANAGE) shell_plus
 
+build:
+	docker build -t localhost:5000/thraxil/countryx .
+
+docker-pg:
+	docker run --name cx-pg \
+	-e POSTGRES_PASSWORD=nothing \
+	-e POSTGRES_USER=postgres \
+	-d \
+	postgres
+
+docker-test: build
+	docker run -it -p 31000:8000 \
+	--link cx-pg:postgresql \
+	-e DB_NAME=postgres \
+	-e SECRET_KEY=notreal \
+	-e DB_PASSWORD=nothing \
+	-e DB_USER=postgres \
+	localhost:5000/thraxil/countryx
+
 node_modules/jshint/bin/jshint:
 	npm install jshint
 
