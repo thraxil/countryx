@@ -70,7 +70,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'django.core.context_processors.static',
-    'gacontext.ga_processor',
 )
 
 MIDDLEWARE_CLASSES = (
