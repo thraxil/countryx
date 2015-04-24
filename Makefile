@@ -32,7 +32,7 @@ shell: ./ve/bin/python
 	$(MANAGE) shell_plus
 
 build:
-	docker build -t localhost:5000/thraxil/countryx .
+	docker build -t thraxil/countryx .
 
 docker-pg:
 	docker run --name cx-pg \
@@ -48,7 +48,7 @@ docker-test: build
 	-e SECRET_KEY=notreal \
 	-e DB_PASSWORD=nothing \
 	-e DB_USER=postgres \
-	localhost:5000/thraxil/countryx
+	thraxil/countryx
 
 node_modules/jshint/bin/jshint:
 	npm install jshint

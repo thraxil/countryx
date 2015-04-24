@@ -31,7 +31,13 @@ if 'ALLOWED_HOSTS' in os.environ:
 
 TIME_ZONE = os.environ.get('TIME_ZONE', 'America/New_York')
 
-EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_HOST = os.environ.get(
+    'EMAIL_HOST',
+    os.environ.get('POSTFIX_PORT_25_TCP_ADDR', 'localhost'))
+EMAIL_PORT = os.environ.get(
+    'EMAIL_PORT',
+    os.environ.get('POSTFIX_PORT_25_TCP_PORT', 25))
+
 SERVER_EMAIL = os.environ.get('SERVER_EMAIL', "countryx@ccnmtl.columbia.edu")
 
 # -------------------------------------------
@@ -66,6 +72,7 @@ if AWS_S3_CUSTOM_DOMAIN:
     COMPRESS_ROOT = STATIC_ROOT
     COMPRESS_URL = STATIC_URL
     COMPRESS_STORAGE = 'cacheds3storage.CompressorS3BotoStorage'
+
 
 if RAVEN_DSN and 'migrate' not in sys.argv:
     INSTALLED_APPS.append('raven.contrib.django.raven_compat')
