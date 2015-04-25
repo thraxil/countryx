@@ -34,6 +34,11 @@ shell: ./ve/bin/python
 build:
 	docker build -t thraxil/countryx .
 
+deploy: test build
+	docker push thraxil/countryx
+	ssh arctic.thraxil.org docker pull thraxil/countryx
+	ssh arctic.thraxil.org sudo /sbin/restart countryx
+
 docker-pg:
 	docker run --name cx-pg \
 	-e POSTGRES_PASSWORD=nothing \
