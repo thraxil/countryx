@@ -1,4 +1,5 @@
 from django.test import TestCase
+from countryx.sim.models import ensure_consistency_of_all_sections
 from .factories import (
     RoleFactory, StateFactory, StateChangeFactory,
     StateVariableFactory, StateRoleChoiceFactory,
@@ -107,3 +108,12 @@ class TestSectionGroup(TestCase):
         StateFactory(state_no=1, turn=1)
         sg.make_state_current(1)
         self.assertEqual(sg.sectiongroupstate_set.count(), 1)
+
+
+class ConsistencyEnforcementTest(TestCase):
+    def test_no_sections(self):
+        ensure_consistency_of_all_sections()
+
+    def test_with_one_section(TestCase):
+        SectionTurnDatesFactory()
+        ensure_consistency_of_all_sections()

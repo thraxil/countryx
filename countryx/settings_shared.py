@@ -72,7 +72,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.transaction.TransactionMiddleware',
     'waffle.middleware.WaffleMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
-    'countryx.sim.middleware.GameStateMiddleware',
 )
 
 ROOT_URLCONF = 'countryx.urls'

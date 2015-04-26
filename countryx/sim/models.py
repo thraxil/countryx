@@ -524,3 +524,8 @@ class SectionGroupPlayerTurn(models.Model):
 
     def is_submitted(self):
         return self.submit_date is not None
+
+
+def ensure_consistency_of_all_sections():
+    for section in Section.objects.all():
+        section.ensure_consistency()
