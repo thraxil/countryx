@@ -1,4 +1,4 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, RequestFactory, Client
 
 from .factories import UserFactory, SectionAdministratorFactory
 from countryx.sim.views import root
@@ -19,3 +19,10 @@ class RootTest(TestCase):
         request.user = SectionAdministratorFactory().user
         response = root(request)
         self.assertEqual(response.status_code, 200)
+
+
+class SmoketestTest(TestCase):
+    def test_smoketest(self):
+        c = Client()
+        r = c.get("/smoketest/")
+        self.assertEqual(r.status_code, 200)
