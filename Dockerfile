@@ -15,7 +15,7 @@ COPY requirements.txt /var/www/countryx/countryx/
 RUN pip install -r /var/www/countryx/countryx/requirements.txt
 WORKDIR /var/www/countryx/countryx
 COPY . /var/www/countryx/countryx/
-RUN python manage.py jenkins --pep8-exclude=migrations --enable-coverage --coverage-rcfile=.coveragerc
+RUN python manage.py test
 EXPOSE 8000
 ADD docker-run.sh /run.sh
 CMD /run.sh
