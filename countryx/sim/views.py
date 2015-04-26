@@ -16,7 +16,7 @@ from django.forms.util import ErrorList
 from django.contrib.admin.widgets import AdminSplitDateTime
 import datetime
 import random
-import simplejson
+import json
 from django.http import Http404
 
 
@@ -75,7 +75,7 @@ def faculty_section_reset(request, section_id):
         response['turn2'] = tm.turn2.ctime()
         response['turn3'] = tm.turn3.ctime()
 
-    return HttpResponse(simplejson.dumps(response), 'application/json')
+    return HttpResponse(json.dumps(response), 'application/json')
 
 
 @login_required
@@ -215,7 +215,7 @@ def faculty_feedback_submit(request):
     response['result'] = 1
     response['turn_id'] = turn_id
     response['message'] = "Your feedback has been saved."
-    return HttpResponse(simplejson.dumps(response), 'application/json')
+    return HttpResponse(json.dumps(response), 'application/json')
 
 
 class FeedbackForm(forms.Form):
@@ -432,7 +432,7 @@ def allquestions(request):
         response.setdefault(
             x.state.id,
             {}).setdefault(x.role.name, {}).setdefault(x.choice, x.desc)
-    return HttpResponse(simplejson.dumps(response), 'application/json')
+    return HttpResponse(json.dumps(response), 'application/json')
 
 
 # actually needs to be faculty only
@@ -441,7 +441,7 @@ def allvariables(request):
     response = {}
     for x in StateVariable.objects.all():
         response.setdefault(x.state.id, {}).setdefault(x.name, x.value)
-    return HttpResponse(simplejson.dumps(response), 'application/json')
+    return HttpResponse(json.dumps(response), 'application/json')
 
 
 @render_to('sim/allpaths.html')
@@ -515,7 +515,7 @@ def player_choose(request):
             response['result'] = 1
             response['message'] = "Draft has been saved"
 
-    return HttpResponse(simplejson.dumps(response), 'application/json')
+    return HttpResponse(json.dumps(response), 'application/json')
 
 
 def __current_conditions(state):
