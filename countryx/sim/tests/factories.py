@@ -1,10 +1,17 @@
 from datetime import datetime
 import factory
+from django.contrib.auth.models import User
 from countryx.sim.models import (
     Role, State, StateChange, StateVariable,
     StateRoleChoice, Section, SectionTurnDates,
-    SectionGroup,
+    SectionGroup, SectionAdministrator,
 )
+
+
+class UserFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = User
+    username = factory.Sequence(lambda n: "user%d" % n)
 
 
 class RoleFactory(factory.DjangoModelFactory):
@@ -61,3 +68,10 @@ class SectionGroupFactory(factory.DjangoModelFactory):
     FACTORY_FOR = SectionGroup
     section = factory.SubFactory(SectionFactory)
     name = factory.Sequence(lambda n: 'group {0}'.format(n))
+
+
+class SectionAdministratorFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = SectionAdministrator
+    section = factory.SubFactory(SectionFactory)
+    user = factory.SubFactory(UserFactory)
