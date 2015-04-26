@@ -8,7 +8,11 @@ jenkins: ./ve/bin/python validate jshint jscs flake8 test
 	./bootstrap.py
 
 test: ./ve/bin/python
-	$(MANAGE) jenkins --pep8-exclude=migrations --enable-coverage --coverage-rcfile=.coveragerc
+	$(MANAGE) test
+
+coverage: ./ve/bin/python flake8
+	. ./ve/bin/activate && ./ve/bin/coverage run --source='countryx' ./manage.py test \
+	&& ./ve/bin/coverage html -d reports --omit='*migrations*,*settings_*,*wsgi*'
 
 jshint: node_modules/jshint/bin/jshint
 	./node_modules/jshint/bin/jshint media/js/game.js media/js/faculty.js media/js/sim_allpaths.js
