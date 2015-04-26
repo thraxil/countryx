@@ -79,3 +79,8 @@ if RAVEN_DSN and 'migrate' not in sys.argv:
     RAVEN_CONFIG = {
         'dsn': DSN,
     }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+}
