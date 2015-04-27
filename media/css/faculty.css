@@ -1,7 +1,3 @@
-@import "/admin_media/css/widgets.css";
-@import "/admin_media/css/global.css";
-@import "/admin_media/css/forms.css";
-
 textarea#id_feedback {
    width: 400px;
    height: 450px;

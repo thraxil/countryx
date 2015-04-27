@@ -10,7 +10,8 @@ from countryx.sim.models import SectionGroupState
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.views.generic import View
 from django import forms
 from django.forms.util import ErrorList
@@ -296,7 +297,8 @@ def faculty_section_manage(request, section_id, updated=False):
 
         form = TurnManagementForm(initial=initial)
 
-    return render_to_response(
+    return render(
+        request,
         'sim/faculty_section_manage.html', {
             'user': request.user,
             'section': section,
@@ -610,8 +612,11 @@ def check_statechanges(request):
                     for o in [1, 2, 3]:
                         (missing, duplicates) = check_statechange(
                             s, p, e, r, o, missing, duplicates)
-    return render_to_response("sim/check_statechanges.html",
-                              dict(missing=missing,
-                                   duplicates=duplicates,
-                                   user=request.user,
-                                   ))
+    return render(
+        request,
+        "sim/check_statechanges.html",
+        dict(
+            missing=missing,
+            duplicates=duplicates,
+            user=request.user,
+        ))
