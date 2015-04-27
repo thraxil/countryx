@@ -270,7 +270,7 @@ class Section(models.Model):
         self.reset_sectiongroupstates()
 
     def reset_sectiongroupstates(self):
-        start_state = State.objects.get(turn=1, state_no=1)
+        start_state, _ = State.objects.get_or_create(turn=1, state_no=1)
         for g in self.sectiongroup_set.all():
             # Remove all state rows for this group
             g.sectiongroupstate_set.all().delete()

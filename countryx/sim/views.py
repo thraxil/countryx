@@ -64,6 +64,7 @@ class CreateSectionView(View):
                 role=r,
                 group=sg,
             )
+        s.reset_sectiongroupstates()
         return HttpResponseRedirect("/sim/")
 
 
