@@ -1,6 +1,6 @@
 from django.test import TestCase, RequestFactory, Client
 
-from .factories import UserFactory, SectionAdministratorFactory
+from .factories import UserFactory
 from countryx.sim.views import root, allpaths, allquestions, allvariables
 
 
@@ -16,7 +16,7 @@ class RootTest(TestCase):
 
     def test_faculty(self):
         request = self.factory.get("/")
-        request.user = SectionAdministratorFactory().user
+        request.user = UserFactory(is_staff=True)
         response = root(request)
         self.assertEqual(response.status_code, 200)
 

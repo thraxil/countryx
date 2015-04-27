@@ -31,9 +31,7 @@ def root(request):
 @render_to("sim/faculty_index.html")
 def __faculty_index(request):
     sections = Section.objects.filter(sectionadministrator__user=request.user)
-    return dict(sections=sections, user=request.user,
-                port=request.META['SERVER_PORT'],
-                hostname=request.META['SERVER_NAME'])
+    return dict(sections=sections, user=request.user)
 
 
 @login_required
