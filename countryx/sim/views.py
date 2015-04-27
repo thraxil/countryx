@@ -19,9 +19,7 @@ from django.http import Http404
 
 @login_required
 def root(request):
-    # is the user a player or an administrator?
-    qs = SectionAdministrator.objects.filter(user=request.user)
-    if (len(qs) > 0):
+    if (request.user.is_staff):
         return __faculty_index(request)
     else:
         return __player_index(request)
