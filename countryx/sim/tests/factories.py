@@ -53,8 +53,6 @@ class StateRoleChoiceFactory(factory.DjangoModelFactory):
 class SectionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Section
     name = factory.Sequence(lambda n: 'section {0}'.format(n))
-    term = factory.Sequence(lambda n: 'term {0}'.format(n))
-    year = 2000
     created_date = datetime.now()
 
 

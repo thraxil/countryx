@@ -240,8 +240,6 @@ def faculty_section_manage(request, section_id, updated=False):
                     section=section, turn1=datetime.datetime.now())
 
             section.name = form.cleaned_data['section_name']
-            section.term = form.cleaned_data['section_term']
-            section.year = form.cleaned_data['section_year']
             section.save()
 
             tm.turn1 = form.cleaned_data['turn1']
@@ -255,8 +253,6 @@ def faculty_section_manage(request, section_id, updated=False):
     else:
         initial = {}
         initial['section_name'] = section.name
-        initial['section_term'] = section.term
-        initial['section_year'] = section.year
 
         try:
             tm = SectionTurnDates.objects.get(section=section)
@@ -290,8 +286,6 @@ class DateTimeFieldEx(forms.DateTimeField):
 
 class TurnManagementForm(forms.Form):
     section_name = forms.CharField()
-    section_term = forms.CharField()
-    section_year = forms.CharField()
 
     turn1 = DateTimeFieldEx(
         widget=AdminSplitDateTime, required=True, label="Turn 1 Close Date")

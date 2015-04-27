@@ -180,12 +180,10 @@ class StateRoleChoice(models.Model):
 
 class Section(models.Model):
     name = models.CharField(max_length=20)
-    term = models.CharField(max_length=20)
-    year = models.IntegerField()
     created_date = models.DateTimeField('created_date')
 
     def __unicode__(self):
-        return "%s %s %s" % (self.name, self.term, self.year)
+        return self.name
 
     def current_turn(self):
         turn_dates = SectionTurnDates.objects.get(section=self)
@@ -327,7 +325,7 @@ def get_or_create_section(name):
         return Section.objects.get(name=name)
     except Section.DoesNotExist:
         # need to make one
-        return Section.objects.create(name=name, term="cheat", year=2009,
+        return Section.objects.create(name=name,
                                       created_date=datetime.datetime.now())
 
 

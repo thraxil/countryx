@@ -12,15 +12,13 @@
 	<br /><br />
 	<table class="datagrid" cellpadding="5">
 		<tr>
-		   <th>Course Title</th>
-		   <th>Term</th>
-		   <th>Administrators</th>
+		   <th>Section</th>
+		   <th>Facilitators</th>
 		   <th style="text-align: center">Current Turn</th>
-		   <th style="text-align: center">Turn Close Date</th>
 		   <th colspan="3" style="text-align: center">Actions</th></tr>
 		{% for section in sections %}
 			<tr>
-				<td>{{section.name}}</td><td>{{section.term}} {{section.year}}</td>
+				<td>{{section.name}}</td>
 				<td>
 					{% for admin in section.sectionadministrator_set.all %}
 						{{admin.user.first_name}} {{admin.user.last_name}} ({{admin.user.username}})<br />
@@ -32,8 +30,6 @@
                <td style="text-align: center">Game Completed</td>
             {% endiflessthan %}
             
-				<td style="text-align: center">{{section.current_turn_close_date}}</td>
-				
 				<td><a href="/sim/faculty/manage/{{section.id}}/">Turn Management</a></td>
 				<td><a href="/sim/faculty/groups/{{section.id}}/">View by Groups</a></td>
 				<td><a href="/sim/faculty/players/{{section.id}}/">View by Player</a></td>
