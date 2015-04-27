@@ -1,5 +1,6 @@
-from django.conf.urls import patterns
+from django.conf.urls import patterns, url
 import os.path
+from .views import CreateSectionView
 
 media_root = os.path.join(os.path.dirname(__file__), "media")
 
@@ -44,4 +45,5 @@ urlpatterns = patterns(
      'countryx.sim.views.faculty_player_detail'),
     (r'^faculty/feedback/$', 'countryx.sim.views.faculty_feedback_submit'),
     (r'^check_statechanges/$', 'countryx.sim.views.check_statechanges'),
+    url(r'^section/new/$', CreateSectionView.as_view(), name='create-section'),
 )

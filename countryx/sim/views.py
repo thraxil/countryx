@@ -1,4 +1,5 @@
 from annoying.decorators import render_to
+from countryx.sim.models import Role
 from countryx.sim.models import SectionAdministrator, Section
 from countryx.sim.models import SectionGroupPlayer
 from countryx.sim.models import SectionGroup, SectionTurnDates
@@ -8,7 +9,9 @@ from countryx.sim.models import StateChange, StateVariable
 from countryx.sim.models import SectionGroupState
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
+from django.views.generic import View
 from django import forms
 from django.forms.util import ErrorList
 from django.contrib.admin.widgets import AdminSplitDateTime
@@ -31,7 +34,36 @@ def root(request):
 @render_to("sim/faculty_index.html")
 def __faculty_index(request):
     sections = Section.objects.filter(sectionadministrator__user=request.user)
-    return dict(sections=sections, user=request.user)
+    roles = Role.objects.all()
+    return dict(sections=sections, user=request.user, roles=roles)
+
+
+class CreateSectionView(View):
+    def post(self, request):
+        now = datetime.datetime.now()
+        s = Section.objects.create(
+            name=request.POST.get('name', 'unamed section'),
+            created_date=now)
+        SectionAdministrator.objects.create(section=s, user=request.user)
+        SectionTurnDates.objects.create(
+            section=s,
+            turn1=now + datetime.timedelta(hours=100),
+            turn2=now + datetime.timedelta(hours=200),
+            turn3=now + datetime.timedelta(hours=300),
+        )
+        sg = SectionGroup.objects.create(section=s, name=s.name)
+        for r in Role.objects.all():
+            username = request.POST.get('username_%d' % r.id)
+            password = request.POST.get('password_%d' % r.id)
+            u = User.objects.create(username=username)
+            u.set_password(password)
+            u.save()
+            SectionGroupPlayer.objects.create(
+                user=u,
+                role=r,
+                group=sg,
+            )
+        return HttpResponseRedirect("/sim/")
 
 
 @login_required

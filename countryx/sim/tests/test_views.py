@@ -1,7 +1,11 @@
+from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory, Client
 
-from .factories import UserFactory
-from countryx.sim.views import root, allpaths, allquestions, allvariables
+from .factories import UserFactory, RoleFactory
+from countryx.sim.models import Section
+from countryx.sim.views import (
+    root, allpaths, allquestions, allvariables, CreateSectionView
+)
 
 
 class RootTest(TestCase):
@@ -59,3 +63,38 @@ class SmoketestTest(TestCase):
         c = Client()
         r = c.get("/smoketest/")
         self.assertEqual(r.status_code, 200)
+
+
+class CreateSectionViewTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.v = CreateSectionView.as_view()
+
+    def test_create_no_roles(self):
+        u = UserFactory()
+        request = self.factory.post(
+            reverse("create-section"),
+            dict(
+                name="test section"
+            )
+        )
+        request.user = u
+        response = self.v(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Section.objects.count(), 1)
+
+    def test_create_roles(self):
+        u = UserFactory()
+        r = RoleFactory()
+        request = self.factory.post(
+            reverse("create-section"),
+            {
+                'name': "test section",
+                "username_%d" % r.id: "foo",
+                "password_%d" % r.id: "bar",
+            }
+        )
+        request.user = u
+        response = self.v(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Section.objects.count(), 1)
