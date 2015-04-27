@@ -268,8 +268,10 @@ class Section(models.Model):
     def reset(self):
         """ reset the section back to its Start state """
         self.set_sectionturndates_to_default()
-        start_state = State.objects.get(turn=1, state_no=1)
+        self.reset_sectiongroupstates()
 
+    def reset_sectiongroupstates(self):
+        start_state = State.objects.get(turn=1, state_no=1)
         for g in self.sectiongroup_set.all():
             # Remove all state rows for this group
             g.sectiongroupstate_set.all().delete()
