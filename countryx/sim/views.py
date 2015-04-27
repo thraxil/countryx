@@ -14,8 +14,6 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.generic import View
 from django import forms
-from django.forms.util import ErrorList
-from django.contrib.admin.widgets import AdminSplitDateTime
 import datetime
 import json
 from django.http import Http404
@@ -263,47 +261,11 @@ def faculty_end_turn(request, section_id):
 def faculty_section_manage(request, section_id, updated=False):
     section = get_object_or_404(Section, id=section_id)
 
-    if (request.method == 'POST'):
-        form = TurnManagementForm(request.POST)
-        if (form.is_valid()):
-            # Process the data in form.cleaned_data
-            try:
-                tm = SectionTurnDates.objects.get(section=section)
-            except SectionTurnDates.DoesNotExist:
-                tm = SectionTurnDates.objects.create(
-                    section=section, turn1=datetime.datetime.now())
-
-            section.name = form.cleaned_data['section_name']
-            section.save()
-
-            tm.turn1 = form.cleaned_data['turn1']
-            tm.turn2 = form.cleaned_data['turn2']
-            tm.turn3 = form.cleaned_data['turn3']
-
-            tm.save()
-
-            redirect_url = '/sim/faculty/manage/%s/' % (section_id)
-            return HttpResponseRedirect(redirect_url)
-    else:
-        initial = {}
-        initial['section_name'] = section.name
-
-        try:
-            tm = SectionTurnDates.objects.get(section=section)
-            initial['turn1'] = tm.turn1
-            initial['turn2'] = tm.turn2
-            initial['turn3'] = tm.turn3
-        except SectionTurnDates.DoesNotExist:
-            initial['turn1'] = datetime.datetime.now()
-
-        form = TurnManagementForm(initial=initial)
-
     return render(
         request,
         'sim/faculty_section_manage.html', {
             'user': request.user,
             'section': section,
-            'form': form,
             'updated': updated
         })
 
@@ -318,37 +280,6 @@ class DateTimeFieldEx(forms.DateTimeField):
             return None
         return super(DateTimeFieldEx, self).clean(value)
 
-
-class TurnManagementForm(forms.Form):
-    section_name = forms.CharField()
-
-    turn1 = DateTimeFieldEx(
-        widget=AdminSplitDateTime, required=True, label="Turn 1 Close Date")
-    turn2 = DateTimeFieldEx(
-        widget=AdminSplitDateTime, required=False, label="Turn 2 Close Date")
-    turn3 = DateTimeFieldEx(
-        widget=AdminSplitDateTime, required=False, label="Turn 3 Close Date")
-
-    def __compare(self, cleaned_data, fieldOne, fieldTwo, labelOne, labelTwo):
-        if (fieldTwo in cleaned_data and
-                not cleaned_data[fieldTwo] in EMPTY_VALUES):
-            if (fieldOne in cleaned_data and
-                not cleaned_data[fieldOne] in EMPTY_VALUES and
-                cmp(cleaned_data[fieldOne],
-                    cleaned_data[fieldTwo]) > -1):
-                msg = "%s close date must be after %s close date" % (
-                    labelTwo, labelOne)
-                self._errors[fieldTwo] = ErrorList([msg])
-                del cleaned_data[fieldTwo]
-
-    def clean(self):
-        cleaned_data = self.cleaned_data
-
-        self.__compare(cleaned_data, "turn1", "turn2", "Turn 1", "Turn 2")
-        self.__compare(cleaned_data, "turn1", "turn3", "Turn 1", "Turn 3")
-        self.__compare(cleaned_data, "turn2", "turn3", "Turn 2", "Turn 3")
-
-        return cleaned_data
 
 ###############################################################################
 ###############################################################################
