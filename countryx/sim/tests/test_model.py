@@ -4,6 +4,7 @@ from .factories import (
     RoleFactory, StateFactory, StateChangeFactory,
     StateVariableFactory, StateRoleChoiceFactory,
     SectionTurnDatesFactory, SectionGroupFactory,
+    UserFactory,
 )
 
 
@@ -11,6 +12,10 @@ class RoleTest(TestCase):
     def test_unicode(self):
         r = RoleFactory()
         self.assertEqual(str(r), r.name)
+
+    def test_display_name(self):
+        r = RoleFactory()
+        self.assertEqual(r.display_name(), 'role')
 
 
 class StateTest(TestCase):
@@ -96,6 +101,28 @@ class TestSection(TestCase):
         std = SectionTurnDatesFactory()
         s = std.section
         s.clear_all()
+
+    def test_reset(self):
+        std = SectionTurnDatesFactory()
+        s = std.section
+        StateFactory(turn=1, state_no=1)
+        s.reset()
+
+    def test_ensure_consistency_empty(self):
+        std = SectionTurnDatesFactory()
+        s = std.section
+        s.ensure_consistency()
+
+    def test_get_absolute_url(self):
+        std = SectionTurnDatesFactory()
+        s = std.section
+        self.assertTrue(s.get_absolute_url().startswith("/sim/faculty/"))
+
+    def test_remove_faculty_already_not(self):
+        std = SectionTurnDatesFactory()
+        s = std.section
+        u = UserFactory()
+        s.remove_faculty(u)
 
 
 class TestSectionGroup(TestCase):

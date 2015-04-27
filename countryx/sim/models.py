@@ -2,7 +2,6 @@ from django.db import models, connection
 from django.contrib.auth.models import User
 import datetime
 import random
-import re
 
 
 class Role(models.Model):
@@ -17,8 +16,8 @@ class Role(models.Model):
         return self.name
 
     def display_name(self):
-        p = re.compile("[A-Z][a-z]*")
-        return " ".join(p.findall(self.name))
+        parts = self.name.split(" ")
+        return parts[0]
 
 
 class State(models.Model):

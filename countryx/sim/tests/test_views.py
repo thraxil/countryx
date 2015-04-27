@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory, Client
 
-from .factories import UserFactory, RoleFactory
+from .factories import UserFactory, RoleFactory, StateFactory
 from countryx.sim.models import Section
 from countryx.sim.views import (
     root, allpaths, allquestions, allvariables, CreateSectionView
@@ -30,6 +30,13 @@ class AllPathsTest(TestCase):
         self.factory = RequestFactory()
 
     def test_allpaths_empty(self):
+        request = self.factory.get("/")
+        request.user = UserFactory()
+        response = allpaths(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_allpaths_one_state(self):
+        StateFactory()
         request = self.factory.get("/")
         request.user = UserFactory()
         response = allpaths(request)
