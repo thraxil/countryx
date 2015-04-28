@@ -21,7 +21,7 @@ jscs: node_modules/jscs/bin/jscs
 	./node_modules/jscs/bin/jscs media/js/game.js media/js/faculty.js media/js/sim_allpaths.js
 
 flake8: ./ve/bin/python
-	$(FLAKE8) $(APP) --max-complexity=10
+	$(FLAKE8) $(APP) --max-complexity=9
 
 runserver: ./ve/bin/python validate
 	$(MANAGE) runserver
