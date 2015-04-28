@@ -9,14 +9,22 @@ from countryx.sim.models import StateChange, StateVariable
 from countryx.sim.models import SectionGroupState
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django import forms
 import datetime
 import json
 from django.http import Http404
+
+
+class StaffOnlyMixin(object):
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, *args, **kwargs):
+        return super(StaffOnlyMixin, self).dispatch(*args, **kwargs)
 
 
 @login_required
@@ -37,7 +45,7 @@ def __faculty_index(request):
     return dict(sections=sections, user=request.user, roles=roles)
 
 
-class CreateSectionView(View):
+class CreateSectionView(StaffOnlyMixin, View):
     def post(self, request):
         now = datetime.datetime.now()
         s = Section.objects.create(

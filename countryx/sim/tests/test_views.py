@@ -78,7 +78,7 @@ class CreateSectionViewTest(TestCase):
         self.v = CreateSectionView.as_view()
 
     def test_create_no_roles(self):
-        u = UserFactory()
+        u = UserFactory(is_staff=True)
         request = self.factory.post(
             reverse("create-section"),
             dict(
@@ -91,7 +91,7 @@ class CreateSectionViewTest(TestCase):
         self.assertEqual(Section.objects.count(), 1)
 
     def test_create_roles(self):
-        u = UserFactory()
+        u = UserFactory(is_staff=True)
         r = RoleFactory()
         request = self.factory.post(
             reverse("create-section"),
