@@ -3,7 +3,7 @@ from countryx.sim.models import ensure_consistency_of_all_sections
 from .factories import (
     RoleFactory, StateFactory, StateChangeFactory,
     StateVariableFactory, StateRoleChoiceFactory,
-    SectionTurnDatesFactory, SectionGroupFactory,
+    SectionGroupFactory, SectionFactory,
     UserFactory,
 )
 
@@ -83,39 +83,32 @@ class TestStateRoleChoice(TestCase):
 
 class TestSection(TestCase):
     def test_current_turn(self):
-        std = SectionTurnDatesFactory()
-        s = std.section
+        s = SectionFactory()
         self.assertEqual(s.current_turn(), 1)
 
     def test_end_turn(self):
-        std = SectionTurnDatesFactory()
-        s = std.section
+        s = SectionFactory()
         s.end_turn()
 
     def test_clear_all(self):
-        std = SectionTurnDatesFactory()
-        s = std.section
+        s = SectionFactory()
         s.clear_all()
 
     def test_reset(self):
-        std = SectionTurnDatesFactory()
-        s = std.section
+        s = SectionFactory()
         StateFactory(turn=1, state_no=1)
         s.reset()
 
     def test_ensure_consistency_empty(self):
-        std = SectionTurnDatesFactory()
-        s = std.section
+        s = SectionFactory()
         s.ensure_consistency()
 
     def test_get_absolute_url(self):
-        std = SectionTurnDatesFactory()
-        s = std.section
+        s = SectionFactory()
         self.assertTrue(s.get_absolute_url().startswith("/sim/faculty/"))
 
     def test_remove_faculty_already_not(self):
-        std = SectionTurnDatesFactory()
-        s = std.section
+        s = SectionFactory()
         u = UserFactory()
         s.remove_faculty(u)
 
@@ -137,5 +130,5 @@ class ConsistencyEnforcementTest(TestCase):
         ensure_consistency_of_all_sections()
 
     def test_with_one_section(TestCase):
-        SectionTurnDatesFactory()
+        SectionFactory()
         ensure_consistency_of_all_sections()

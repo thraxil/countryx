@@ -2,7 +2,7 @@ from annoying.decorators import render_to
 from countryx.sim.models import Role
 from countryx.sim.models import SectionAdministrator, Section
 from countryx.sim.models import SectionGroupPlayer
-from countryx.sim.models import SectionGroup, SectionTurnDates
+from countryx.sim.models import SectionGroup
 from countryx.sim.models import State, SectionGroupPlayerTurn
 from countryx.sim.models import StateRoleChoice
 from countryx.sim.models import StateChange, StateVariable
@@ -50,14 +50,9 @@ class CreateSectionView(StaffOnlyMixin, View):
         now = datetime.datetime.now()
         s = Section.objects.create(
             name=request.POST.get('section_name', 'unamed section'),
+            turn=1,
             created_date=now)
         SectionAdministrator.objects.create(section=s, user=request.user)
-        SectionTurnDates.objects.create(
-            section=s,
-            turn1=now + datetime.timedelta(hours=100),
-            turn2=now + datetime.timedelta(hours=200),
-            turn3=now + datetime.timedelta(hours=300),
-        )
         for i in range(5):
             group_name = request.POST.get('group_name_%d' % i)
             if group_name is None:
@@ -106,11 +101,6 @@ def faculty_section_reset(request, section_id):
     else:
         section = get_object_or_404(Section, id=section_id)
         section.reset()
-
-        tm = SectionTurnDates.objects.get(section=section)
-        response['turn1'] = tm.turn1.ctime()
-        response['turn2'] = tm.turn2.ctime()
-        response['turn3'] = tm.turn3.ctime()
 
     return HttpResponse(json.dumps(response), 'application/json')
 

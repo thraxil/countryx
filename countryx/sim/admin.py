@@ -1,7 +1,7 @@
 from countryx.sim.models import StateVariable, Role, State
 from countryx.sim.models import StateChange, Section
 from countryx.sim.models import SectionGroup, StateRoleChoice
-from countryx.sim.models import SectionTurnDates, SectionAdministrator
+from countryx.sim.models import SectionAdministrator
 from countryx.sim.models import SectionGroupPlayer, SectionGroupState
 from django.contrib import admin
 
@@ -33,19 +33,13 @@ admin.site.register(State, StateAdmin)
 ###############################################################################
 
 
-class SectionTurnDatesInline(admin.StackedInline):
-    model = SectionTurnDates
-    max_num = 1
-    extra = 1
-
-
 class SectionAdministratorInline(admin.StackedInline):
     model = SectionAdministrator
     extra = 1
 
 
 class SectionAdmin(admin.ModelAdmin):
-    inlines = [SectionAdministratorInline, SectionTurnDatesInline]
+    inlines = [SectionAdministratorInline]
     model = Section
 
 admin.site.register(Section, SectionAdmin)

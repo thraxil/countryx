@@ -257,16 +257,6 @@ class SectionAdministrator(models.Model):
         return "%s" % (self.user)
 
 
-class SectionTurnDates(models.Model):
-    section = models.ForeignKey(Section)
-    turn1 = models.DateTimeField('turn1')
-    turn2 = models.DateTimeField('turn2', null=True)
-    turn3 = models.DateTimeField('turn3', null=True)
-
-    def __unicode__(self):
-        return "%s %s %s" % (self.turn1, self.turn2, self.turn3)
-
-
 def get_or_create_section(name):
     """ fetches an existing section with a given name
 
