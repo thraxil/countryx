@@ -49,10 +49,18 @@
 <table>
 	<tr>
 		<td>Section/Workshop Name</td>
-		<td><input type="text" name="name" /></td>
+		<td><input type="text" name="section_name" /></td>
 		<td></td>
 	</tr>
+</table>
 
+<h3>Define Groups</h3>
+
+<table>
+	<tr>
+		<th>Group Name:</th>
+		<td colspan="3"><input type="text" name="group_name_0" /></td>
+	</tr>
 	<tr>
 		<th>Role</th>
 		<th>Username</th>
@@ -62,11 +70,92 @@
 {% for role in roles %}
 	<tr>
 		<td>{{role.name}}</td>
-		<td><input type="text" name="username_{{role.id}}" /></td>
-		<td><input type="text" name="password_{{role.id}}" /></td>
+		<td><input type="text" name="group_0_username_{{role.id}}" /></td>
+		<td><input type="text" name="group_0_password_{{role.id}}" /></td>
 	</tr>
 {% endfor %}
 </table>
+
+<table>
+	<tr>
+		<th>Group Name:</th>
+		<td colspan="3"><input type="text" name="group_name_1" /></td>
+	</tr>
+	<tr>
+		<th>Role</th>
+		<th>Username</th>
+		<th>Password</th>
+	</tr>
+
+{% for role in roles %}
+	<tr>
+		<td>{{role.name}}</td>
+		<td><input type="text" name="group_1_username_{{role.id}}" /></td>
+		<td><input type="text" name="group_1_password_{{role.id}}" /></td>
+	</tr>
+{% endfor %}
+</table>
+
+<table>
+	<tr>
+		<th>Group Name:</th>
+		<td colspan="3"><input type="text" name="group_name_2" /></td>
+	</tr>
+	<tr>
+		<th>Role</th>
+		<th>Username</th>
+		<th>Password</th>
+	</tr>
+
+{% for role in roles %}
+	<tr>
+		<td>{{role.name}}</td>
+		<td><input type="text" name="group_2_username_{{role.id}}" /></td>
+		<td><input type="text" name="group_2_password_{{role.id}}" /></td>
+	</tr>
+{% endfor %}
+</table>
+
+<table>
+	<tr>
+		<th>Group Name:</th>
+		<td colspan="3"><input type="text" name="group_name_3" /></td>
+	</tr>
+	<tr>
+		<th>Role</th>
+		<th>Username</th>
+		<th>Password</th>
+	</tr>
+
+{% for role in roles %}
+	<tr>
+		<td>{{role.name}}</td>
+		<td><input type="text" name="group_3_username_{{role.id}}" /></td>
+		<td><input type="text" name="group_3_password_{{role.id}}" /></td>
+	</tr>
+{% endfor %}
+</table>
+
+<table>
+	<tr>
+		<th>Group Name:</th>
+		<td colspan="3"><input type="text" name="group_name_4" /></td>
+	</tr>
+	<tr>
+		<th>Role</th>
+		<th>Username</th>
+		<th>Password</th>
+	</tr>
+
+{% for role in roles %}
+	<tr>
+		<td>{{role.name}}</td>
+		<td><input type="text" name="group_4_username_{{role.id}}" /></td>
+		<td><input type="text" name="group_4_password_{{role.id}}" /></td>
+	</tr>
+{% endfor %}
+</table>
+
 
 <input type="submit" value="create new section" />
 </form>

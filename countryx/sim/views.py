@@ -41,7 +41,7 @@ class CreateSectionView(View):
     def post(self, request):
         now = datetime.datetime.now()
         s = Section.objects.create(
-            name=request.POST.get('name', 'unamed section'),
+            name=request.POST.get('section_name', 'unamed section'),
             created_date=now)
         SectionAdministrator.objects.create(section=s, user=request.user)
         SectionTurnDates.objects.create(
@@ -50,19 +50,23 @@ class CreateSectionView(View):
             turn2=now + datetime.timedelta(hours=200),
             turn3=now + datetime.timedelta(hours=300),
         )
-        sg = SectionGroup.objects.create(section=s, name=s.name)
-        for r in Role.objects.all():
-            username = request.POST.get('username_%d' % r.id)
-            password = request.POST.get('password_%d' % r.id)
-            u = User.objects.create(username=username)
-            u.set_password(password)
-            u.save()
-            SectionGroupPlayer.objects.create(
-                user=u,
-                role=r,
-                group=sg,
-            )
-        s.reset_sectiongroupstates()
+        for i in range(5):
+            group_name = request.POST.get('group_name_%d' % i)
+            if group_name is None:
+                continue
+            sg = SectionGroup.objects.create(section=s, name=group_name)
+            for r in Role.objects.all():
+                username = request.POST.get('group_%d_username_%d' % (i, r.id))
+                password = request.POST.get('group_%d_password_%d' % (i, r.id))
+                u = User.objects.create(username=username)
+                u.set_password(password)
+                u.save()
+                SectionGroupPlayer.objects.create(
+                    user=u,
+                    role=r,
+                    group=sg,
+                )
+            s.reset_sectiongroupstates()
         return HttpResponseRedirect("/sim/")
 
 

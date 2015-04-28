@@ -82,7 +82,7 @@ class CreateSectionViewTest(TestCase):
         request = self.factory.post(
             reverse("create-section"),
             dict(
-                name="test section"
+                section_name="test section"
             )
         )
         request.user = u
@@ -96,9 +96,10 @@ class CreateSectionViewTest(TestCase):
         request = self.factory.post(
             reverse("create-section"),
             {
-                'name': "test section",
-                "username_%d" % r.id: "foo",
-                "password_%d" % r.id: "bar",
+                'section_name': "test section",
+                'group_name_0': "test group",
+                "group_0_username_%d" % r.id: "foo",
+                "group_0_password_%d" % r.id: "bar",
             }
         )
         request.user = u
