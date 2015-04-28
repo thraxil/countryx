@@ -180,6 +180,7 @@ class StateRoleChoice(models.Model):
 class Section(models.Model):
     name = models.CharField(max_length=20)
     created_date = models.DateTimeField('created_date')
+    turn = models.IntegerField(default=1)
 
     def __unicode__(self):
         return self.name
