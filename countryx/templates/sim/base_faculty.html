@@ -4,11 +4,13 @@
    {{ block.super }}
    <script type="text/javascript" src="{{STATIC_URL}}admin/js/core.js"></script>
    <script type="text/javascript" src="{{STATIC_URL}}js/faculty.js"></script>
+   <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block css %}
-{{ block.super }}
+
 	 <link rel="stylesheet" href="{{STATIC_URL}}css/faculty.css" />
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
 {% endblock %}
 
 {% block masthead %}
