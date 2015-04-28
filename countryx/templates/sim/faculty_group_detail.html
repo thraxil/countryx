@@ -12,7 +12,7 @@
    {{ block.super }}
    
    {% for t in turns %}
-      <a name="turn{{t.group_state.state.turn}}"/>
+      <a name="turn{{t.group_state.state.turn}}"></a>
       
       {% iflessthan t.group_state.state.turn 4 %}
 	      <h2>Turn {{t.group_state.state.turn}} {{t.group_state.state.name}}</h2>
