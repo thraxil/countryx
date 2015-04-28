@@ -54,6 +54,7 @@ class SectionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Section
     name = factory.Sequence(lambda n: 'section {0}'.format(n))
     created_date = datetime.now()
+    turn = 1
 
 
 class SectionTurnDatesFactory(factory.DjangoModelFactory):

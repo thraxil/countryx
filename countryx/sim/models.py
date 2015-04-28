@@ -186,65 +186,14 @@ class Section(models.Model):
         return self.name
 
     def current_turn(self):
-        turn_dates = SectionTurnDates.objects.get(section=self)
-        if (turn_dates.turn1 > datetime.datetime.now()):
-            return 1
-        elif (turn_dates.turn2 is None or
-              turn_dates.turn2 > datetime.datetime.now()):
-            return 2
-        elif (turn_dates.turn3 is None or
-              turn_dates.turn3 > datetime.datetime.now()):
-            return 3
-        return 4
-
-    def current_turn_close_date(self):
-        turn_dates = SectionTurnDates.objects.get(section=self)
-        if (turn_dates.turn1 > datetime.datetime.now()):
-            return turn_dates.turn1
-        elif (turn_dates.turn2 is None or
-              turn_dates.turn2 > datetime.datetime.now()):
-            return turn_dates.turn2
-        elif (turn_dates.turn3 is None or
-              turn_dates.turn3 > datetime.datetime.now()):
-            return turn_dates.turn3
-
-        return turn_dates.turn1
+        return self.turn
 
     def end_turn(self):
-        ct = self.current_turn()
-        std = self.sectionturndates_set.all()[0]
-        if ct == 1:
-            std.turn1 = datetime.datetime.now()
-        elif ct == 2:
-            std.turn2 = datetime.datetime.now()
-        elif ct == 3:
-            std.turn3 = datetime.datetime.now()
-        else:
-            raise "This shouldn't have happened"
-        std.save()
+        self.turn = self.turn + 1
+        self.save()
 
     def get_absolute_url(self):
         return "/sim/faculty/manage/%d/" % self.id
-
-    def set_sectionturndates_to_default(self):
-        """ sets turn dates on this section to one day apart starting now """
-        dates = (datetime.datetime.now() + datetime.timedelta(hours=24),
-                 datetime.datetime.now() + datetime.timedelta(hours=48),
-                 datetime.datetime.now() + datetime.timedelta(hours=72))
-        if self.sectionturndates_set.all().count() > 0:
-            std = self.sectionturndates_set.all()[0]
-            std.turn1 = dates[0]
-            std.turn2 = dates[1]
-            std.turn3 = dates[2]
-            std.save()
-            return std
-        else:
-            std = SectionTurnDates.objects.create(section=self,
-                                                  turn1=dates[0],
-                                                  turn2=dates[1],
-                                                  turn3=dates[2],
-                                                  )
-            return std
 
     def clear_all(self):
         """ clear out all the groups in the section
@@ -267,7 +216,8 @@ class Section(models.Model):
 
     def reset(self):
         """ reset the section back to its Start state """
-        self.set_sectionturndates_to_default()
+        self.turn = 1
+        self.save()
         self.reset_sectiongroupstates()
 
     def reset_sectiongroupstates(self):

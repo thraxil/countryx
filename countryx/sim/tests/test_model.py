@@ -85,12 +85,7 @@ class TestSection(TestCase):
     def test_current_turn(self):
         std = SectionTurnDatesFactory()
         s = std.section
-        self.assertEqual(s.current_turn(), 2)
-
-    def test_current_turn_close_date(self):
-        std = SectionTurnDatesFactory()
-        s = std.section
-        self.assertEqual(s.current_turn_close_date(), None)
+        self.assertEqual(s.current_turn(), 1)
 
     def test_end_turn(self):
         std = SectionTurnDatesFactory()
