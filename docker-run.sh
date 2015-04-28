@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd /var/www/countryx/countryx/
-python manage.py migrate --settings=countryx.settings_docker
+python manage.py migrate --noinput --settings=countryx.settings_docker
 python manage.py collectstatic --noinput --settings=countryx.settings_docker
 python manage.py compress --settings=countryx.settings_docker
 gunicorn --env \
