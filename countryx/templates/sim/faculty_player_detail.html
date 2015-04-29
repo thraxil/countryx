@@ -12,9 +12,10 @@
 
 {% block content %}
    {{ block.super }}
-   
+
+<div class="container">   
    {% for t in player_turns %}
-      <a name="turn{{t.turn}"/>
+      <a name="turn{{t.turn}"></a>
       
       {% iflessthan t.state.turn 4 %}
          <h2>Turn {{t.state.turn}} {{t.state.name}}</h2>
@@ -92,4 +93,5 @@
 			</table>
 		{% endiflessthan %}		
    {% endfor %}
+</div>
 {% endblock %}

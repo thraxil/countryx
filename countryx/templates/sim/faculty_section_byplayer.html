@@ -8,15 +8,15 @@
 
 {% block content %}
    {{ block.super }}
-   
-   <table id="sortable_table" class="datagrid">
+
+<div class="container">   
+   <table id="sortable_table" class="datagrid table table-condensed">
       <thead>
          <tr>
             <th mochi:format="str">Group Turn</th>
             <th mochi:format="str">Group</th>
             <th mochi:format="str">Player Status</th>
-            <th mochi:format="str">Name</th>
-            <th mochi:format="str">Uni</th>
+            <th mochi:format="str">Username</th>
             <th mochi:format="str">Role</th>
             <th>Detail</th>
          </tr>
@@ -44,7 +44,6 @@
 	                  Submitted      
 	               {% endifequal %}
 	            </td>
-	            <td>{{ player.user.first_name }} {{ player.user.last_name }}</td>
 	            <td>{{ player.user.username }}</td>
 	            <td>{{ player.role.display_name }}</td>
 	            {% iflessthan player.sectiongroupplayerturn_related_player.count 1 %}
@@ -56,4 +55,5 @@
          {% endfor %}
       </tbody>
    </table>
+</div>
 {% endblock %}

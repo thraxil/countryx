@@ -56,8 +56,8 @@ class CreateSectionView(StaffOnlyMixin, View):
             created_date=now)
         SectionAdministrator.objects.create(section=s, user=request.user)
         for i in range(5):
-            group_name = request.POST.get('group_name_%d' % i)
-            if group_name is None:
+            group_name = request.POST.get('group_name_%d' % i, '').strip()
+            if not group_name:
                 continue
             sg = SectionGroup.objects.create(section=s, name=group_name)
             for r in Role.objects.all():

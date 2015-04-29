@@ -6,8 +6,9 @@
 
 {% block content %}
    {{ block.super }}
-   
-   <table id="sortable_table" class="datagrid">
+
+<div class="container">   
+   <table id="sortable_table" class="datagrid table">
       <thead>
          <tr>
             <th mochi:format="str">Status</th>
@@ -43,4 +44,5 @@
 	   </tbody>
    </table>
    
+</div>
 {% endblock %}

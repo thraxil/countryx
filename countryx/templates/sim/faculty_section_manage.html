@@ -12,7 +12,7 @@
 
 {% block content %}
    {{ block.super }}
-
+<div class="container">
 
 
    {% ifnotequal section.current_turn 4 %}
@@ -22,10 +22,10 @@
        <!-- todo: put in options for selecting choices on roles
 	    that haven't submitted -->
 
-       <table>
-	 <tr}><th>group</th><th>status</th><th>action</th></tr>
+       <table class="table table-striped">
+	 <tr><th>group</th><th>status</th><th>action</th></tr>
 	 {% for group in section.sectiongroup_set.all %}
-	 <tr class="{% cycle "even" "odd" %}">
+	 <tr>
 	   <th>{{ group.name }}</th>
 	   <td>{{ group.status_name }}</td>
 	   <td>{% ifnotequal group.status 4 %}
@@ -41,7 +41,9 @@
 	 {% endfor %}
        </table>
        <br />
-       <input type="submit" value="turn advance" />
+       <button type="submit" class="btn btn-primary">
+				 Turn advance <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+			 </button>
        <br /><br />
      </fieldset>
    </form>
@@ -52,4 +54,5 @@
    <p>This section has completed all four turns</p>
    {% endifequal %}
 
+</div>
 {% endblock %}

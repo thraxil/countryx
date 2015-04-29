@@ -10,7 +10,8 @@
 
 {% block content %}
    {{ block.super }}
-   
+
+<div class="container">   
    {% for t in turns %}
       <a name="turn{{t.group_state.state.turn}}"></a>
       
@@ -32,13 +33,11 @@
 	      <br />
 	      <div class="scrollable_text">{% autoescape off %}<b>Country Conditions</b><br />{{ t.country_condition }}{% endautoescape %}</div>
          <br />   
-	      <table id="sortable_table" class="datagrid">
+	      <table id="sortable_table" class="datagrid table table-condensed">
 	      <thead>
 	         <tr>
 	            <th mochi:format="str">Status</th>
-	            <th mochi:format="str">First Name</th>
-	            <th mochi:format="str">Last Name</th>
-	            <th mochi:format="str">Uni</th>
+	            <th mochi:format="str">Username</th>
 	            <th mochi:format="str">Role</th>
 	            <th mochi:format="date">Date Submitted</th>
 	            <th mochi:format="str">Feedback</th>
@@ -68,8 +67,6 @@
 	                     {% endif %}
 	                  {% endifequal %}
 	               </td>
-	               <td>{{ p.model.user.first_name }}</td>
-	               <td>{{ p.model.user.last_name }}</td>
 	               <td>{{ p.model.user.username }}</td>
 	               <td>{{ p.model.role.display_name }}</td>
 			         {% ifequal p.submit_status 4 %}
@@ -98,5 +95,5 @@
 	    {% endiflessthan %}
 	{% endfor %}
 
-    
+</div>    
 {% endblock %}

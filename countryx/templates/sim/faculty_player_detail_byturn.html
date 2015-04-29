@@ -10,6 +10,7 @@
 
 {% block content %}
    {{ block.super }}
+<div class="container">
    <h2>Turn {{state.turn}} {{state.name}}</h2>
    <table class="datagrid">
       <tr>
@@ -82,4 +83,5 @@
 			</td>
 		</tr>
 	</table>		
+</div>
 {% endblock %}
