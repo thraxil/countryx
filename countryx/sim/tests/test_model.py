@@ -29,7 +29,7 @@ class StateTest(TestCase):
 
     def test_get_color(self):
         s = StateFactory()
-        self.assertEqual(s.get_color(), 'ff9400')
+        self.assertEqual(len(s.get_color()), 6)
 
     def test_full_to(self):
         s = StateFactory()

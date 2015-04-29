@@ -1,5 +1,6 @@
 from django.db import models, connection
 from django.contrib.auth.models import User
+from django.conf import settings
 import datetime
 import random
 
@@ -68,15 +69,8 @@ class State(models.Model):
         return rv
 
     def get_color(self):
-        colors = [
-            'ffd478', '009192', 'ff9400', 'd25700', '935200', 'd4fb79',
-            '73fa79', '8efa00', '4e8f00', '0096ff', '0a31ff', 'd783ff',
-            '7a80ff', '531a93', 'ff8ad8', 'ff3092', 'ff40ff', '009051',
-            '942092', '941751', '941200', 'ff2700', '005393', 'ff7e79',
-            'fffc00', '76d6ff', '00f900', '929292', '929000']
-        # when reimported ids get higher than 28.
-        # The 28 should NOT be hard-coded
-        key = (self.id % 28) + 1
+        colors = settings.STATE_COLORS
+        key = (self.id % len(colors))
         if len(colors) > key:
             return colors[key]
         else:
