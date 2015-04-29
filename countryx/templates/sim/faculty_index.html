@@ -74,109 +74,79 @@
 <table class="table">
 	<tr>
 		<td>Section/Workshop Name</td>
-		<td><input type="text" name="section_name" class="form-control" /></td>
+		<td><input type="text" name="section_name" class="form-control" 
+							 placeholder="section name"
+/></td>
 		<td></td>
 	</tr>
 </table>
 
 <h3>Define Groups</h3>
+<p>For each group you want to create, fill in a group name, and
+username/passwords for all roles in the group. If you don't name
+a group, it won't be created.</p>
 
 <table class="table table-condensed table-striped">
-	<tr>
+	<tr class="info">
 		<th>Group Name:</th>
-		<td colspan="3"><input type="text" name="group_name_0" class="form-control" /></td>
+		<td colspan="3"><input type="text" name="group_name_0"
+													 class="form-control" 
+													 placeholder="group name" /></td>
 	</tr>
-	<tr>
-		<th>Role</th>
-		<th>Username</th>
-		<th>Password</th>
-	</tr>
-
 {% for role in roles %}
 	<tr>
 		<td>{{role.name}}</td>
-		<td><input type="text" name="group_0_username_{{role.id}}" class="form-control" /></td>
-		<td><input type="text" name="group_0_password_{{role.id}}" class="form-control" /></td>
+		<td><input type="text" name="group_0_username_{{role.id}}" class="form-control" placeholder="username"/></td>
+		<td><input type="text" name="group_0_password_{{role.id}}" class="form-control" placeholder="password"/></td>
 	</tr>
 {% endfor %}
-</table>
 
-<table class="table table-condensed table-striped">
-	<tr>
+	<tr class="info">
 		<th>Group Name:</th>
 		<td colspan="3"><input type="text" name="group_name_1" class="form-control" /></td>
 	</tr>
-	<tr>
-		<th>Role</th>
-		<th>Username</th>
-		<th>Password</th>
-	</tr>
-
 {% for role in roles %}
 	<tr>
 		<td>{{role.name}}</td>
-		<td><input type="text" name="group_1_username_{{role.id}}" class="form-control" /></td>
-		<td><input type="text" name="group_1_password_{{role.id}}" class="form-control" /></td>
+		<td><input type="text" name="group_1_username_{{role.id}}" class="form-control" placeholder="username"/></td>
+		<td><input type="text" name="group_1_password_{{role.id}}" class="form-control" placeholder="password"/></td>
 	</tr>
 {% endfor %}
-</table>
 
-<table class="table table-condensed table-striped">
-	<tr>
+	<tr class="info">
 		<th>Group Name:</th>
 		<td colspan="3"><input type="text" name="group_name_2" class="form-control" /></td>
 	</tr>
-	<tr>
-		<th>Role</th>
-		<th>Username</th>
-		<th>Password</th>
-	</tr>
 
 {% for role in roles %}
 	<tr>
 		<td>{{role.name}}</td>
-		<td><input type="text" name="group_2_username_{{role.id}}" class="form-control" /></td>
-		<td><input type="text" name="group_2_password_{{role.id}}" class="form-control" /></td>
+		<td><input type="text" name="group_2_username_{{role.id}}" class="form-control" placeholder="username"/></td>
+		<td><input type="text" name="group_2_password_{{role.id}}" class="form-control" placeholder="password"/></td>
 	</tr>
 {% endfor %}
-</table>
 
-<table class="table table-condensed table-striped">
-	<tr>
+	<tr class="info">
 		<th>Group Name:</th>
 		<td colspan="3"><input type="text" name="group_name_3" class="form-control" /></td>
 	</tr>
-	<tr>
-		<th>Role</th>
-		<th>Username</th>
-		<th>Password</th>
-	</tr>
-
 {% for role in roles %}
 	<tr>
 		<td>{{role.name}}</td>
-		<td><input type="text" name="group_3_username_{{role.id}}" class="form-control" /></td>
-		<td><input type="text" name="group_3_password_{{role.id}}" class="form-control" /></td>
+		<td><input type="text" name="group_3_username_{{role.id}}" class="form-control" placeholder="username"/></td>
+		<td><input type="text" name="group_3_password_{{role.id}}" class="form-control" placeholder="password"/></td>
 	</tr>
 {% endfor %}
-</table>
 
-<table class="table table-condensed table-striped">
-	<tr>
+	<tr class="info">
 		<th>Group Name:</th>
 		<td colspan="3"><input type="text" name="group_name_4" class="form-control" /></td>
 	</tr>
-	<tr>
-		<th>Role</th>
-		<th>Username</th>
-		<th>Password</th>
-	</tr>
-
 {% for role in roles %}
 	<tr>
 		<td>{{role.name}}</td>
-		<td><input type="text" name="group_4_username_{{role.id}}" class="form-control" /></td>
-		<td><input type="text" name="group_4_password_{{role.id}}" class="form-control" /></td>
+		<td><input type="text" name="group_4_username_{{role.id}}" class="form-control" placeholder="username"/></td>
+		<td><input type="text" name="group_4_password_{{role.id}}" class="form-control" placeholder="password" /></td>
 	</tr>
 {% endfor %}
 </table>
