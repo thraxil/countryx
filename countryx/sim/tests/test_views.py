@@ -122,5 +122,4 @@ class CreateSectionViewTest(TestCase):
         )
         request.user = u
         response = self.v(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.content.startswith("Error"))
+        self.assertEqual(response.status_code, 302)
