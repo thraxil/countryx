@@ -47,6 +47,13 @@ def __faculty_index(request):
 
 class CreateSectionView(StaffOnlyMixin, View):
     def post(self, request):
+        # first, make sure no usernames are duplicated
+        for i in range(5):
+            for r in Role.objects.all():
+                username = request.POST.get('group_%d_username_%d' % (i, r.id))
+                if User.objects.filter(username=username).exists():
+                    return HttpResponse(
+                        "Error: duplicate username '%s'" % username)
         now = datetime.datetime.now()
         s = Section.objects.create(
             name=request.POST.get('section_name', 'unamed section'),

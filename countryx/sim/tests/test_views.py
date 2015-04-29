@@ -106,3 +106,21 @@ class CreateSectionViewTest(TestCase):
         response = self.v(request)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Section.objects.count(), 1)
+
+    def test_create_with_duplicate_username(self):
+        u = UserFactory(is_staff=True)
+        r = RoleFactory()
+        UserFactory(username="foo")
+        request = self.factory.post(
+            reverse("create-section"),
+            {
+                'section_name': "test section",
+                'group_name_0': "test group",
+                "group_0_username_%d" % r.id: "foo",
+                "group_0_password_%d" % r.id: "bar",
+            }
+        )
+        request.user = u
+        response = self.v(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.content.startswith("Error"))
