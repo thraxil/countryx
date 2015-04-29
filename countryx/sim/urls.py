@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 import os.path
-from .views import CreateSectionView
+from .views import CreateSectionView, DeleteSectionView
 
 media_root = os.path.join(os.path.dirname(__file__), "media")
 
@@ -46,4 +46,6 @@ urlpatterns = patterns(
     (r'^faculty/feedback/$', 'countryx.sim.views.faculty_feedback_submit'),
     (r'^check_statechanges/$', 'countryx.sim.views.check_statechanges'),
     url(r'^section/new/$', CreateSectionView.as_view(), name='create-section'),
+    url(r'^section/(?P<pk>\d+)/delete/$', DeleteSectionView.as_view(),
+        name='delete-section'),
 )

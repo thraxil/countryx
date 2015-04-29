@@ -15,6 +15,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import View
+from django.views.generic.edit import DeleteView
 from django import forms
 import datetime
 import json
@@ -81,6 +82,11 @@ class CreateSectionView(StaffOnlyMixin, View):
                 )
             s.reset_sectiongroupstates()
         return HttpResponseRedirect("/sim/")
+
+
+class DeleteSectionView(StaffOnlyMixin, DeleteView):
+    model = Section
+    success_url = "/sim/"
 
 
 @login_required

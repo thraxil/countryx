@@ -18,7 +18,7 @@
 		   <th>Section</th>
 		   <th>Facilitators</th>
 		   <th style="text-align: center">Current Turn</th>
-		   <th colspan="4" style="text-align: center">Actions</th></tr>
+		   <th colspan="5" style="text-align: center">Actions</th></tr>
 		{% for section in sections %}
 			<tr>
 				<td>{{section.name}}</td>
@@ -37,8 +37,10 @@
 				<td><a href="/sim/faculty/groups/{{section.id}}/">View by Groups</a></td>
 				<td><a href="/sim/faculty/players/{{section.id}}/">View by Player</a></td>
                 {% if user.is_superuser %}
-                    <td><a onclick="submitResetRequest(this); return false;" href="/sim/faculty/reset/{{section.id}}/">Reset</a></td>
+                    <td><a class="btn btn-xs btn-warning" onclick="submitResetRequest(this); return false;" href="/sim/faculty/reset/{{section.id}}/">Reset</a></td>
                 {% endif %}
+				<td><a href="{% url 'delete-section' section.id %}" class="btn
+				btn-danger btn-xs" />delete</a></td>
 			</tr>
 		{% endfor %}
 	</table>
