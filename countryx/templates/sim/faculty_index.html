@@ -52,10 +52,14 @@
 				<td><a href="/sim/faculty/groups/{{section.id}}/">View by Groups</a></td>
 				<td><a href="/sim/faculty/players/{{section.id}}/">View by Player</a></td>
                 {% if user.is_superuser %}
-                    <td><a class="btn btn-xs btn-warning" onclick="submitResetRequest(this); return false;" href="/sim/faculty/reset/{{section.id}}/">Reset</a></td>
+                    <td><a class="btn btn-xs btn-warning"
+                onclick="submitResetRequest(this); return false;"
+                href="/sim/faculty/reset/{{section.id}}/"><span class="glyphicon
+                glyphicon-repeat" aria-hidden="true"></span> Reset</a></td>
                 {% endif %}
 				<td><a href="{% url 'delete-section' section.id %}" class="btn
-				btn-danger btn-xs" />delete</a></td>
+				btn-danger btn-xs" /><span class="glyphicon
+                glyphicon-trash" aria-hidden="true"></span> delete</a></td>
 			</tr>
 		{% endfor %}
 	</table>
