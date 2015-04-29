@@ -10,9 +10,24 @@
 	{{ block.super }}
 <div class="container">	
 	<br /><br />
-{% if sections %}
 
+<div role="tabpanel">
+	<ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active">
+			<a href="#sections" aria-controls="sections" role="tab"
+			data-toggle="tab">Active Sections</a>
+		</li>
+		<li role="presentation">
+			<a href="#add-section" aria-controls="sections" role="tab"
+			data-toggle="tab">Add Section</a>
+		</li>
+	</ul>
+
+
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="sections">
 	<h2>Active Sections</h2>
+{% if sections %}
 	<table class="datagrid table table-condensed table-striped" cellpadding="5">
 		<tr>
 		   <th>Section</th>
@@ -45,7 +60,9 @@
 		{% endfor %}
 	</table>
 {% endif %}
+</div>
 
+<div role="tabpanel" class="tab-pane" id="add-section">
 <h2>Create New Section/Workshop</h2>
 <form method="post" action="{% url 'create-section' %}" >
 {% csrf_token %}
@@ -164,6 +181,9 @@
 <input type="submit" value="create new section" class="btn
 																											 btn-primary" />
 </form>
+</div>
+</div>
+
 
 </div>
 {% endblock %}
