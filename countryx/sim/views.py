@@ -61,7 +61,10 @@ class CreateSectionView(StaffOnlyMixin, View):
             for r in Role.objects.all():
                 username = request.POST.get('group_%d_username_%d' % (i, r.id))
                 password = request.POST.get('group_%d_password_%d' % (i, r.id))
-                u = User.objects.create(username=username)
+                u = User.objects.create(
+                    username=username,
+                    last_name=username,
+                )
                 u.set_password(password)
                 u.save()
                 SectionGroupPlayer.objects.create(
