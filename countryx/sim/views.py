@@ -265,8 +265,8 @@ class FeedbackForm(forms.Form):
 def faculty_end_turn(request, section_id):
     section = get_object_or_404(Section, id=section_id)
     section.end_turn()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER',
-                                                 section.get_absolute_url()))
+    section.ensure_consistency()
+    return HttpResponseRedirect("/sim/")
 
 
 @login_required
