@@ -41,30 +41,26 @@ class State(models.Model):
         return "Turn %s: %s" % (self.turn, self.name)
 
     def _countedges(self, myfield, otherfield, extra=''):
-        tablename = StateChange._meta.db_table
         cursor = connection.cursor()
         cursor.execute(
-            'SELECT "%s", count("%s") FROM "%s" WHERE "%s"=%d %s GROUP BY "%s"'
-            % (otherfield, otherfield, tablename, myfield, self.id, extra,
+            'SELECT "%s", count("%s") FROM sim_statechange '
+            'WHERE "%s"=%d %s GROUP BY "%s"'
+            % (otherfield, otherfield, myfield, self.id, extra,
                otherfield))
         return cursor.rowcount
 
     def influence_from(self, role):
-        tablename = StateChange._meta.db_table
-        myfield = StateChange._meta.get_field('next_state').column
-        otherfield = StateChange._meta.get_field('state').column
         cursor = connection.cursor()
         cursor.execute(
-            'SELECT "%s", count("%s") FROM "%s" WHERE "%s"=%d %s GROUP BY "%s"'
-            % (otherfield, otherfield, tablename, myfield, self.id, '',
-               otherfield))
+            'SELECT state_id, count(state_id) FROM sim_statechange '
+            'WHERE next_state_id=%d GROUP BY state_id'
+            % self.id)
         rv = []
         for row in cursor.fetchall():
             cursor.execute(
-                'SELECT count("%s") FROM "%s" WHERE "%s"=%d AND '
-                '"%s"=%d GROUP BY "%s"' % (
-                    role, tablename, myfield, self.id, otherfield, row[0],
-                    role))
+                'SELECT count("%s") FROM sim_statechange '
+                'WHERE next_state_id=%d AND '
+                'state_id=%d GROUP BY "%s"' % (role, self.id, row[0], role))
             rv.append(3 - cursor.rowcount)
         return rv
 
