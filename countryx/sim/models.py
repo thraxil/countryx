@@ -251,30 +251,6 @@ class SectionAdministrator(models.Model):
         return "%s" % (self.user)
 
 
-def get_or_create_section(name):
-    """ fetches an existing section with a given name
-
-    or creates a new one if necessary
-
-    mostly used for the cheat functionality """
-    try:
-        return Section.objects.get(name=name)
-    except Section.DoesNotExist:
-        # need to make one
-        return Section.objects.create(name=name,
-                                      created_date=datetime.datetime.now())
-
-
-def get_or_create_user(username, first_name, last_name, email,
-                       password, is_staff=False, is_superuser=False):
-    try:
-        return User.objects.get(username=username)
-    except User.DoesNotExist:
-        return User.objects.create(username=username, first_name=first_name,
-                                   last_name=last_name, email=email,
-                                   password=password, is_staff=is_staff,
-                                   is_superuser=is_superuser)
-
 ###############################################################################
 ###############################################################################
 
@@ -318,7 +294,7 @@ class SectionGroup(models.Model):
                     player_response.automatic_update =\
                         AUTOMATIC_UPDATE_FROMDRAFT
                     player_response.save()
-            except:
+            except SectionGroupPlayerTurn.DoesNotExist:
                 # player has no choice saved
                 player_response = SectionGroupPlayerTurn.objects.create(
                     player=player, turn=state.turn)
@@ -355,8 +331,8 @@ class SectionGroup(models.Model):
                 state=next_state,
                 group=self,
                 date_updated=datetime.datetime.now())
-        except:
-            pass  # something is wrong with the group.
+        except SectionGroupPlayerTurn.DoesNotExist:
+            pass
 
     def make_state_current(self, section_turn):
         try:
@@ -458,8 +434,3 @@ class SectionGroupPlayerTurn(models.Model):
 
     def is_submitted(self):
         return self.submit_date is not None
-
-
-def ensure_consistency_of_all_sections():
-    for section in Section.objects.all():
-        section.ensure_consistency()

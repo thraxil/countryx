@@ -1,10 +1,12 @@
 from django.test import TestCase
-from countryx.sim.models import ensure_consistency_of_all_sections
+from countryx.sim.models import (
+    SectionAdministrator)
 from .factories import (
     RoleFactory, StateFactory, StateChangeFactory,
     StateVariableFactory, StateRoleChoiceFactory,
     SectionGroupFactory, SectionFactory,
-    UserFactory,
+    UserFactory, SectionGroupPlayerFactory,
+    SectionGroupStateFactory,
 )
 
 
@@ -23,7 +25,7 @@ class StateTest(TestCase):
         s = StateFactory()
         self.assertTrue(s.name in str(s))
 
-    def test_influence_from(self):
+    def test_influence_from_empty(self):
         s = StateFactory()
         self.assertEqual(s.influence_from(None), [])
 
@@ -35,7 +37,7 @@ class StateTest(TestCase):
         s = StateFactory()
         self.assertEqual(s.full_to([]), [])
 
-    def test_full_from(self):
+    def test_full_from_empty(self):
         s = StateFactory()
         self.assertEqual(s.full_from([]), [False])
 
@@ -54,6 +56,16 @@ class StateTest(TestCase):
         self.assertTrue('influence_from' in r)
         self.assertTrue('influence_to' in r)
         self.assertTrue('to' in r)
+
+    def test_influence_from(self):
+        sc = StateChangeFactory()
+        r = sc.next_state.influence_from('envoy')
+        self.assertEqual(len(r), 1)
+
+    def test_full_from(self):
+        sc = StateChangeFactory()
+        s = sc.next_state
+        self.assertEqual(len(s.full_from([])), 1)
 
 
 class TestStateChange(TestCase):
@@ -90,7 +102,7 @@ class TestSection(TestCase):
         s = SectionFactory()
         s.end_turn()
 
-    def test_clear_all(self):
+    def test_clear_all_empty(self):
         s = SectionFactory()
         s.clear_all()
 
@@ -112,6 +124,33 @@ class TestSection(TestCase):
         u = UserFactory()
         s.remove_faculty(u)
 
+    def test_clear_all(self):
+        sg = SectionGroupFactory()
+        sg.section.clear_all()
+
+    def test_add_faculty(self):
+        s = SectionFactory()
+        u = UserFactory()
+        s.add_faculty(u)
+        self.assertEqual(SectionAdministrator.objects.count(), 1)
+
+        # no double add
+        s.add_faculty(u)
+        self.assertEqual(SectionAdministrator.objects.count(), 1)
+
+    def test_remove_faculty(self):
+        s = SectionFactory()
+        u = UserFactory()
+        s.add_faculty(u)
+        self.assertEqual(SectionAdministrator.objects.count(), 1)
+        s.remove_faculty(u)
+        self.assertEqual(SectionAdministrator.objects.count(), 0)
+
+    def test_ensure_consistency(self):
+        s = SectionGroupFactory()
+        StateFactory(turn=1, state_no=1)
+        s.section.ensure_consistency()
+
 
 class TestSectionGroup(TestCase):
     def test_unicode(self):
@@ -124,11 +163,34 @@ class TestSectionGroup(TestCase):
         sg.make_state_current(1)
         self.assertEqual(sg.sectiongroupstate_set.count(), 1)
 
+    def test_update_state(self):
+        sg = SectionGroupStateFactory().group
+        sg.update_state()
 
-class ConsistencyEnforcementTest(TestCase):
-    def test_no_sections(self):
-        ensure_consistency_of_all_sections()
+    def test_force_response_all_players(self):
+        sg = SectionGroupStateFactory().group
+        SectionGroupPlayerFactory(group=sg)
+        sg.force_response_all_players()
 
-    def test_with_one_section(TestCase):
-        SectionFactory()
-        ensure_consistency_of_all_sections()
+
+class TestSectionGroupPlayer(TestCase):
+    def test_unicode(self):
+        p = SectionGroupPlayerFactory()
+        self.assertTrue(":" in str(p))
+
+    def test_current_status(self):
+        p = SectionGroupPlayerFactory()
+        SectionGroupStateFactory(group=p.group)
+        self.assertEqual(p.current_status(), 1)
+
+
+class TestSectionGroupState(TestCase):
+    def test_status(self):
+        sg = SectionGroupStateFactory()
+        self.assertEqual(sg.status(), 2)
+
+    def test_status_end(self):
+        sg = SectionGroupStateFactory()
+        sg.state.turn = 4
+        sg.state.save()
+        self.assertEqual(sg.status(), 4)

@@ -5,6 +5,7 @@ from countryx.sim.models import (
     Role, State, StateChange, StateVariable,
     StateRoleChoice, Section,
     SectionGroup, SectionAdministrator,
+    SectionGroupPlayer, SectionGroupState,
 )
 
 
@@ -68,3 +69,20 @@ class SectionAdministratorFactory(factory.DjangoModelFactory):
         model = SectionAdministrator
     section = factory.SubFactory(SectionFactory)
     user = factory.SubFactory(UserFactory)
+
+
+class SectionGroupPlayerFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = SectionGroupPlayer
+
+    user = factory.SubFactory(UserFactory)
+    group = factory.SubFactory(SectionGroupFactory)
+    role = factory.SubFactory(RoleFactory)
+
+
+class SectionGroupStateFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = SectionGroupState
+    state = factory.SubFactory(StateFactory)
+    group = factory.SubFactory(SectionGroupFactory)
+    date_updated = datetime.now()
