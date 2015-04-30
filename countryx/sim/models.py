@@ -306,31 +306,25 @@ class SectionGroup(models.Model):
     def update_state(self):
         state = self.sectiongroupstate_set.latest().state
         try:
-            president = SectionGroupPlayerTurn.objects.get(
-                player__role__name='President',
-                player__group=self,
-                turn=state.turn, submit_date__isnull=False)
-            regional = SectionGroupPlayerTurn.objects.get(
-                player__role__name='SubRegionalRep',
-                player__group=self,
-                turn=state.turn, submit_date__isnull=False)
-            opposition = SectionGroupPlayerTurn.objects.get(
-                player__role__name='OppositionLeadership',
-                player__group=self, turn=state.turn,
-                submit_date__isnull=False)
-            envoy = SectionGroupPlayerTurn.objects.get(
-                player__role__name='FirstWorldEnvoy',
-                player__group=self,
-                turn=state.turn, submit_date__isnull=False)
+            choices = dict()
+            for r in Role.objects.all():
+                choice = SectionGroupPlayerTurn.objects.get(
+                    player__role=r,
+                    player__group=self,
+                    turn=state.turn, submit_date__isnull=False)
+                choices[r.name] = choice
             next_state = StateChange.objects.get(
-                state=state, president=president.choice,
-                envoy=envoy.choice,
-                regional=regional.choice,
-                opposition=opposition.choice).next_state
+                state=state,
+                president=choices['President'],
+                envoy=choices['FirstWorldEnvoy'],
+                regional=choices['SubRegionalRep'],
+                opposition=choices['OppositionLeadership']).next_state
             SectionGroupState.objects.create(
                 state=next_state,
                 group=self,
                 date_updated=datetime.datetime.now())
+        except KeyError:
+            pass
         except SectionGroupPlayerTurn.DoesNotExist:
             pass
 
