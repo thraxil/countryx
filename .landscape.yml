@@ -1,0 +1,5 @@
+ignore-paths:
+  - virtualenv.py
+  - bootstrap.py
+ignore-patterns:
+  - (^|/).*settings.*\.py(/|$)
