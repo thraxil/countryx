@@ -25,10 +25,6 @@ class StateTest(TestCase):
         s = StateFactory()
         self.assertTrue(s.name in str(s))
 
-    def test_influence_from_empty(self):
-        s = StateFactory()
-        self.assertEqual(s.influence_from(None), [])
-
     def test_get_color(self):
         s = StateFactory()
         self.assertEqual(len(s.get_color()), 6)
@@ -40,27 +36,6 @@ class StateTest(TestCase):
     def test_full_from_empty(self):
         s = StateFactory()
         self.assertEqual(s.full_from([]), [False])
-
-    def test_to_count(self):
-        s = StateFactory()
-        self.assertEqual(s.to_count(), -1)
-
-    def test_from_count(self):
-        s = StateFactory()
-        self.assertEqual(s.from_count(), -1)
-
-    def test_edge_metadata(self):
-        s = StateFactory()
-        r = s.edge_metadata()
-        self.assertTrue('from' in r)
-        self.assertTrue('influence_from' in r)
-        self.assertTrue('influence_to' in r)
-        self.assertTrue('to' in r)
-
-    def test_influence_from(self):
-        sc = StateChangeFactory()
-        r = sc.next_state.influence_from('envoy')
-        self.assertEqual(len(r), 1)
 
     def test_full_from(self):
         sc = StateChangeFactory()

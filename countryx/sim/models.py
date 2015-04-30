@@ -49,21 +49,6 @@ class State(models.Model):
                otherfield))
         return cursor.rowcount
 
-    def influence_from(self, role):
-        cursor = connection.cursor()
-        cursor.execute(
-            'SELECT state_id, count(state_id) FROM sim_statechange '
-            'WHERE next_state_id=%d GROUP BY state_id'
-            % self.id)
-        rv = []
-        for row in cursor.fetchall():
-            cursor.execute(
-                'SELECT count("%s") FROM sim_statechange '
-                'WHERE next_state_id=%d AND '
-                'state_id=%d GROUP BY "%s"' % (role, self.id, row[0], role))
-            rv.append(3 - cursor.rowcount)
-        return rv
-
     def get_color(self):
         colors = settings.STATE_COLORS
         key = (self.id % len(colors))
@@ -95,38 +80,6 @@ class State(models.Model):
             else:
                 rv[index]['color'] = ch.state.get_color()
         return rv
-
-    def to_count(self, extra=''):
-        return self._countedges(
-            StateChange._meta.get_field('state').column,
-            StateChange._meta.get_field('next_state').column,
-            extra
-        )
-
-    def from_count(self, extra=''):
-        return self._countedges(
-            StateChange._meta.get_field('next_state').column,
-            StateChange._meta.get_field('state').column,
-            extra
-        )
-
-    def influence(self, role, func, count):
-        rv = []
-        for choice in range(1, 4):
-            rv.append(count - func('AND %s=%d' % (role, choice)))
-        return rv
-
-    def edge_metadata(self):
-        metadata = {
-            'to': self.to_count(),
-            'from': self.from_count(),
-            'influence_from': {},
-            'influence_to': {}}
-        for role in ('president', 'envoy', 'regional', 'opposition'):
-            metadata['influence_from'][role] = self.influence_from(role)
-            metadata['influence_to'][role] = self.influence(
-                role, self.to_count, metadata['to'])
-        return metadata
 
 
 class StateChange(models.Model):
