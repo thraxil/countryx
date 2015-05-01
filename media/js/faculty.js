@@ -21,36 +21,36 @@ function submitFeedback(form, playerId) {
     } else {
         var url = 'http://' + location.hostname + ':' + location.port +
             '/sim/faculty/feedback/';
-        var deferred = doXHR(
-            url,
-            {
-                method: 'POST',
-                sendContent: queryString(
-                    {
-                        'player_id': playerId,
-                        /*jshint -W069 */
-                        'turn_id': form['turn_id'].value,
-                        'feedback': form.feedback.value,
-                        'faculty_id': form['faculty_id'].value
-                    })
-            });
-        deferred.addCallbacks(submitFeedbackSuccess, submitError);
+        jQuery.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'player_id': playerId,
+                /*jshint -W069 */
+                'turn_id': form['turn_id'].value,
+                'feedback': form.feedback.value,
+                'faculty_id': form['faculty_id'].value
+            },
+            success: submitFeedbackSuccess,
+            error: submitError
+        });
     }
     return false;
 }
 
 function submitFeedbackSuccess(response) {
-    var doc = JSON.parse(response.responseText, null);
     var id;
-    if (doc.result === 0) {
+    if (response.result === 0) {
         /*jshint -W069 */
-        id = 'error_client_' + doc['turn_id'];
-        $(id).innerHTML = doc.message;
-        setStyle($(id), {'display': 'block'});
-    } else if (doc.result === 1) {
-        id = 'success_client_' + doc['turn_id'];
-        $(id).innerHTML = doc.message;
-        setStyle($(id), {'display': 'block'});
+        id = '#error_client_' + response['turn_id'];
+        $(id).text(response.message);
+        $(id).show();
+        $(id).removeClass('invisible');
+    } else if (response.result === 1) {
+        id = '#success_client_' + response['turn_id'];
+        $(id).text(response.message);
+        $(id).show();
+        $(id).removeClass('invisible');
     }
 }
 

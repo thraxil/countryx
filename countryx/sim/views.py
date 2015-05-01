@@ -237,7 +237,6 @@ def faculty_feedback_submit(request):
     faculty_id = int(request.POST.get('faculty_id', None))
     turn_id = int(request.POST.get('turn_id', None))
     feedback = request.POST.get('feedback', '')
-
     player = get_object_or_404(SectionGroupPlayer, id=player_id)
     group = player.group
 
