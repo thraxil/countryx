@@ -178,7 +178,7 @@ class TestSectionGroupState(TestCase):
     def test_status(self):
         sg = SectionGroupStateFactory()
         StateFactory(turn=4)
-        self.assertEqual(sg.status(), 2)
+        self.assertEqual(sg.status(), 1)
 
     def test_status_end(self):
         sg = SectionGroupStateFactory()

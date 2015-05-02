@@ -215,8 +215,6 @@ class SectionAdministrator(models.Model):
 ###############################################################################
 ###############################################################################
 
-GROUP_PLAYER_COUNT = 4
-
 GROUP_STATUS_NOACTION = 1
 GROUP_STATUS_PENDING = 2
 GROUP_STATUS_SUBMITTED = 4
@@ -337,9 +335,9 @@ class SectionGroupState(models.Model):
         players = self.group.sectiongroupplayer_set.all()
         for player in players:
             status += player.status(self.state)
-        if (status == PLAYER_STATUS_NOACTION * GROUP_PLAYER_COUNT):
+        if (status == PLAYER_STATUS_NOACTION * Role.objects.count()):
             return GROUP_STATUS_NOACTION
-        elif (status == PLAYER_STATUS_SUBMITTED * GROUP_PLAYER_COUNT):
+        elif (status == PLAYER_STATUS_SUBMITTED * Role.objects.count()):
             return GROUP_STATUS_SUBMITTED
         else:
             return GROUP_STATUS_PENDING
