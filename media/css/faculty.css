@@ -50,7 +50,7 @@ div#breadcrumbs
    text-align: left;
 }
 
-div#breadcrumbs a:link, a:visited
+div#breadcrumbs a:link
 {
    color: #5b80b2;
    text-decoration: none;

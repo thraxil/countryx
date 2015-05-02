@@ -1,0 +1,38 @@
+{% extends 'sim/base_faculty.html' %}
+{% load markup %}
+
+{% block breadcrumbs %}
+<a href="{% url 'roles-index' %}">Roles</a> /
+<a href="{% url 'role' role.id %}">{{role.name}}</a> / delete
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<form action="." method="post">{% csrf_token %}
+<input class="btn btn-danger"
+       type="submit" value="yes, delete this role"/>
+</form>
+
+{% if role.staterolechoice_set.exists %}
+<p>Deleting this role will also delete these StateChoices:</p>
+
+	<table class="table table-striped table-condensed">
+		{% for src in role.staterolechoice_set.all %}
+		{% ifchanged src.state %}
+		<tr>
+		<th colspan="2">[{{src.state.turn}}:{{src.state.state_no}}]
+		{{src.state.name}}</th>
+		</tr>
+		{% endifchanged %}
+		<tr>
+			<td>{{src.choice}}</td>
+			<td>{{src.desc|markdown}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endif %}
+
+</div>
+
+
+{% endblock %}

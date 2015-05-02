@@ -12,6 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -101,6 +102,13 @@ class StateDetailView(StaffOnlyMixin, DetailView):
 
 class RoleDetailView(StaffOnlyMixin, DetailView):
     model = Role
+
+
+class DeleteRoleView(StaffOnlyMixin, DeleteView):
+    model = Role
+
+    def get_success_url(self):
+        return reverse('roles-index')
 
 
 @login_required
