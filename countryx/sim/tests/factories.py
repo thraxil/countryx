@@ -6,6 +6,7 @@ from countryx.sim.models import (
     StateRoleChoice, Section,
     SectionGroup, SectionAdministrator,
     SectionGroupPlayer, SectionGroupState,
+    SectionGroupPlayerTurn,
 )
 
 
@@ -80,6 +81,16 @@ class SectionGroupPlayerFactory(factory.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     group = factory.SubFactory(SectionGroupFactory)
     role = factory.SubFactory(RoleFactory)
+
+
+class SectionGroupPlayerTurnFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = SectionGroupPlayerTurn
+
+    player = factory.SubFactory(SectionGroupPlayerFactory)
+    turn = 1
+    choice = 1
+    faculty = factory.SubFactory(SectionAdministratorFactory)
 
 
 class SectionGroupStateFactory(factory.DjangoModelFactory):

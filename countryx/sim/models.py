@@ -217,6 +217,17 @@ GROUP_STATUS_PENDING = 2
 GROUP_STATUS_SUBMITTED = 4
 
 
+def compare_dicts(a, b):
+    """ every k,v in a must have a match in b.
+    the converse doesn't necessarily have to be true.
+    ie, there can be a key in b that does not exist in a
+    and it's still good enough"""
+    for k, v in a.items():
+        if b[k] != v:
+            return False
+    return True
+
+
 class SectionGroup(models.Model):
     name = models.CharField(max_length=20)
     section = models.ForeignKey(Section)
@@ -259,30 +270,34 @@ class SectionGroup(models.Model):
                 player_response.automatic_update = AUTOMATIC_UPDATE_RANDOM
                 player_response.save()
 
+    def current_state(self):
+        return self.sectiongroupstate_set.latest().state
+
+    def role_choices(self, turn=None):
+        if turn is None:
+            turn = self.current_state().turn
+        choices = dict()
+        sgpts = SectionGroupPlayerTurn.objects.filter(
+            player__group=self,
+            turn=turn,
+            submit_date__isnull=False
+        )
+        for s in sgpts:
+            choices[s.player.role.name] = s.choice
+        return choices
+
     def update_state(self):
-        state = self.sectiongroupstate_set.latest().state
-        try:
-            choices = dict()
-            for r in Role.objects.all():
-                choice = SectionGroupPlayerTurn.objects.get(
-                    player__role=r,
-                    player__group=self,
-                    turn=state.turn, submit_date__isnull=False)
-                choices[r.name] = choice
-            next_state = StateChange.objects.get(
-                state=state,
-                president=choices['President'],
-                envoy=choices['FirstWorldEnvoy'],
-                regional=choices['SubRegionalRep'],
-                opposition=choices['OppositionLeadership']).next_state
-            SectionGroupState.objects.create(
-                state=next_state,
-                group=self,
-                date_updated=datetime.datetime.now())
-        except KeyError:
-            pass
-        except SectionGroupPlayerTurn.DoesNotExist:
-            pass
+        choices = self.role_choices()
+        for sc in StateChange.objects.filter(state=self.current_state()):
+            roles = json.loads(sc.roles)
+            if compare_dicts(choices, roles):
+                next_state = sc.next_state
+                SectionGroupState.objects.create(
+                    state=next_state,
+                    group=self,
+                    date_updated=datetime.datetime.now())
+                # and we're done
+                return
 
     def make_state_current(self, section_turn):
         try:

@@ -1,12 +1,13 @@
 from django.test import TestCase
+from datetime import datetime
 from countryx.sim.models import (
-    SectionAdministrator)
+    SectionAdministrator, compare_dicts)
 from .factories import (
     RoleFactory, StateFactory, StateChangeFactory,
     StateVariableFactory, StateRoleChoiceFactory,
     SectionGroupFactory, SectionFactory,
     UserFactory, SectionGroupPlayerFactory,
-    SectionGroupStateFactory,
+    SectionGroupStateFactory, SectionGroupPlayerTurnFactory,
 )
 
 
@@ -138,9 +139,23 @@ class TestSectionGroup(TestCase):
         sg.make_state_current(1)
         self.assertEqual(sg.sectiongroupstate_set.count(), 1)
 
-    def test_update_state(self):
+    def test_role_choices(self):
+        sgpt = SectionGroupPlayerTurnFactory(submit_date=datetime.now())
+        group = sgpt.player.group
+        self.assertEqual(
+            group.role_choices(turn=sgpt.turn),
+            {sgpt.player.role.name: sgpt.choice})
+
+    def test_update_state_empty(self):
         sg = SectionGroupStateFactory().group
         sg.update_state()
+
+    def test_udpate_state_with_roles(self):
+        sgpt = SectionGroupPlayerTurnFactory()
+        group = sgpt.player.group
+        SectionGroupStateFactory(group=group)
+        StateChangeFactory(state=group.current_state())
+        group.update_state()
 
     def test_force_response_all_players(self):
         sg = SectionGroupStateFactory().group
@@ -169,3 +184,15 @@ class TestSectionGroupState(TestCase):
         sg.state.turn = 4
         sg.state.save()
         self.assertEqual(sg.status(), 4)
+
+
+class TestCompareDicts(TestCase):
+    def test_same(self):
+        a = {1: 2, 3: 4}
+        b = {3: 4, 1: 2}
+        self.assertTrue(compare_dicts(a, b))
+
+    def test_different(self):
+        a = {1: 2, 3: 4}
+        b = {1: 1, 3: 4}
+        self.assertFalse(compare_dicts(a, b))
