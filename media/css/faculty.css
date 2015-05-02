@@ -5,6 +5,18 @@
 	border: solid 1px black;
 }
 
+.choice-1 {
+  background-color: #ffeeee;
+}
+.choice-2 {
+  background-color: #eeffee;
+}
+.choice-3 {
+  background-color: #eeeeff;
+}
+
+
+
 textarea#id_feedback {
    width: 400px;
    height: 450px;

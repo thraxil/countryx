@@ -27,7 +27,7 @@
 		</tr>
 		{% endifchanged %}
 		<tr>
-			<td>{{src.choice}}</td>
+			<td class="choice-{{src.choice}}">{{src.choice}}</td>
 			<td>{{src.desc|markdown}}</td>
 		</tr>
 		{% endfor %}
@@ -45,7 +45,7 @@
 				#{{sc.next_state.get_color}}"></span> [{{sc.next_state.turn}}:{{sc.next_state.state_no}}] {{sc.next_state.name}}</a>
 			</th>
 			{% for choice in sc.show_choices %}
-			<td>
+			<td class="choice-{{choice.choice}}">
 				{{choice.role}}={{choice.choice}}
 			</td>
 			{% endfor %}
@@ -63,7 +63,7 @@
 			<th><a href="{% url 'state' sc.state.id %}"><span class="swatch"
 			style="background-color: #{{sc.state.get_color}}"></span> [{{sc.state.turn}}:{{sc.state.state_no}}] {{sc.state.name}}</a></th>
 			{% for choice in sc.show_choices %}
-			<td>
+			<td class="choice-{{choice.choice}}">
 				{{choice.role}}={{choice.choice}}
 			</td>
 			{% endfor %}
