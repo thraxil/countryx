@@ -1,4 +1,4 @@
-from django.db import models, connection
+from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import datetime
@@ -42,15 +42,6 @@ class State(models.Model):
 
     def __unicode__(self):
         return "Turn %s: %s" % (self.turn, self.name)
-
-    def _countedges(self, myfield, otherfield, extra=''):
-        cursor = connection.cursor()
-        cursor.execute(
-            'SELECT "%s", count("%s") FROM sim_statechange '
-            'WHERE "%s"=%d %s GROUP BY "%s"'
-            % (otherfield, otherfield, myfield, self.id, extra,
-               otherfield))
-        return cursor.rowcount
 
     def get_color(self):
         colors = settings.STATE_COLORS
