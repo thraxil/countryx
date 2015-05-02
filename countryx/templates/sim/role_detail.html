@@ -8,9 +8,22 @@
 
 {% block content %}
 <div class="container">
+	<div class="pull-right">
+				<a href="edit" class="btn btn-primary"><span class="glyphicon
+                glyphicon-edit" aria-hidden="true"></span></a>
+
+				<a href="delete" class="btn btn-danger"><span class="glyphicon
+                glyphicon-trash" aria-hidden="true"></span></a>
+	</div>
+
+
 	<h1>Role: {{role.name}}</h1>
 
+
 	{{role.description|markdown}}
+
+
+			
 
 	<h2>State Choices</h2>
 
