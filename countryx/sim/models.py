@@ -85,10 +85,6 @@ class State(models.Model):
 
 class StateChange(models.Model):
     state = models.ForeignKey(State, related_name="%(class)s_related_current")
-    president = models.IntegerField()
-    envoy = models.IntegerField()
-    regional = models.IntegerField()
-    opposition = models.IntegerField()
     next_state = models.ForeignKey(State,
                                    related_name="%(class)s_related_next")
     # in here, we store some json. it will look something like:

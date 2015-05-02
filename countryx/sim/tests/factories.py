@@ -31,10 +31,6 @@ class StateFactory(factory.DjangoModelFactory):
 class StateChangeFactory(factory.DjangoModelFactory):
     FACTORY_FOR = StateChange
     state = factory.SubFactory(StateFactory)
-    president = 0
-    envoy = 1
-    regional = 2
-    opposition = 3
     roles = ('{"President": 0, "FirstWorldEnvoy": 1, '
              '"SubRegionalRep": 2, "OppositionLeadership": 3}')
     next_state = factory.SubFactory(StateFactory)
