@@ -167,7 +167,7 @@ class StateRoleChoiceDelete(StaffOnlyMixin, DeleteView):
     model = StateRoleChoice
 
     def get_success_url(self):
-        return reverse('state', self.object.state.id)
+        return reverse('state', args=(self.object.state.id,))
 
 
 @login_required
