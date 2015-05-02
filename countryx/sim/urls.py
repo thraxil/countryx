@@ -4,6 +4,7 @@ from .views import (
     CreateSectionView, DeleteSectionView,
     RolesIndexView, StatesIndexView, StateDetailView,
     RoleDetailView, DeleteRoleView, CreateRoleView,
+    RoleUpdate,
 )
 
 media_root = os.path.join(os.path.dirname(__file__), "media")
@@ -57,6 +58,8 @@ urlpatterns = patterns(
     url(r'^roles/(?P<pk>\d+)/$', RoleDetailView.as_view(), name="role"),
     url(r'^roles/(?P<pk>\d+)/delete/$', DeleteRoleView.as_view(),
         name="delete-role"),
+    url(r'^roles/(?P<pk>\d+)/edit/$', RoleUpdate.as_view(),
+        name="edit-role"),
     url(r'^states/$', StatesIndexView.as_view(), name="states-index"),
     url(r'^states/(?P<pk>\d+)/$', StateDetailView.as_view(), name="state"),
 )

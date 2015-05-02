@@ -1,0 +1,26 @@
+{% extends 'sim/base_faculty.html' %}
+{% load markup %}
+{% load bootstrap %}
+
+{% block breadcrumbs %}
+<a href="{% url 'roles-index' %}">Roles</a> /
+<a href="{% url 'role' role.id %}">{{role.name}}</a> /
+Edit
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+
+		<h3>Edit Role: {{role.name}}</h3>
+		<p class="bg-info">You can't edit the name once it's been
+			created since state transitions rely on it. If you need to
+			change the name, for now, you will have to delete and add a new one.</p>
+		<form method="post" action=".">
+			{% csrf_token %}
+			{{ form|bootstrap }}
+
+			<input type="submit" class="btn btn-primary" value="Save"/>
+		</form>
+</div>
+{% endblock %}

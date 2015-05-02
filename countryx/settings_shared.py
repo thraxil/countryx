@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
+    'bootstrapform',
     'countryx.sim',
     'django_statsd',
     'discover_jenkins',

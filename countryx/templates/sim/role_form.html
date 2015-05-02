@@ -1,8 +1,10 @@
 {% extends 'sim/base_faculty.html' %}
 {% load markup %}
+{% load bootstrap %}
 
 {% block breadcrumbs %}
-Roles
+<a href="{% url 'roles-index' %}">Roles</a> /
+Add New Role
 {% endblock %}
 
 
@@ -15,17 +17,7 @@ Roles
 			added all the corresponding choices and transitions for it.</div>
 		<form method="post" action="{% url 'create-role' %}">
 			{% csrf_token %}
-			<div class="form-group">
-				<label for="role-name">Name</label>
-				<input type="text" class="form-control" name="name"
-				id="role-name" />
-			</div>
-
-			<div class="form-group">
-				<label for="role-desc">Description</label>
-				<textarea name="description" id="role-desc" rows="7"
-				class="form-control"></textarea>
-			</div>
+			{{ form|bootstrap }}
 
 			<input type="submit" class="btn btn-primary" value="Add"/>
 		</form>

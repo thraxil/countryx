@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import View, ListView, DetailView
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django import forms
 import datetime
 import json
@@ -113,6 +113,12 @@ class DeleteRoleView(StaffOnlyMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('roles-index')
+
+
+class RoleUpdate(StaffOnlyMixin, UpdateView):
+    model = Role
+    fields = ['description']
+    template_name = "sim/role_edit_form.html"
 
 
 @login_required

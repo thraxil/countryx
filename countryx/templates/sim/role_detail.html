@@ -9,7 +9,7 @@
 {% block content %}
 <div class="container">
 	<div class="pull-right">
-				<a href="edit" class="btn btn-primary"><span class="glyphicon
+				<a href="{% url 'edit-role' role.id %}" class="btn btn-primary"><span class="glyphicon
                 glyphicon-edit" aria-hidden="true"></span></a>
 
 				<a href="{% url 'delete-role' role.id %}" class="btn btn-danger"><span class="glyphicon
