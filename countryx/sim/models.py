@@ -86,6 +86,12 @@ class State(models.Model):
         return rv
 
 
+def num_turns():
+    if State.objects.count() == 0:
+        return 0
+    return State.objects.all().aggregate(models.Max('turn'))['turn__max']
+
+
 class StateChange(models.Model):
     state = models.ForeignKey(State, related_name="%(class)s_related_current")
     next_state = models.ForeignKey(State,
@@ -325,7 +331,7 @@ class SectionGroupState(models.Model):
         return "%s %s" % (self.state, self.date_updated)
 
     def status(self):
-        if (self.state.turn == 4):
+        if (self.state.turn == num_turns()):
             return GROUP_STATUS_SUBMITTED
         status = 0
         players = self.group.sectiongroupplayer_set.all()

@@ -7,6 +7,7 @@ from countryx.sim.models import State, SectionGroupPlayerTurn
 from countryx.sim.models import StateRoleChoice
 from countryx.sim.models import StateVariable
 from countryx.sim.models import SectionGroupState
+from countryx.sim.models import num_turns
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -55,7 +56,7 @@ class CreateSectionView(StaffOnlyMixin, View):
             turn=1,
             created_date=now)
         SectionAdministrator.objects.create(section=s, user=request.user)
-        for i in range(5):
+        for i in range(num_turns() + 1):
             group_name = request.POST.get('group_name_%d' % i, '').strip()
             if not group_name:
                 continue
@@ -306,7 +307,7 @@ def __player_index(request):
 
 
 def tab_name(i):
-    if i < 4:
+    if i < num_turns():
         return 'Phase %s' % i
     else:
         return "Results"
@@ -342,7 +343,7 @@ def player_game(request, group_id, turn_id=0):
 
     tabs = [dict(id=i, activetab=(working_state.turn == i),
                  viewable=tab_viewable(group, i), name=tab_name(i),
-                 ) for i in range(1, 5)]
+                 ) for i in range(1, num_turns() + 1)]
 
     # setup set of special attributes for current user
     your_player = {
@@ -365,7 +366,7 @@ def player_game(request, group_id, turn_id=0):
 
     endgame_results = []
     feedback = None
-    if working_state.turn == 4:
+    if working_state.turn == num_turns():
         turns = SectionGroupPlayerTurn.objects.filter(
             player=your_player['model']).order_by('turn')
         endgame_results = zip(turns, tabs)
@@ -416,8 +417,8 @@ def allvariables(request):
 def allpaths(request):
     turns = []
     roles = [r.name for r in Role.objects.all()]
-    # NOTE: we currently assume 4 turns indexed at 1
-    for turn in range(1, 5):
+    # NOTE: indexed at 1
+    for turn in range(1, num_turns() + 1):
         states = State.objects.filter(turn=turn).order_by("state_no")
         turn = dict(
             states=[
