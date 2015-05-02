@@ -38,7 +38,12 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 	<div class="panel-heading">
 		<div class="panel-title">Role Choices</div>
 	</div>
+
 	<div class="panel-body">
+
+	<p><a href="{% url 'add-role-choice' state.id %}"> <span class="glyphicon
+	glyphicon-plus" aria-hidden="true"></span> Add Role Choice</a></p>
+
 	{% if state.staterolechoice_set.exists %}
 	<table class="table table-striped">
 		{% for src in state.staterolechoice_set.all %}

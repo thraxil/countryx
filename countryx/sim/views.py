@@ -138,6 +138,31 @@ class StateCreate(StaffOnlyMixin, CreateView):
     model = State
 
 
+class StateAddRoleChoice(StaffOnlyMixin, View):
+    template_name = "sim/state_add_role_choice.html"
+
+    def get(self, request, pk):
+        state = get_object_or_404(State, id=pk)
+        return render(
+            request,
+            self.template_name,
+            dict(state=state,
+                 roles=Role.objects.all()))
+
+    def post(self, request, pk):
+        state = get_object_or_404(State, id=pk)
+        role = get_object_or_404(Role, id=request.POST.get('role'))
+        choice = int(request.POST.get('choice', '1'))
+        desc = request.POST.get('description', '')
+        StateRoleChoice.objects.create(
+            state=state,
+            role=role,
+            choice=choice,
+            desc=desc
+        )
+        return HttpResponseRedirect(reverse('state', args=(pk,)))
+
+
 @login_required
 @render_to("sim/faculty_section_bygroup.html")
 def faculty_section_bygroup(request, section_id):
