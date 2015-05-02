@@ -55,6 +55,12 @@ class State(models.Model):
             # 255*255*255/28 states == 592191
             return str(hex(592191 * key))[2:]
 
+    def to_states(self):
+        return StateChange.objects.filter(state=self).order_by('next_state')
+
+    def from_states(self):
+        return StateChange.objects.filter(next_state=self).order_by('state')
+
     def full_to(self, roles):
         return [{'color': x.next_state.get_color(), 'ids': [x.next_state.id]}
                 for x in StateChange.objects.filter(
@@ -102,6 +108,14 @@ class StateChange(models.Model):
         return "[%s] %s >> [%s]" % (
             self.state, rolesstr, self.next_state)
 
+    def show_choices(self):
+        """ more useful format for displaying """
+        j = json.loads(self.roles)
+        choices = []
+        for k in sorted(j.keys()):
+            choices.append(dict(role=k, choice=j[k]))
+        return choices
+
 
 class StateVariable(models.Model):
     state = models.ForeignKey(State)
@@ -117,6 +131,9 @@ class StateRoleChoice(models.Model):
     role = models.ForeignKey(Role)
     choice = models.IntegerField()
     desc = models.CharField(max_length=250)
+
+    class Meta:
+        ordering = ['state', 'role', 'choice']
 
     def __unicode__(self):
         return "[%s] %s: %s. %s" % (self.state, self.role,

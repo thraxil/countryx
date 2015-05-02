@@ -23,7 +23,7 @@ States
 		{% endifchanged %}
 		<tr>
 			<td>{{state.state_no}}</td>
-			<td>{{state.name}}</td>
+			<td><a href="{% url 'state' state.id %}">{{state.name}}</a></td>
 		</tr>
 		{% endfor %}
 	</table>

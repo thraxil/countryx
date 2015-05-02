@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 import os.path
 from .views import (
     CreateSectionView, DeleteSectionView,
-    RolesIndexView, StatesIndexView)
+    RolesIndexView, StatesIndexView, StateDetailView)
 
 media_root = os.path.join(os.path.dirname(__file__), "media")
 
@@ -52,4 +52,5 @@ urlpatterns = patterns(
 
     url(r'^roles/$', RolesIndexView.as_view(), name="roles-index"),
     url(r'^states/$', StatesIndexView.as_view(), name="states-index"),
+    url(r'^states/(?P<pk>\d+)/$', StateDetailView.as_view(), name="state"),
 )
