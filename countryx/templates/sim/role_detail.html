@@ -22,9 +22,7 @@
 
 	{{role.description|markdown}}
 
-
-			
-
+{% if role.staterolechoice_set.exists %}
 	<h2>State Choices</h2>
 
 	<table class="table table-striped">
@@ -41,6 +39,6 @@
 		</tr>
 		{% endfor %}
 	</table>
-
+{% endif %}
 </div>
 {% endblock %}

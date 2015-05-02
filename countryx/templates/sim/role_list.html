@@ -10,6 +10,8 @@ Roles
 <div class="container">
 	<h2>Roles</h2>
 
+	<p><a href="{% url 'create-role' %}">Add new Role</a></p>
+
 	{% if object_list %}
 	<table class="table table-striped">
 		<tr>
@@ -22,6 +24,12 @@ Roles
 			<td>{{ role.description|markdown }}</td>
 		</tr>
 	{% endfor %}
+	</table>
 	{% endif %}
+
+
 </div>
+
+
+
 {% endblock %}

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.core.urlresolvers import reverse
 import datetime
 import json
 import random
@@ -22,6 +23,9 @@ class Role(models.Model):
     def display_name(self):
         parts = self.name.split(" ")
         return parts[0]
+
+    def get_absolute_url(self):
+        return reverse('role', args=(self.id,))
 
 
 class State(models.Model):

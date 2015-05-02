@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import View, ListView, DetailView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import CreateView, DeleteView
 from django import forms
 import datetime
 import json
@@ -101,6 +101,10 @@ class StateDetailView(StaffOnlyMixin, DetailView):
 
 
 class RoleDetailView(StaffOnlyMixin, DetailView):
+    model = Role
+
+
+class CreateRoleView(StaffOnlyMixin, CreateView):
     model = Role
 
 
