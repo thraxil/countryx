@@ -90,6 +90,10 @@ class StateChange(models.Model):
     opposition = models.IntegerField()
     next_state = models.ForeignKey(State,
                                    related_name="%(class)s_related_next")
+    # in here, we store some json. it will look something like:
+    # {'President': 1, 'Envoy': 2, ...}
+    # Role -> integer choice
+    roles = models.TextField(blank=True)
 
     def __unicode__(self):
         return "[%s] P=%s E%s R=%s O=%s >> [%s]" % (
