@@ -1,16 +1,20 @@
 {% extends "sim/base_sim.html" %}
+{% load compress %}
 
 {% block js %}
    {{ block.super }}
+{% compress js %}
    <script type="text/javascript" src="{{STATIC_URL}}admin/js/core.js"></script>
    <script type="text/javascript" src="{{STATIC_URL}}js/faculty.js"></script>
+{% endcompress %}
 	 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block css %}
-
+{% compress css %}
 	 <link rel="stylesheet" href="{{STATIC_URL}}css/faculty.css" />
+{% endcompress %}
    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
 {% endblock %}
 
