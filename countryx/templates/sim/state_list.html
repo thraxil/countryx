@@ -1,0 +1,33 @@
+{% extends 'sim/base_faculty.html' %}
+{% load markup %}
+
+{% block breadcrumbs %}
+States
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+	<h2>States</h2>
+
+	{% if object_list %}
+	<table class="table table-striped">
+		<tr>
+			<th>State #</th>
+			<th>Name</th>
+		</tr>
+
+		{% for state in object_list %}
+		{% ifchanged state.turn %}
+		<tr><th colspan="2">Turn: {{state.turn}}</th></tr>
+		{% endifchanged %}
+		<tr>
+			<td>{{state.state_no}}</td>
+			<td>{{state.name}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	{% endif %}
+
+{% endblock %}

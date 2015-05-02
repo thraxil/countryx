@@ -40,6 +40,9 @@ class State(models.Model):
     state_no = models.IntegerField()
     name = models.CharField(max_length=40)
 
+    class Meta:
+        ordering = ['turn', 'state_no']
+
     def __unicode__(self):
         return "Turn %s: %s" % (self.turn, self.name)
 

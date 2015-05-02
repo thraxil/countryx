@@ -91,6 +91,10 @@ class RolesIndexView(StaffOnlyMixin, ListView):
     model = Role
 
 
+class StatesIndexView(StaffOnlyMixin, ListView):
+    model = State
+
+
 @login_required
 @render_to("sim/faculty_section_bygroup.html")
 def faculty_section_bygroup(request, section_id):

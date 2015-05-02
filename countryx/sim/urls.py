@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 import os.path
 from .views import (
     CreateSectionView, DeleteSectionView,
-    RolesIndexView)
+    RolesIndexView, StatesIndexView)
 
 media_root = os.path.join(os.path.dirname(__file__), "media")
 
@@ -51,4 +51,5 @@ urlpatterns = patterns(
         name='delete-section'),
 
     url(r'^roles/$', RolesIndexView.as_view(), name="roles-index"),
+    url(r'^states/$', StatesIndexView.as_view(), name="states-index"),
 )
