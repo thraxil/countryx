@@ -16,8 +16,18 @@
 
 {% block masthead %}
    <table width="100%">
-      <tr><td id="masthead">Country X Administration</td>
-      <td id="login_credentials">Welcome, {{user.username}} / <a style="color: white" href="/sim/logout/">Logout</a></td></tr>
+      <tr>
+          <td id="masthead">Country X Administration</td>
+          <td id="login_credentials">Welcome, {{user.username}}
+          / <a style="color: white"
+          href="/sim/logout/">Logout</a></td>
+      </tr>
+      <tr>
+        <td colspan="2" id="faculty-nav">
+					<a href="/sim/">Sections</a> | 
+					<a href="{% url 'roles-index' %}">Roles</a> | 
+					<a href="/sim/states/">States</a></td>
+      </tr>
    </table>
 {% endblock %}
 

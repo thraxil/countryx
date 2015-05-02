@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, url
 import os.path
-from .views import CreateSectionView, DeleteSectionView
+from .views import (
+    CreateSectionView, DeleteSectionView,
+    RolesIndexView)
 
 media_root = os.path.join(os.path.dirname(__file__), "media")
 
@@ -47,4 +49,6 @@ urlpatterns = patterns(
     url(r'^section/new/$', CreateSectionView.as_view(), name='create-section'),
     url(r'^section/(?P<pk>\d+)/delete/$', DeleteSectionView.as_view(),
         name='delete-section'),
+
+    url(r'^roles/$', RolesIndexView.as_view(), name="roles-index"),
 )

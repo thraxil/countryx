@@ -27,10 +27,13 @@ textarea#id_feedback {
    vertical-align: middle;
 }
 
+#faculty-nav {
+   text-align: right;
+}
+
 div#breadcrumbs
 {
    background-color: white;
-   background-position: 0pt -10px;
    padding-top: 2px;
    padding-right: 8px;
    padding-bottom: 3px;
@@ -39,7 +42,7 @@ div#breadcrumbs
    color: #999999;
    border-top-width: 1px;
    border-top-style: solid;
-   border-top-color: white;
+   border-top-color: #white;
    border-bottom-width: 1px;
    border-bottom-style: solid;
    border-bottom-color: #cccccc;

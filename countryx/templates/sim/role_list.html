@@ -1,0 +1,27 @@
+{% extends 'sim/base_faculty.html' %}
+{% load markup %}
+
+{% block breadcrumbs %}
+Roles
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+	<h2>Roles</h2>
+
+	{% if object_list %}
+	<table class="table table-striped">
+		<tr>
+			<th>Role</th>
+			<th>Description</th>
+		</tr>
+	{% for role in object_list %}
+		<tr>
+			<td>{{ role.name }}</td>
+			<td>{{ role.description|markdown }}</td>
+		</tr>
+	{% endfor %}
+	{% endif %}
+</div>
+{% endblock %}

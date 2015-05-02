@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.views.generic import View
+from django.views.generic import View, ListView
 from django.views.generic.edit import DeleteView
 from django import forms
 import datetime
@@ -85,6 +85,10 @@ class CreateSectionView(StaffOnlyMixin, View):
 class DeleteSectionView(StaffOnlyMixin, DeleteView):
     model = Section
     success_url = "/sim/"
+
+
+class RolesIndexView(StaffOnlyMixin, ListView):
+    model = Role
 
 
 @login_required
