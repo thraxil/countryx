@@ -5,6 +5,8 @@ import datetime
 import json
 import random
 
+NUM_CHOICES = 3
+
 
 class Role(models.Model):
     """
@@ -68,10 +70,11 @@ class State(models.Model):
         default_color = 'FFFFFF'
         # don't do dictionaries here, since then they'll all be a
         # pointer to the same object
-        rv = [False] * (3 ** len(roles))
+        rv = [False] * (NUM_CHOICES ** len(roles))
         for ch in StateChange.objects.filter(next_state=self).order_by(*roles):
-            index = sum([(3 ** (len(roles) - i - 1)) * (getattr(ch, r) - 1)
-                         for i, r in enumerate(roles)])
+            index = sum(
+                [(NUM_CHOICES ** (len(roles) - i - 1)) * (getattr(ch, r) - 1)
+                 for i, r in enumerate(roles)])
             if not rv[index]:
                 rv[index] = {'color': default_color, 'ids': []}
 
@@ -261,7 +264,7 @@ class SectionGroup(models.Model):
                 # player has no choice saved
                 player_response = SectionGroupPlayerTurn.objects.create(
                     player=player, turn=state.turn)
-                player_response.choice = random.randint(1, 3)
+                player_response.choice = random.randint(1, NUM_CHOICES)
                 player_response.submit_date = datetime.datetime.now()
                 player_response.automatic_update = AUTOMATIC_UPDATE_RANDOM
                 player_response.save()
