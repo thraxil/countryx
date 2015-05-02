@@ -1,0 +1,33 @@
+{% extends 'sim/base_faculty.html' %}
+{% load markup %}
+
+{% block breadcrumbs %}
+<a href="{% url 'roles-index' %}">Roles</a> / {{role.name}}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+	<h1>Role: {{role.name}}</h1>
+
+	{{role.description|markdown}}
+
+	<h2>State Choices</h2>
+
+	<table class="table table-striped">
+		{% for src in role.staterolechoice_set.all %}
+		{% ifchanged src.state %}
+		<tr>
+		<th colspan="2"><a href="{% url 'state' src.state.id %}">[{{src.state.turn}}:{{src.state.state_no}}]
+		{{src.state.name}}</a></th>
+		</tr>
+		{% endifchanged %}
+		<tr>
+			<td>{{src.choice}}</td>
+			<td>{{src.desc|markdown}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+</div>
+{% endblock %}

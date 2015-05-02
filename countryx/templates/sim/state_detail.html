@@ -23,7 +23,7 @@
 		{% for src in state.staterolechoice_set.all %}
 		{% ifchanged src.role %}
 		<tr>
-			<th colspan="2">{{src.role.name}}</th>
+			<th colspan="2"><a href="{% url 'role' src.role.id %}">{{src.role.name}}</a></th>
 		</tr>
 		{% endifchanged %}
 		<tr>

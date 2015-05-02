@@ -18,7 +18,7 @@ Roles
 		</tr>
 	{% for role in object_list %}
 		<tr>
-			<td>{{ role.name }}</td>
+			<td><a href="{% url 'role' role.id %}">{{ role.name }}</a></td>
 			<td>{{ role.description|markdown }}</td>
 		</tr>
 	{% endfor %}

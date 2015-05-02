@@ -99,6 +99,10 @@ class StateDetailView(StaffOnlyMixin, DetailView):
     model = State
 
 
+class RoleDetailView(StaffOnlyMixin, DetailView):
+    model = Role
+
+
 @login_required
 @render_to("sim/faculty_section_bygroup.html")
 def faculty_section_bygroup(request, section_id):
