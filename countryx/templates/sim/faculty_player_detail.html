@@ -8,8 +8,6 @@
    
 {% endblock %}
 
-{% load iflessthan %}
-
 {% block content %}
    {{ block.super }}
 
@@ -17,7 +15,7 @@
    {% for t in player_turns %}
       <a name="turn{{t.turn}"></a>
       
-      {% iflessthan t.state.turn 4 %}
+      {% if t.state.turn < 4 %}
          <h2>Turn {{t.state.turn}} {{t.state.name}}</h2>
       
 		   <table class="datagrid">
@@ -91,7 +89,7 @@
 					</td>
 				</tr>
 			</table>
-		{% endiflessthan %}		
+		{% endif %}		
    {% endfor %}
 </div>
 {% endblock %}

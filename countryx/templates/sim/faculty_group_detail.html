@@ -6,8 +6,6 @@
    Group {{ group.name }}
 {% endblock %}
 
-{% load iflessthan %}
-
 {% block content %}
    {{ block.super }}
 
@@ -15,7 +13,7 @@
    {% for t in turns %}
       <a name="turn{{t.group_state.state.turn}}"></a>
       
-      {% iflessthan t.group_state.state.turn 4 %}
+      {% if t.group_state.state.turn < 4 %}
 	      <h2>Turn {{t.group_state.state.turn}} {{t.group_state.state.name}}</h2>
       
 	      Group Status:        
@@ -92,7 +90,7 @@
 	       Updated: {{ t.group_state.date_updated }}<br />
 	       <br />
 	       <div class="scrollable_text">{% autoescape off %}<b>Country Conditions</b><br />{{ t.country_condition }}{% endautoescape %}</div>
-	    {% endiflessthan %}
+	    {% endif %}
 	{% endfor %}
 
 </div>    

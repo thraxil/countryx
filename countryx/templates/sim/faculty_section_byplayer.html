@@ -1,7 +1,5 @@
 {% extends "sim/base_faculty.html" %}
 
-{% load iflessthan %}
-
 {% block breadcrumbs %}
    <a href="/sim/">Home</a> > {{section}}
 {% endblock %}
@@ -46,11 +44,11 @@
 	            </td>
 	            <td>{{ player.user.username }}</td>
 	            <td>{{ player.role.display_name }}</td>
-	            {% iflessthan player.sectiongroupplayerturn_related_player.count 1 %}
+	            {% if player.sectiongroupplayerturn_related_player.count < 1 %}
 	                <td/>
 	            {% else %}
 	                <td><a href="/sim/faculty/player/{{player.id}}/">All Turns</a></td>
-               {% endiflessthan %}
+               {% endif %}
 	         </tr>
          {% endfor %}
       </tbody>
