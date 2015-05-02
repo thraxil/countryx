@@ -10,6 +10,9 @@ States
 <div class="container">
 	<h2>States</h2>
 
+	<p><a href="{% url 'create-state' %}"> <span class="glyphicon
+	glyphicon-plus" aria-hidden="true"></span> Add new State</a></p>
+
 	{% if object_list %}
 	<table class="table table-striped">
 		{% for state in object_list %}

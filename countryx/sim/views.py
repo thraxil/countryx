@@ -134,6 +134,10 @@ class StateDelete(StaffOnlyMixin, DeleteView):
         return reverse('states-index')
 
 
+class StateCreate(StaffOnlyMixin, CreateView):
+    model = State
+
+
 @login_required
 @render_to("sim/faculty_section_bygroup.html")
 def faculty_section_bygroup(request, section_id):

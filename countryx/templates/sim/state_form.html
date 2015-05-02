@@ -1,0 +1,22 @@
+{% extends 'sim/base_faculty.html' %}
+{% load markup %}
+{% load bootstrap %}
+
+{% block breadcrumbs %}
+<a href="{% url 'states-index' %}">States</a> /
+Add New State
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+
+		<h3>Add New State</h3>
+		<form method="post" action="{% url 'create-state' %}">
+			{% csrf_token %}
+			{{ form|bootstrap }}
+
+			<input type="submit" class="btn btn-primary" value="Add"/>
+		</form>
+</div>
+{% endblock %}
