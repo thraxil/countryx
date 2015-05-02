@@ -50,6 +50,9 @@ class State(models.Model):
     def __unicode__(self):
         return "Turn %s: %s" % (self.turn, self.name)
 
+    def get_absolute_url(self):
+        return reverse('state', args=(self.id,))
+
     def get_color(self):
         colors = settings.STATE_COLORS
         key = (self.id % len(colors))

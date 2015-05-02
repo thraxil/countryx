@@ -8,6 +8,14 @@
 
 {% block content %}
 <div class="container">
+	<div class="pull-right">
+		<a href="{% url 'edit-state' state.id %}"
+			 class="btn btn-primary">
+			<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+		</a>
+	</div>
+
+
 	<h1>State: <span class="swatch" style="background-color: #{{state.get_color}}"></span> [{{state.turn}}:{{state.state_no}}] {{state.name}}</h1>
 
 	<table class="table">
