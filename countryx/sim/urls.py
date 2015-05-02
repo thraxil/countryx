@@ -44,7 +44,6 @@ urlpatterns = patterns(
     (r'^faculty/player/(?P<player_id>\d+)/$',
      'countryx.sim.views.faculty_player_detail'),
     (r'^faculty/feedback/$', 'countryx.sim.views.faculty_feedback_submit'),
-    (r'^check_statechanges/$', 'countryx.sim.views.check_statechanges'),
     url(r'^section/new/$', CreateSectionView.as_view(), name='create-section'),
     url(r'^section/(?P<pk>\d+)/delete/$', DeleteSectionView.as_view(),
         name='delete-section'),

@@ -5,7 +5,7 @@ from countryx.sim.models import SectionGroupPlayer
 from countryx.sim.models import SectionGroup
 from countryx.sim.models import State, SectionGroupPlayerTurn
 from countryx.sim.models import StateRoleChoice
-from countryx.sim.models import StateChange, StateVariable
+from countryx.sim.models import StateVariable
 from countryx.sim.models import SectionGroupState
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -415,7 +415,7 @@ def allvariables(request):
 @login_required
 def allpaths(request):
     turns = []
-    roles = ('president', 'regional', 'envoy', 'opposition')
+    roles = [r.name for r in Role.objects.all()]
     # NOTE: we currently assume 4 turns indexed at 1
     for turn in range(1, 5):
         states = State.objects.filter(turn=turn).order_by("state_no")
@@ -531,38 +531,3 @@ class FeedbackForm(forms.Form):
     feedback = forms.CharField(widget=forms.Textarea)
     faculty_id = forms.IntegerField(widget=forms.HiddenInput)
     turn_id = forms.IntegerField(widget=forms.HiddenInput)
-
-
-def check_statechange(s, p, e, r, o, c, missing, duplicates):
-    c = StateChange.objects.filter(
-        state=s, president=p, envoy=e, regional=r, opposition=o).count()
-    if c == 0:
-        missing.append(
-            dict(state=s, president=p, envoy=e, opposition=o, regional=r))
-    if c > 1:
-        duplicates.append(
-            dict(state=s, president=p, envoy=e, opposition=o, regional=r))
-    return (missing, duplicates)
-
-
-@login_required
-def check_statechanges(request):
-    missing = []
-    duplicates = []
-    for s in State.objects.all():
-        if s.turn == 4:
-            continue  # no transitions out of the last state
-        for p in [1, 2, 3]:
-            for e in [1, 2, 3]:
-                for r in [1, 2, 3]:
-                    for o in [1, 2, 3]:
-                        (missing, duplicates) = check_statechange(
-                            s, p, e, r, o, missing, duplicates)
-    return render(
-        request,
-        "sim/check_statechanges.html",
-        dict(
-            missing=missing,
-            duplicates=duplicates,
-            user=request.user,
-        ))
