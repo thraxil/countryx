@@ -163,6 +163,13 @@ class StateAddRoleChoice(StaffOnlyMixin, View):
         return HttpResponseRedirect(reverse('state', args=(pk,)))
 
 
+class StateRoleChoiceDelete(StaffOnlyMixin, DeleteView):
+    model = StateRoleChoice
+
+    def get_success_url(self):
+        return reverse('state', self.object.state.id)
+
+
 @login_required
 @render_to("sim/faculty_section_bygroup.html")
 def faculty_section_bygroup(request, section_id):

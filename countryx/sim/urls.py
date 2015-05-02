@@ -5,7 +5,7 @@ from .views import (
     RolesIndexView, StatesIndexView, StateDetailView,
     RoleDetailView, DeleteRoleView, CreateRoleView,
     RoleUpdate, StateUpdate, StateDelete,
-    StateCreate, StateAddRoleChoice,
+    StateCreate, StateAddRoleChoice, StateRoleChoiceDelete,
 )
 
 media_root = os.path.join(os.path.dirname(__file__), "media")
@@ -70,5 +70,7 @@ urlpatterns = patterns(
         name="delete-state"),
     url(r'^states/(?P<pk>\d+)/add_role_choice/$', StateAddRoleChoice.as_view(),
         name="add-role-choice"),
-
+    url(r'^staterolechoice/(?P<pk>\d+)/delete/$',
+        StateRoleChoiceDelete.as_view(),
+        name="delete-role-choice"),
 )

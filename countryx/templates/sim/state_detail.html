@@ -49,12 +49,16 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 		{% for src in state.staterolechoice_set.all %}
 		{% ifchanged src.role %}
 		<tr>
-			<th colspan="2"><a href="{% url 'role' src.role.id %}">{{src.role.name}}</a></th>
+			<th colspan="3"><a href="{% url 'role' src.role.id %}">{{src.role.name}}</a></th>
 		</tr>
 		{% endifchanged %}
 		<tr>
 			<td class="choice-{{src.choice}}">{{src.choice}}</td>
 			<td>{{src.desc|markdown}}</td>
+			<td><a href="{% url 'delete-role-choice' src.id %}"
+			 class="btn btn-danger btn-sm">
+			<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+		</a></td>
 		</tr>
 		{% endfor %}
 	</table>
