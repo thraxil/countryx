@@ -2,6 +2,7 @@ from django.db import models, connection
 from django.contrib.auth.models import User
 from django.conf import settings
 import datetime
+import json
 import random
 
 
@@ -96,9 +97,11 @@ class StateChange(models.Model):
     roles = models.TextField(blank=True)
 
     def __unicode__(self):
-        return "[%s] P=%s E%s R=%s O=%s >> [%s]" % (
-            self.state, self.president, self.envoy, self.regional,
-            self.opposition, self.next_state)
+        rolesstr = " ".join(
+            "%s=%d" % (k[0], v) for k, v in json.loads(self.roles).items()
+        )
+        return "[%s] %s >> [%s]" % (
+            self.state, rolesstr, self.next_state)
 
 
 class StateVariable(models.Model):
