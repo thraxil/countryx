@@ -8,6 +8,9 @@
 
 {% block content %}
 <div class="container">
+<div class="panel panel-default">
+<div class="panel-heading">
+		<div class="panel-title">
 	<div class="pull-right">
 		<a href="{% url 'edit-state' state.id %}"
 			 class="btn btn-primary">
@@ -19,18 +22,24 @@
 		</a>
 	</div>
 
-
-	<h1>State: <span class="swatch" style="background-color: #{{state.get_color}}"></span> [{{state.turn}}:{{state.state_no}}] {{state.name}}</h1>
+State: <span class="swatch" style="background-color: #{{state.get_color}}"></span> [{{state.turn}}:{{state.state_no}}] {{state.name}}
+</div>
+</div>
+	<div class="panel-body">
 
 	<table class="table">
 		<tr><th>Turn</th><td>{{state.turn}}</td></tr>
 		<tr><th>State #</th><td>{{state.state_no}}</td></tr>
 	</table>
+	</div>
+</div>
 
-
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="panel-title">Role Choices</div>
+	</div>
+	<div class="panel-body">
 	{% if state.staterolechoice_set.exists %}
-	<h2>Role Choices</h2>
-
 	<table class="table table-striped">
 		{% for src in state.staterolechoice_set.all %}
 		{% ifchanged src.role %}
@@ -44,10 +53,18 @@
 		</tr>
 		{% endfor %}
 	</table>
+	{% else %}
+	<p>No role choices specified.</p>
 	{% endif %}
+</div>
+</div>
 
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="panel-title">Transitions out of this state</div>
+	</div>
+	<div class="panel-body">
 	{% if state.to_states.exists %}
-	<h2>Transitions to:</h2>
 
 	<table class="table table-striped">
 		{% for sc in state.to_states %}
@@ -64,11 +81,18 @@
 		</tr>
 		{% endfor %}
 	</table>
-
+	{% else %}
+	<p>No transitions out of this state.</p>
 	{% endif %}
+	</div>
+</div>
 
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="panel-title">Transitions into this state</div>
+	</div>
+	<div class="panel-body">
 	{% if state.from_states.exists %}
-	<h2>Transitions from:</h2>
 	<table class="table table-striped">
 		{% for sc in state.from_states %}
 		<tr>
@@ -82,7 +106,10 @@
 		</tr>
 		{% endfor %}
 	</table>
+	{% else %}
+	<p>No transitions into this state.</p>
 	{% endif %}
+</div></div>
 
 </div>
 {% endblock %}
