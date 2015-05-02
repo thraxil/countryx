@@ -12,18 +12,15 @@ States
 
 	{% if object_list %}
 	<table class="table table-striped">
-		<tr>
-			<th>State #</th>
-			<th>Name</th>
-		</tr>
-
 		{% for state in object_list %}
 		{% ifchanged state.turn %}
 		<tr><th colspan="2">Turn: {{state.turn}}</th></tr>
 		{% endifchanged %}
 		<tr>
-			<td>{{state.state_no}}</td>
-			<td><a href="{% url 'state' state.id %}">{{state.name}}</a></td>
+			<td>
+<a href="{% url 'state' state.id %}">
+<span class="swatch" style="background-color: #{{state.get_color}}"></span>
+[{{state.turn}}:{{state.state_no}}] {{state.name}}</a></td>
 		</tr>
 		{% endfor %}
 	</table>

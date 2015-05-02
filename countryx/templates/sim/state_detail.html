@@ -8,7 +8,7 @@
 
 {% block content %}
 <div class="container">
-	<h1>State: {{state.name}}</h1>
+	<h1>State: <span class="swatch" style="background-color: #{{state.get_color}}"></span> [{{state.turn}}:{{state.state_no}}] {{state.name}}</h1>
 
 	<table class="table">
 		<tr><th>Turn</th><td>{{state.turn}}</td></tr>
@@ -41,7 +41,8 @@
 		{% for sc in state.to_states %}
 		<tr>
 			<th>
-				<a href="{% url 'state' sc.next_state.id %}">[{{sc.next_state.turn}}:{{sc.next_state.state_no}}] {{sc.next_state.name}}</a>
+				<a href="{% url 'state' sc.next_state.id %}"><span class="swatch" style="background-color:
+				#{{sc.next_state.get_color}}"></span> [{{sc.next_state.turn}}:{{sc.next_state.state_no}}] {{sc.next_state.name}}</a>
 			</th>
 			{% for choice in sc.show_choices %}
 			<td>
@@ -59,7 +60,8 @@
 	<table class="table table-striped">
 		{% for sc in state.from_states %}
 		<tr>
-			<th><a href="{% url 'state' sc.state.id %}">[{{sc.state.turn}}:{{sc.state.state_no}}] {{sc.state.name}}</a></th>
+			<th><a href="{% url 'state' sc.state.id %}"><span class="swatch"
+			style="background-color: #{{sc.state.get_color}}"></span> [{{sc.state.turn}}:{{sc.state.state_no}}] {{sc.state.name}}</a></th>
 			{% for choice in sc.show_choices %}
 			<td>
 				{{choice.role}}={{choice.choice}}
