@@ -145,6 +145,9 @@ class StateChangeDelete(StaffOnlyMixin, DeleteView):
 class StateCreate(StaffOnlyMixin, CreateView):
     model = State
 
+    def get_success_url(self):
+        return reverse('states-index')
+
 
 class StateAddRoleChoice(StaffOnlyMixin, View):
     template_name = "sim/state_add_role_choice.html"
