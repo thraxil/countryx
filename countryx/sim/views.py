@@ -497,7 +497,6 @@ def player_game(request, group_id, turn_id=0):
         group=group,
         state=working_state,
         country_condition=working_state.country_condition(),
-        conditions=__current_conditions(working_state),
         tabs=tabs,
         players=players,
         you=your_player,
@@ -598,48 +597,6 @@ def player_choose(request):
             response['message'] = "Draft has been saved"
 
     return HttpResponse(json.dumps(response), 'application/json')
-
-
-def __current_conditions(state):
-    details = {
-        'Violence Level': {
-            'most': 'non-violent',
-            'least': 'genocide',
-            'good_inverse': True
-        },
-        'Economy': {
-            'least': 'depression',
-            'most': 'stable',
-            'good_inverse': True
-        },
-        'Prestige': {
-            'least': 'globally isolated',
-            'most': 'respected world player',
-            'good_inverse': True
-        },
-        'Awareness': {
-            'least': 'zero media coverage',
-            'most': 'regular media coverage',
-            'good_inverse': True
-        },
-        'Political Discourse': {
-            'least': 'state control of information',
-            'most': 'free and open system',
-            'good_inverse': True
-        },
-        'Weapons Flow': {
-            'most': 'minimal/no weapons smuggling',
-            'least': 'uncontrolled weapons smuggling',
-            'good_inverse': True
-        },
-    }
-    conditions = []
-    for k, var_dict in details.items():
-        var = state.statevariable_set.get(name=k)
-        var_dict['name'] = var.name
-        var_dict['value'] = int(var.value)
-        conditions.append(var_dict)
-    return conditions
 
 
 class FeedbackForm(forms.Form):
