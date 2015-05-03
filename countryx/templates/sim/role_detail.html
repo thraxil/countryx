@@ -30,7 +30,7 @@
 		{% ifchanged src.state %}
 		<tr>
 		<th colspan="2"><a href="{% url 'state' src.state.id %}"><span class="swatch" style="background-color:
-		#{{src.state.get_color}}"></span> [{{src.state.turn}}:{{src.state.state_no}}]
+		#{{src.state.get_color}}"></span> T{{src.state.turn}}_S{{src.state.state_no}}
 		{{src.state.name}}</a></th>
 		</tr>
 		{% endifchanged %}

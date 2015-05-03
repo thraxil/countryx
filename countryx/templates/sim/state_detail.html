@@ -22,7 +22,7 @@
 		</a>
 	</div>
 
-State: <span class="swatch" style="background-color: #{{state.get_color}}"></span> [{{state.turn}}:{{state.state_no}}] {{state.name}}
+State: <span class="swatch" style="background-color: #{{state.get_color}}"></span> T{{state.turn}}_S{{state.state_no}} {{state.name}}
 </div>
 </div>
 	<div class="panel-body">
@@ -87,7 +87,7 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 		<tr>
 			<th>
 				<a href="{% url 'state' sc.next_state.id %}"><span class="swatch" style="background-color:
-				#{{sc.next_state.get_color}}"></span> [{{sc.next_state.turn}}:{{sc.next_state.state_no}}] {{sc.next_state.name}}</a>
+				#{{sc.next_state.get_color}}"></span> T{{sc.next_state.turn}}_S{{sc.next_state.state_no}} {{sc.next_state.name}}</a>
 			</th>
 			{% for choice in sc.show_choices %}
 			<td class="choice-{{choice.choice}}">
@@ -119,7 +119,7 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 		{% for sc in state.from_states %}
 		<tr>
 			<th><a href="{% url 'state' sc.state.id %}"><span class="swatch"
-			style="background-color: #{{sc.state.get_color}}"></span> [{{sc.state.turn}}:{{sc.state.state_no}}] {{sc.state.name}}</a></th>
+			style="background-color: #{{sc.state.get_color}}"></span> T{{sc.state.turn}}_S{{sc.state.state_no}} {{sc.state.name}}</a></th>
 			{% for choice in sc.show_choices %}
 			<td class="choice-{{choice.choice}}">
 				{{choice.role}}={{choice.choice}}

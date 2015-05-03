@@ -23,7 +23,7 @@ States
 			<td>
 <a href="{% url 'state' state.id %}">
 <span class="swatch" style="background-color: #{{state.get_color}}"></span>
-[{{state.turn}}:{{state.state_no}}] {{state.name}}</a></td>
+T{{state.turn}}_S{{state.state_no}} {{state.name}}</a></td>
 		</tr>
 		{% endfor %}
 	</table>

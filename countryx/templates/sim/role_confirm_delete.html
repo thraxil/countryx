@@ -20,7 +20,7 @@
 		{% for src in role.staterolechoice_set.all %}
 		{% ifchanged src.state %}
 		<tr>
-		<th colspan="2">[{{src.state.turn}}:{{src.state.state_no}}]
+		<th colspan="2">T{{src.state.turn}}_S{{src.state.state_no}}
 		{{src.state.name}}</th>
 		</tr>
 		{% endifchanged %}
