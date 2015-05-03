@@ -94,7 +94,7 @@ class State(models.Model):
         return rv
 
     def country_condition(self):
-        return self.statevariable_set.get(name='Country Condition').value
+        return self.description
 
 
 def num_turns():

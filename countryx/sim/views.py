@@ -123,7 +123,7 @@ class RoleUpdate(StaffOnlyMixin, UpdateView):
 
 class StateUpdate(StaffOnlyMixin, UpdateView):
     model = State
-    fields = ['name', 'turn', 'state_no']
+    fields = ['name', 'turn', 'state_no', 'description']
     template_name = "sim/state_edit_form.html"
 
 
