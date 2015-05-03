@@ -92,6 +92,9 @@ class State(models.Model):
                 rv[index]['color'] = ch.state.get_color()
         return rv
 
+    def country_condition(self):
+        return self.statevariable_set.get(name='Country Condition').value
+
 
 def num_turns():
     if State.objects.count() == 0:

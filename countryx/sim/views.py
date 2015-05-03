@@ -230,8 +230,7 @@ def faculty_group_detail(request, group_id):
                     'submit_status': p.status(gs.state)
                 })
 
-        conditions = gs.state.statevariable_set.get(
-            name='Country Condition').value
+        conditions = gs.state.country_condition()
         turns.append(
             {
                 'group_state': gs,
@@ -265,8 +264,7 @@ def faculty_player_detail_byturn(request, group_id, player_id,
         turn=turn,
         submit_status=player.status(state),
         choices=StateRoleChoice.objects.filter(state=state, role=player.role),
-        country_condition=state.statevariable_set.get(
-            name='Country Condition').value,
+        country_condition=state.country_condition(),
         form=FeedbackForm(initial={'faculty_id': request.user.id,
                                    'feedback': turn.feedback,
                                    'turn_id': state.turn}),
@@ -292,8 +290,7 @@ def faculty_player_detail(request, player_id):
             'choice': t.choice,
             'choices': StateRoleChoice.objects.filter(
                 state=turn_state, role=player.role),
-            'country_condition': turn_state.statevariable_set.get(
-                name='Country Condition').value,
+            'country_condition': turn_state.country_condition(),
             'submit_date': t.submit_date,
             'reasoning': t.reasoning,
             'state': turn_state,
@@ -464,8 +461,7 @@ def player_game(request, group_id, turn_id=0):
         user=request.user,
         group=group,
         state=working_state,
-        country_condition=working_state.statevariable_set.get(
-            name='Country Condition').value,
+        country_condition=working_state.country_condition(),
         conditions=__current_conditions(working_state),
         tabs=tabs,
         players=players,
