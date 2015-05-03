@@ -151,10 +151,12 @@ class StateAddRoleChoice(StaffOnlyMixin, View):
 
     def get(self, request, pk):
         state = get_object_or_404(State, id=pk)
+        selected = request.GET.get('role')
         return render(
             request,
             self.template_name,
             dict(state=state,
+                 selected=selected,
                  roles=Role.objects.all()))
 
     def post(self, request, pk):

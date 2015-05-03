@@ -50,7 +50,14 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 		{% for src in state.staterolechoice_set.all %}
 		{% ifchanged src.role %}
 		<tr>
-			<th colspan="3"><a href="{% url 'role' src.role.id %}">{{src.role.name}}</a></th>
+			<th>
+				<a href="{% url 'role' src.role.id %}">{{src.role.name}}</a>
+			</th>
+			<td>
+				<a href="{% url 'add-role-choice' state.id %}?role={{src.role.name}}">
+					<span class="glyphicon glyphicon-plus"
+					aria-hidden="true"></span> Add Role Choice for {{src.role.name}}</a>
+			</td>
 		</tr>
 		{% endifchanged %}
 		<tr>
