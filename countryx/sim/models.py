@@ -43,6 +43,7 @@ class State(models.Model):
     turn = models.IntegerField()
     state_no = models.IntegerField()
     name = models.CharField(max_length=40)
+    description = models.TextField(blank=True)
 
     class Meta:
         ordering = ['turn', 'state_no']
