@@ -74,6 +74,11 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 		<div class="panel-title">Transitions out of this state</div>
 	</div>
 	<div class="panel-body">
+
+	<p><a href="{% url 'add-statechange' state.id %}"> <span class="glyphicon
+	glyphicon-plus" aria-hidden="true"></span> Add Transition Out</a></p>
+
+
 	{% if state.to_states.exists %}
 
 	<table class="table table-striped">

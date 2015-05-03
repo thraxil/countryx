@@ -1,0 +1,68 @@
+{% extends 'sim/base_faculty.html' %}
+{% load markup %}
+
+{% block breadcrumbs %}
+<a href="{% url 'states-index' %}">States</a> /
+<a href="{% url 'state' state.id %}">{{state.name}}</a> /
+Add Transition Out
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+
+<form action="." method="post">
+
+<h2>Add Transition Out</h2>
+
+<div class="form-group">
+
+    <label for="next_state">Next State</label>
+
+{% for ns in state.next_turn_states %}
+<div class="radio">
+	<label>
+		<input type="radio" name="next_state" value="{{ns.id}}">
+		<span class="swatch"
+					style="background-color: #{{ns.get_color}}"></span>
+		[{{ns.turn}}:{{ns.state_no}}] {{ns.name}}
+	</label>
+</div>
+{% endfor %}
+</div>
+
+{% if state.staterolechoice_set.exists %}
+{% regroup state.staterolechoice_set.all by role as role_list %}
+
+<table class="table">
+<tr>
+{% for role in role_list %}
+<td>
+
+
+<h3>{{role.grouper}}</h3>
+		{% for src in role.list %}
+<div class="radio">
+  <label>
+    <input type="radio" name="role_{{role.grouper}}"
+    value="{{src.choice}}" />
+		[{{src.choice}}] {{src.desc}}
+	</label>
+</div>
+{% endfor %}
+
+
+</td>
+{% endfor %}
+</td>
+
+</table>	{% else %}
+	<p>No role choices specified.</p>
+	{% endif %}
+
+
+<input type="submit" value="add" class="btn btn-primary" />
+</form>
+
+</div>
+{% endblock %}

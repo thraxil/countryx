@@ -171,6 +171,33 @@ class StateAddRoleChoice(StaffOnlyMixin, View):
         return HttpResponseRedirect(reverse('state', args=(pk,)))
 
 
+class StateAddStateChange(StaffOnlyMixin, View):
+    template_name = "sim/state_add_statechange.html"
+
+    def get(self, request, pk):
+        state = get_object_or_404(State, id=pk)
+        return render(
+            request,
+            self.template_name,
+            dict(state=state))
+
+    def post(self, request, pk):
+        state = get_object_or_404(State, id=pk)
+        next_state = get_object_or_404(
+            State, id=request.POST.get('next_state'))
+
+        roles = dict()
+        for role in Role.objects.all():
+            roles[role.name] = request.POST.get("role_%s" % role.name)
+
+        StateChange.objects.create(
+            state=state,
+            next_state=next_state,
+            roles=json.dumps(roles)
+        )
+        return HttpResponseRedirect(reverse('state', args=(pk,)))
+
+
 class StateRoleChoiceDelete(StaffOnlyMixin, DeleteView):
     model = StateRoleChoice
 

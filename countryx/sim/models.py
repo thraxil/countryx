@@ -69,6 +69,9 @@ class State(models.Model):
     def from_states(self):
         return StateChange.objects.filter(next_state=self).order_by('state')
 
+    def next_turn_states(self):
+        return State.objects.filter(turn=self.turn + 1)
+
     def full_to(self, roles):
         return [{'color': x.next_state.get_color(), 'ids': [x.next_state.id]}
                 for x in StateChange.objects.filter(
