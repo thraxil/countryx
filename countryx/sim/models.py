@@ -117,7 +117,7 @@ class StateChange(models.Model):
 
     def __unicode__(self):
         rolesstr = " ".join(
-            "%s=%d" % (k[0], v) for k, v in json.loads(self.roles).items()
+            "%s=%d" % (k[0], int(v)) for k, v in json.loads(self.roles).items()
         )
         return "[%s] %s >> [%s]" % (
             self.state, rolesstr, self.next_state)
@@ -251,7 +251,7 @@ def compare_dicts(a, b):
     ie, there can be a key in b that does not exist in a
     and it's still good enough"""
     for k, v in a.items():
-        if b[k] != v:
+        if str(b[k]) != str(v):
             return False
     return True
 
