@@ -200,7 +200,8 @@ class StateAddStateChange(StaffOnlyMixin, View):
             next_state=next_state,
             roles=json.dumps(roles)
         )
-        return HttpResponseRedirect(reverse('state', args=(pk,)))
+        return HttpResponseRedirect(
+            reverse('state', args=(pk,)) + "#transitions-out")
 
 
 class StateRoleChoiceDelete(StaffOnlyMixin, DeleteView):
