@@ -75,9 +75,10 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 	</div>
 	<div class="panel-body">
 
+{% if state.next_turn_states.exists and state.staterolechoice_set.exists %}
 	<p><a href="{% url 'add-statechange' state.id %}"> <span class="glyphicon
 	glyphicon-plus" aria-hidden="true"></span> Add Transition Out</a></p>
-
+{% endif %}
 
 	{% if state.to_states.exists %}
 
