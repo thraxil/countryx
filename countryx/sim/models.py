@@ -144,7 +144,7 @@ class StateRoleChoice(models.Model):
     state = models.ForeignKey(State)
     role = models.ForeignKey(Role)
     choice = models.IntegerField()
-    desc = models.CharField(max_length=250)
+    desc = models.TextField(default="")
 
     class Meta:
         ordering = ['state', 'role', 'choice']
