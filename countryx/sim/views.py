@@ -4,6 +4,7 @@ from countryx.sim.models import SectionAdministrator, Section
 from countryx.sim.models import SectionGroupPlayer
 from countryx.sim.models import SectionGroup
 from countryx.sim.models import State, SectionGroupPlayerTurn
+from countryx.sim.models import StateChange
 from countryx.sim.models import StateRoleChoice
 from countryx.sim.models import StateVariable
 from countryx.sim.models import SectionGroupState
@@ -132,6 +133,13 @@ class StateDelete(StaffOnlyMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('states-index')
+
+
+class StateChangeDelete(StaffOnlyMixin, DeleteView):
+    model = StateChange
+
+    def get_success_url(self):
+        return reverse('state', args=(self.object.state.id,))
 
 
 class StateCreate(StaffOnlyMixin, CreateView):

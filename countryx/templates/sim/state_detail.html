@@ -88,6 +88,12 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 				{{choice.role}}={{choice.choice}}
 			</td>
 			{% endfor %}
+
+			<td><a href="{% url 'delete-statechange' sc.id %}"
+			 class="btn btn-danger btn-sm">
+			<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+		</a></td>
+
 		</tr>
 		{% endfor %}
 	</table>

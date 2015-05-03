@@ -1,0 +1,19 @@
+{% extends 'sim/base_faculty.html' %}
+{% load markup %}
+
+{% block breadcrumbs %}
+<a href="{% url 'states-index' %}">States</a> /
+<a href="{% url 'state' object.state.id %}">{{object.state.name}}</a> /
+Delete StateChange
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<form action="." method="post">{% csrf_token %}
+<input class="btn btn-danger"
+       type="submit" value="yes, delete this statechange"/>
+</form>
+</div>
+
+
+{% endblock %}
