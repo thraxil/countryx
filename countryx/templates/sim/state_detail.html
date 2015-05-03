@@ -53,7 +53,7 @@ State: <span class="swatch" style="background-color: #{{state.get_color}}"></spa
 			<th>
 				<a href="{% url 'role' src.role.id %}">{{src.role.name}}</a>
 			</th>
-			<td>
+			<td colspan="2">
 				<a href="{% url 'add-role-choice' state.id %}?role={{src.role.name}}">
 					<span class="glyphicon glyphicon-plus"
 					aria-hidden="true"></span> Add Role Choice for {{src.role.name}}</a>
