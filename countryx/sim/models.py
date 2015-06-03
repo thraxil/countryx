@@ -355,6 +355,21 @@ class SectionGroup(models.Model):
             # the player choices
             self.update_state()
 
+    def get_or_create_working_state(self, turn_id):
+        if turn_id == 0:
+            try:
+                return self.sectiongroupstate_set.latest().state
+            except SectionGroupState.DoesNotExist:
+                # put them in the start state automatically
+                start_state = State.objects.get(turn=1, state_no=1)
+                SectionGroupState.objects.create(
+                    group=self,
+                    state=start_state,
+                    date_updated=datetime.datetime.now())
+                return start_state
+        return self.sectiongroupstate_set.get(
+            state__turn=turn_id).state
+
 
 class SectionGroupState(models.Model):
     state = models.ForeignKey(State)

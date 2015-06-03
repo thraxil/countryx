@@ -7,7 +7,6 @@ from countryx.sim.models import State, SectionGroupPlayerTurn
 from countryx.sim.models import StateChange
 from countryx.sim.models import StateRoleChoice
 from countryx.sim.models import StateVariable
-from countryx.sim.models import SectionGroupState
 from countryx.sim.models import num_turns
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -20,7 +19,6 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View, ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django import forms
-import datetime
 import json
 from django.http import Http404
 
@@ -439,20 +437,7 @@ def tab_viewable(group, i):
 def player_game(request, group_id, turn_id=0):
     group = get_object_or_404(SectionGroup, id=group_id)
 
-    if turn_id == 0:
-        try:
-            working_state = group.sectiongroupstate_set.latest().state
-        except SectionGroupState.DoesNotExist:
-            # put them in the start state automatically
-            start_state = State.objects.get(turn=1, state_no=1)
-            SectionGroupState.objects.create(
-                group=group,
-                state=start_state,
-                date_updated=datetime.datetime.now())
-            working_state = start_state
-    else:
-        working_state = group.sectiongroupstate_set.get(
-            state__turn=turn_id).state
+    working_state = group.get_or_create_working_state(turn_id)
 
     tabs = [dict(id=i, activetab=(working_state.turn == i),
                  viewable=tab_viewable(group, i), name=tab_name(i),
