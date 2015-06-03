@@ -161,7 +161,7 @@ class StateRoleChoice(models.Model):
 class SectionManager(models.Manager):
     def create_section(self, name, user):
         now = datetime.datetime.now()
-        s = Section.objects.create(
+        s = self.create(
             name=name,
             turn=1,
             created_date=now)
@@ -410,8 +410,7 @@ PLAYER_STATUS_SUBMITTED = 4
 
 class SectionGroupPlayerManager(models.Manager):
     def create_sectiongroupplayer(self, user, role, group):
-        return SectionGroupPlayer.objects.create(
-            user=user, role=role, group=group)
+        return self.create(user=user, role=role, group=group)
 
 
 class SectionGroupPlayer(models.Model):
@@ -450,13 +449,10 @@ AUTOMATIC_UPDATE_RANDOM = 2
 
 class TurnManager(models.Manager):
     def player_turn(self, player, turn):
-        turnList = SectionGroupPlayerTurn.objects.filter(
-            player=player, turn=turn)
+        turnList = self.filter(player=player, turn=turn)
         if len(turnList) > 0:
             return turnList[0]
-        else:
-            return SectionGroupPlayerTurn.objects.create(
-                player=player, turn=turn)
+        return self.create(player=player, turn=turn)
 
 
 class SectionGroupPlayerTurn(models.Model):
