@@ -440,6 +440,13 @@ class SectionGroupPlayerTurn(models.Model):
                                          user__id=faculty_id)
         self.save()
 
+    def player_choose(self, choiceid, reasoning, final):
+        self.choice = choiceid
+        self.reasoning = reasoning
+        if final:
+            self.submit_date = datetime.datetime.now()
+        self.save()
+
     class Meta:
         get_latest_by = 'submit_date'
 

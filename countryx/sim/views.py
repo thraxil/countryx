@@ -578,12 +578,7 @@ def player_choose(request):
         response['result'] = 0
         response['message'] = 'Player has already submitted a final choice'
     else:
-        turn.choice = choiceid
-        turn.reasoning = reasoning
-        if final:
-            turn.submit_date = datetime.datetime.now()
-        turn.save()
-
+        turn.player_choose(choiceid, reasoning, final)
         if (final):
             response['result'] = 2
             response['message'] = ("Your choice and reasoning have "
