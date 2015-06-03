@@ -158,10 +158,23 @@ class StateRoleChoice(models.Model):
 ###############################################################################
 
 
+class SectionManager(models.Manager):
+    def create_section(self, name, user):
+        now = datetime.datetime.now()
+        s = Section.objects.create(
+            name=name,
+            turn=1,
+            created_date=now)
+        SectionAdministrator.objects.create(section=s, user=user)
+        return s
+
+
 class Section(models.Model):
     name = models.CharField(max_length=20)
     created_date = models.DateTimeField('created_date')
     turn = models.IntegerField(default=1)
+
+    objects = SectionManager()
 
     def __unicode__(self):
         return self.name
