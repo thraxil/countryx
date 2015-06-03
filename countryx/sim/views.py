@@ -57,7 +57,7 @@ class CreateSectionView(StaffOnlyMixin, View):
             group_name = request.POST.get('group_name_%d' % i, '').strip()
             if not group_name:
                 continue
-            sg = SectionGroup.objects.create(section=s, name=group_name)
+            sg = SectionGroup.objects.create_sectiongroup(s, group_name)
             for r in Role.objects.all():
                 username = request.POST.get('group_%d_username_%d' % (i, r.id))
                 password = request.POST.get('group_%d_password_%d' % (i, r.id))
