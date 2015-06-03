@@ -405,6 +405,17 @@ AUTOMATIC_UPDATE_FROMDRAFT = 1
 AUTOMATIC_UPDATE_RANDOM = 2
 
 
+class TurnManager(models.Manager):
+    def player_turn(self, player, turn):
+        turnList = SectionGroupPlayerTurn.objects.filter(
+            player=player, turn=turn)
+        if len(turnList) > 0:
+            return turnList[0]
+        else:
+            return SectionGroupPlayerTurn.objects.create(
+                player=player, turn=turn)
+
+
 class SectionGroupPlayerTurn(models.Model):
     player = models.ForeignKey(SectionGroupPlayer,
                                related_name="%(class)s_related_player")
@@ -418,6 +429,8 @@ class SectionGroupPlayerTurn(models.Model):
                                 related_name="%(class)s_related_faculty",
                                 null=True)
     feedback_date = models.DateTimeField('feedback submitted', null=True)
+
+    objects = TurnManager()
 
     def finish_turn(self, feedback, group, faculty_id):
         self.feedback = feedback
