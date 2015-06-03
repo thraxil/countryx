@@ -70,11 +70,7 @@ class CreateSectionView(StaffOnlyMixin, View):
                     )
                 u.set_password(password)
                 u.save()
-                SectionGroupPlayer.objects.create(
-                    user=u,
-                    role=r,
-                    group=sg,
-                )
+                SectionGroupPlayer.objects.create_sectiongroupplayer(u, r, sg)
             s.reset_sectiongroupstates()
         return HttpResponseRedirect("/sim/")
 

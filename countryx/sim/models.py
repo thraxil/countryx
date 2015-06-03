@@ -408,10 +408,18 @@ PLAYER_STATUS_PENDING = 2
 PLAYER_STATUS_SUBMITTED = 4
 
 
+class SectionGroupPlayerManager(models.Manager):
+    def create_sectiongroupplayer(self, user, role, group):
+        return SectionGroupPlayer.objects.create(
+            user=user, role=role, group=group)
+
+
 class SectionGroupPlayer(models.Model):
     user = models.ForeignKey(User)
     group = models.ForeignKey(SectionGroup)
     role = models.ForeignKey(Role)
+
+    objects = SectionGroupPlayerManager()
 
     def __unicode__(self):
         return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
