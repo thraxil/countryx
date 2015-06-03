@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
 import datetime
 import json
 import random
@@ -417,6 +418,14 @@ class SectionGroupPlayerTurn(models.Model):
                                 related_name="%(class)s_related_faculty",
                                 null=True)
     feedback_date = models.DateTimeField('feedback submitted', null=True)
+
+    def finish_turn(self, feedback, group, faculty_id):
+        self.feedback = feedback
+        self.feedback_date = datetime.datetime.now()
+        self.faculty = get_object_or_404(SectionAdministrator,
+                                         section=group.section,
+                                         user__id=faculty_id)
+        self.save()
 
     class Meta:
         get_latest_by = 'submit_date'

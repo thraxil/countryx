@@ -366,12 +366,7 @@ def faculty_feedback_submit(request):
     turn = get_object_or_404(SectionGroupPlayerTurn, player=player,
                              turn=turn_id)
 
-    turn.feedback = feedback
-    turn.feedback_date = datetime.datetime.now()
-    turn.faculty = get_object_or_404(SectionAdministrator,
-                                     section=group.section,
-                                     user__id=faculty_id)
-    turn.save()
+    turn.finish_turn(feedback, group, faculty_id)
 
     response['result'] = 1
     response['turn_id'] = turn_id
