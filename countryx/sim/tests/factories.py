@@ -17,19 +17,22 @@ class UserFactory(factory.DjangoModelFactory):
 
 
 class RoleFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Role
+    class Meta:
+        model = Role
     name = factory.Sequence(lambda n: 'role {0}'.format(n))
 
 
 class StateFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = State
+    class Meta:
+        model = State
     name = factory.Sequence(lambda n: 'state {0}'.format(n))
     turn = 0
     state_no = 0
 
 
 class StateChangeFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = StateChange
+    class Meta:
+        model = StateChange
     state = factory.SubFactory(StateFactory)
     roles = ('{"President": 0, "FirstWorldEnvoy": 1, '
              '"SubRegionalRep": 2, "OppositionLeadership": 3}')
@@ -37,13 +40,15 @@ class StateChangeFactory(factory.DjangoModelFactory):
 
 
 class StateVariableFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = StateVariable
+    class Meta:
+        model = StateVariable
     state = factory.SubFactory(StateFactory)
     name = factory.Sequence(lambda n: 'variable {0}'.format(n))
 
 
 class StateRoleChoiceFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = StateRoleChoice
+    class Meta:
+        model = StateRoleChoice
     state = factory.SubFactory(StateFactory)
     role = factory.SubFactory(RoleFactory)
     choice = 0
@@ -51,14 +56,16 @@ class StateRoleChoiceFactory(factory.DjangoModelFactory):
 
 
 class SectionFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Section
+    class Meta:
+        model = Section
     name = factory.Sequence(lambda n: 'section {0}'.format(n))
     created_date = datetime.now()
     turn = 1
 
 
 class SectionGroupFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = SectionGroup
+    class Meta:
+        model = SectionGroup
     section = factory.SubFactory(SectionFactory)
     name = factory.Sequence(lambda n: 'group {0}'.format(n))
 
