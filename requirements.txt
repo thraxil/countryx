@@ -3,7 +3,7 @@ Markdown==2.6.2
 psycopg2==2.6.1
 statsd==3.1
 coverage==3.7.1
-pyflakes==0.9.0
+pyflakes==0.9.1
 pep8==1.6.2
 flake8==1.7.0
 logilab-common==0.63.2
