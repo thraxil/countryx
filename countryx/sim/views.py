@@ -566,9 +566,3 @@ def player_choose(request):
             response['message'] = "Draft has been saved"
 
     return HttpResponse(json.dumps(response), 'application/json')
-
-
-class FeedbackForm(forms.Form):
-    feedback = forms.CharField(widget=forms.Textarea)
-    faculty_id = forms.IntegerField(widget=forms.HiddenInput)
-    turn_id = forms.IntegerField(widget=forms.HiddenInput)
