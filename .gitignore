@@ -8,3 +8,4 @@ cover/
 reports/
 node_modules/
 pip-log.txt
+wheelhouse
