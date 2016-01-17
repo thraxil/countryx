@@ -21,7 +21,7 @@ urlpatterns = patterns(
     (r'^admin/', include(admin.site.urls)),
     url(r'^impersonate/', include('impersonate.urls')),
     (r'^sim/', include('countryx.sim.urls')),
-    (r'^smoketest/$', include('smoketest.urls')),
+    (r'^smoketest/', include('smoketest.urls')),
     ('^stats/', TemplateView.as_view(template_name='stats.html')),
     (r'^site_media/(?P<path>.*)$',
      'django.views.static.serve', {'document_root': site_media_root}),
