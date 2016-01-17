@@ -78,7 +78,7 @@ if AWS_S3_CUSTOM_DOMAIN:
 if RAVEN_DSN and 'migrate' not in sys.argv:
     INSTALLED_APPS.append('raven.contrib.django.raven_compat')
     RAVEN_CONFIG = {
-        'dsn': DSN,
+        'dsn': RAVEN_DSN,
     }
 
 LOGGING = {
