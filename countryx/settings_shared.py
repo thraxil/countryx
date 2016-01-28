@@ -63,7 +63,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.template.context_processors.static',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,7 +73,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'waffle.middleware.WaffleMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
-)
+]
 
 ROOT_URLCONF = 'countryx.urls'
 
