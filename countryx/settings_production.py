@@ -37,9 +37,6 @@ COMPRESS_ROOT = STATIC_ROOT
 COMPRESS_URL = STATIC_URL
 COMPRESS_STORAGE = 'cacheds3storage.CompressorS3BotoStorage'
 
-if 'migrate' not in sys.argv:
-    INSTALLED_APPS.append('raven.contrib.django.raven_compat')
-
 try:
     from local_settings import *
 except ImportError:
