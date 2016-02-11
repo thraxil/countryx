@@ -1,4 +1,3 @@
-from annoying.decorators import render_to
 from countryx.sim.models import Role
 from countryx.sim.models import Section
 from countryx.sim.models import SectionGroupPlayer
@@ -40,11 +39,11 @@ def root(request):
 ###############################################################################
 
 
-@render_to("sim/faculty_index.html")
 def __faculty_index(request):
     sections = Section.objects.filter(sectionadministrator__user=request.user)
     roles = Role.objects.all()
-    return dict(sections=sections, user=request.user, roles=roles)
+    return render(request, "sim/faculty_index.html",
+                  dict(sections=sections, user=request.user, roles=roles))
 
 
 class CreateSectionView(StaffOnlyMixin, View):
@@ -203,22 +202,22 @@ class StateRoleChoiceDelete(StaffOnlyMixin, DeleteView):
 
 
 @login_required
-@render_to("sim/faculty_section_bygroup.html")
 def faculty_section_bygroup(request, section_id):
-    return dict(user=request.user, section=Section.objects.get(id=section_id))
+    return render(request, "sim/faculty_section_bygroup.html",
+                  dict(user=request.user,
+                       section=Section.objects.get(id=section_id)))
 
 
 @login_required
-@render_to('sim/faculty_section_byplayer.html')
 def faculty_section_byplayer(request, section_id):
     section = Section.objects.get(id=section_id)
     all_players = SectionGroupPlayer.objects.select_related().filter(
         group__section=section)
-    return {
+    return render(request, 'sim/faculty_section_byplayer.html', {
         'user': request.user,
         'section': section,
         'players': all_players,
-    }
+    })
 
 
 @login_required
@@ -235,7 +234,6 @@ def faculty_section_reset(request, section_id):
 
 
 @login_required
-@render_to('sim/faculty_group_detail.html')
 def faculty_group_detail(request, group_id):
     group = SectionGroup.objects.get(id=group_id)
 
@@ -270,15 +268,17 @@ def faculty_group_detail(request, group_id):
                 'country_condition': conditions
             })
 
-    return dict(user=request.user,
-                group=group,
-                turns=turns,
-                section=group.section,
-                )
+    return render(
+        request, 'sim/faculty_group_detail.html',
+        dict(
+            user=request.user,
+            group=group,
+            turns=turns,
+            section=group.section,
+        ))
 
 
 @login_required
-@render_to('sim/faculty_player_detail_byturn.html')
 def faculty_player_detail_byturn(request, group_id, player_id,
                                  state_id, updated=False):
     group = get_object_or_404(SectionGroup, id=group_id)
@@ -287,25 +287,27 @@ def faculty_player_detail_byturn(request, group_id, player_id,
     turn = get_object_or_404(SectionGroupPlayerTurn,
                              player=player, turn=state.turn)
 
-    return dict(
-        user=request.user,
-        group=group,
-        section=group.section,
-        player=player,
-        state=state,
-        turn=turn,
-        submit_status=player.status(state),
-        choices=StateRoleChoice.objects.filter(state=state, role=player.role),
-        country_condition=state.country_condition(),
-        form=FeedbackForm(initial={'faculty_id': request.user.id,
-                                   'feedback': turn.feedback,
-                                   'turn_id': state.turn}),
-        updated=updated
-    )
+    return render(
+        request, 'sim/faculty_player_detail_byturn.html',
+        dict(
+            user=request.user,
+            group=group,
+            section=group.section,
+            player=player,
+            state=state,
+            turn=turn,
+            submit_status=player.status(state),
+            choices=StateRoleChoice.objects.filter(state=state,
+                                                   role=player.role),
+            country_condition=state.country_condition(),
+            form=FeedbackForm(initial={'faculty_id': request.user.id,
+                                       'feedback': turn.feedback,
+                                       'turn_id': state.turn}),
+            updated=updated
+        ))
 
 
 @login_required
-@render_to('sim/faculty_player_detail.html')
 def faculty_player_detail(request, player_id):
     player = get_object_or_404(SectionGroupPlayer, id=player_id)
     group = player.group
@@ -336,12 +338,16 @@ def faculty_player_detail(request, player_id):
 
         player_turns.append(player_turn)
 
-    return dict(user=request.user,
-                player=player,
-                group=group,
-                section=group.section,
-                player_turns=player_turns,
-                )
+    return render(
+        request,
+        'sim/faculty_player_detail.html',
+        dict(
+            user=request.user,
+            player=player,
+            group=group,
+            section=group.section,
+            player_turns=player_turns,
+        ))
 
 
 def faculty_feedback_submit(request):
@@ -407,10 +413,10 @@ class DateTimeFieldEx(forms.DateTimeField):
 ###############################################################################
 
 
-@render_to("sim/player_index.html")
 def __player_index(request):
     groups = SectionGroup.objects.filter(sectiongroupplayer__user=request.user)
-    return dict(user=request.user, groups=groups)
+    return render(request, "sim/player_index.html",
+                  dict(user=request.user, groups=groups))
 
 
 def tab_name(i):
@@ -428,7 +434,6 @@ def tab_viewable(group, i):
         return False
 
 
-@render_to('sim/player_game.html')
 @login_required
 def player_game(request, group_id, turn_id=0):
     group = get_object_or_404(SectionGroup, id=group_id)
@@ -471,17 +476,18 @@ def player_game(request, group_id, turn_id=0):
     players = [dict(model=p, submit_status=p.status(working_state))
                for p in group.sectiongroupplayer_set.all()
                if (p != your_player['model'])]
-    return dict(
-        user=request.user,
-        group=group,
-        state=working_state,
-        country_condition=working_state.country_condition(),
-        tabs=tabs,
-        players=players,
-        you=your_player,
-        endgame_results=endgame_results,
-        feedback=feedback,
-    )
+    return render(
+        request, 'sim/player_game.html', dict(
+            user=request.user,
+            group=group,
+            state=working_state,
+            country_condition=working_state.country_condition(),
+            tabs=tabs,
+            players=players,
+            you=your_player,
+            endgame_results=endgame_results,
+            feedback=feedback,
+        ))
 
 
 # actually needs to be faculty only
@@ -504,7 +510,6 @@ def allvariables(request):
     return HttpResponse(json.dumps(response), 'application/json')
 
 
-@render_to('sim/allpaths.html')
 @login_required
 def allpaths(request):
     turns = []
@@ -527,7 +532,8 @@ def allpaths(request):
         )
         turns.append(turn)
 
-    return dict(turns=turns, roles=roles)
+    return render(request, 'sim/allpaths.html',
+                  dict(turns=turns, roles=roles))
 
 
 @login_required
