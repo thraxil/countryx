@@ -5,7 +5,7 @@ from .factories import UserFactory, RoleFactory, StateFactory
 from countryx.sim.models import Section
 from countryx.sim.views import (
     root, allpaths, allquestions, allvariables, CreateSectionView,
-    CreateRoleView,
+    CreateRoleView, StateCreate,
 )
 
 
@@ -138,6 +138,27 @@ class CreateRoleViewTest(TestCase):
             {
                 'name': "foo",
                 'description': "bar",
+            }
+        )
+        request.user = u
+        response = self.v(request)
+        self.assertEqual(response.status_code, 302)
+
+
+class StateCreateTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.v = StateCreate.as_view()
+
+    def test_post(self):
+        u = UserFactory(is_staff=True)
+        request = self.factory.post(
+            reverse("create-state"),
+            {
+                'turn': 1,
+                'state_no': 1,
+                'name': "test",
+                "description": "some description"
             }
         )
         request.user = u

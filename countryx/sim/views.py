@@ -135,6 +135,7 @@ class StateChangeDelete(StaffOnlyMixin, DeleteView):
 
 class StateCreate(StaffOnlyMixin, CreateView):
     model = State
+    fields = ['turn', 'state_no', 'name', 'description']
 
     def get_success_url(self):
         return reverse('states-index')
