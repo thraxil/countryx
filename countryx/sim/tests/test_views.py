@@ -4,7 +4,8 @@ from django.test import TestCase, RequestFactory, Client
 from .factories import UserFactory, RoleFactory, StateFactory
 from countryx.sim.models import Section
 from countryx.sim.views import (
-    root, allpaths, allquestions, allvariables, CreateSectionView
+    root, allpaths, allquestions, allvariables, CreateSectionView,
+    CreateRoleView,
 )
 
 
@@ -118,6 +119,25 @@ class CreateSectionViewTest(TestCase):
                 'group_name_0': "test group",
                 "group_0_username_%d" % r.id: "foo",
                 "group_0_password_%d" % r.id: "bar",
+            }
+        )
+        request.user = u
+        response = self.v(request)
+        self.assertEqual(response.status_code, 302)
+
+
+class CreateRoleViewTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.v = CreateRoleView.as_view()
+
+    def test_post(self):
+        u = UserFactory(is_staff=True)
+        request = self.factory.post(
+            reverse("create-role"),
+            {
+                'name': "foo",
+                'description': "bar",
             }
         )
         request.user = u

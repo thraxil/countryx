@@ -97,6 +97,7 @@ class RoleDetailView(StaffOnlyMixin, DetailView):
 
 class CreateRoleView(StaffOnlyMixin, CreateView):
     model = Role
+    fields = ['name', 'description']
 
 
 class DeleteRoleView(StaffOnlyMixin, DeleteView):
