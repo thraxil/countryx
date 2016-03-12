@@ -28,6 +28,12 @@ class StaffOnlyMixin(object):
         return super(StaffOnlyMixin, self).dispatch(*args, **kwargs)
 
 
+class FacilitatorOnlyMixin(object):
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, *args, **kwargs):
+        return super(FacilitatorOnlyMixin, self).dispatch(*args, **kwargs)
+
+
 @login_required
 def root(request):
     if (request.user.is_staff):
@@ -46,7 +52,7 @@ def __faculty_index(request):
                   dict(sections=sections, user=request.user, roles=roles))
 
 
-class CreateSectionView(StaffOnlyMixin, View):
+class CreateSectionView(FacilitatorOnlyMixin, View):
     def post(self, request):
         # first, make sure no usernames are duplicated
         s = Section.objects.create_section(
@@ -74,7 +80,7 @@ class CreateSectionView(StaffOnlyMixin, View):
         return HttpResponseRedirect("/sim/")
 
 
-class DeleteSectionView(StaffOnlyMixin, DeleteView):
+class DeleteSectionView(FacilitatorOnlyMixin, DeleteView):
     model = Section
     success_url = "/sim/"
 
