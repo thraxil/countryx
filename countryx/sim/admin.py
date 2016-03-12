@@ -1,12 +1,13 @@
-from countryx.sim.models import StateVariable, Role, State
-from countryx.sim.models import StateChange, Section
-from countryx.sim.models import SectionGroup, StateRoleChoice
-from countryx.sim.models import SectionAdministrator
-from countryx.sim.models import SectionGroupPlayer, SectionGroupState
+from countryx.sim.models import (
+    StateVariable, Role, State, StateChange, Section,
+    SectionGroup, StateRoleChoice, SectionAdministrator,
+    SectionGroupPlayer, SectionGroupState, Facilitator,
+)
 from django.contrib import admin
 
 
 admin.site.register(Role)
+admin.site.register(Facilitator)
 
 
 class StateVariableInline(admin.TabularInline):

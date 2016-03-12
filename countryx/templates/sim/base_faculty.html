@@ -28,9 +28,9 @@
       </tr>
       <tr>
         <td colspan="2" id="faculty-nav">
-					<a href="/sim/">Sections</a> | 
+					<a href="/sim/">Sections</a>{% if request.user.is_staff %} | 
 					<a href="{% url 'roles-index' %}">Roles</a> | 
-					<a href="{% url 'states-index' %}">States</a></td>
+					<a href="{% url 'states-index' %}">States</a>{% endif %}</td>
       </tr>
    </table>
 {% endblock %}

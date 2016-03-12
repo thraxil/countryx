@@ -495,3 +495,12 @@ class SectionGroupPlayerTurn(models.Model):
 
     def is_submitted(self):
         return self.submit_date is not None
+
+
+class Facilitator(models.Model):
+    """ associated user can manage sections and run games
+    but not edit content """
+    user = models.OneToOneField(User)
+
+    def __unicode__(self):
+        return str(self.user)

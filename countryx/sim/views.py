@@ -1,12 +1,7 @@
-from countryx.sim.models import Role
-from countryx.sim.models import Section
-from countryx.sim.models import SectionGroupPlayer
-from countryx.sim.models import SectionGroup
-from countryx.sim.models import State, SectionGroupPlayerTurn
-from countryx.sim.models import StateChange
-from countryx.sim.models import StateRoleChoice
-from countryx.sim.models import StateVariable
-from countryx.sim.models import num_turns
+from .models import (
+    Role, Section, SectionGroupPlayer, SectionGroup,
+    State, SectionGroupPlayerTurn, StateChange,
+    StateRoleChoice, StateVariable, Facilitator, num_turns)
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -28,15 +23,21 @@ class StaffOnlyMixin(object):
         return super(StaffOnlyMixin, self).dispatch(*args, **kwargs)
 
 
+def is_facilitator(user):
+    if user.is_staff:
+        return True
+    return Facilitator.objects.filter(user=user).exists()
+
+
 class FacilitatorOnlyMixin(object):
-    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    @method_decorator(user_passes_test(is_facilitator))
     def dispatch(self, *args, **kwargs):
         return super(FacilitatorOnlyMixin, self).dispatch(*args, **kwargs)
 
 
 @login_required
 def root(request):
-    if (request.user.is_staff):
+    if (is_facilitator(request.user)):
         return __faculty_index(request)
     else:
         return __player_index(request)
