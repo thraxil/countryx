@@ -1,2 +1,7 @@
 [report]
 ignore_errors = True
+omit =
+    *_settings.py
+    */wsgi.py
+    */settings_*.py
+    *migrations*
