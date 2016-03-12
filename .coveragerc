@@ -5,3 +5,4 @@ omit =
     */wsgi.py
     */settings_*.py
     *migrations*
+    *commands*
