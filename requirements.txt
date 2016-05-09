@@ -3,7 +3,7 @@ Markdown==2.6.6
 psycopg2==2.6.1
 statsd==3.2.1
 coverage==4.0.3
-pyflakes==1.1.0
+pyflakes==1.2.2
 pep8==1.7.0
 mccabe==0.4.0
 flake8==2.5.4
@@ -19,7 +19,7 @@ python-dateutil==2.5.3
 six==1.10.0
 gunicorn==19.4.5
 astroid==1.4.5
-opbeat==3.3
+opbeat==3.3.1
 
 django-statsd-mozilla==0.3.16
 django-smoketest==1.0.0
