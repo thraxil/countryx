@@ -19,7 +19,7 @@ python-dateutil==2.5.3
 six==1.10.0
 gunicorn==19.6.0
 astroid==1.4.6
-opbeat==3.3.2
+opbeat==3.3.3
 
 django-statsd-mozilla==0.3.16
 django-smoketest==1.0.0
