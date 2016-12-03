@@ -403,6 +403,7 @@ class SectionGroupState(models.Model):
         else:
             return GROUP_STATUS_PENDING
 
+
 PLAYER_STATUS_NOACTION = 1
 PLAYER_STATUS_PENDING = 2
 PLAYER_STATUS_SUBMITTED = 4
@@ -441,6 +442,7 @@ class SectionGroupPlayer(models.Model):
             except SectionGroupPlayerTurn.DoesNotExist:
                 pass
         return action
+
 
 AUTOMATIC_UPDATE_NONE = 0
 AUTOMATIC_UPDATE_FROMDRAFT = 1

@@ -29,6 +29,7 @@ class StateChangeInline(admin.TabularInline):
 class StateAdmin(admin.ModelAdmin):
     inlines = [StateVariableInline, StateRoleChoiceInline, StateChangeInline]
 
+
 admin.site.register(State, StateAdmin)
 
 ###############################################################################
@@ -42,6 +43,7 @@ class SectionAdministratorInline(admin.StackedInline):
 class SectionAdmin(admin.ModelAdmin):
     inlines = [SectionAdministratorInline]
     model = Section
+
 
 admin.site.register(Section, SectionAdmin)
 
@@ -63,5 +65,6 @@ class SectionGroupAdmin(admin.ModelAdmin):
     inlines = [SectionGroupPlayerInline, SectionGroupStateInline]
     model = SectionGroup
     extra = 1
+
 
 admin.site.register(SectionGroup, SectionGroupAdmin)

@@ -406,6 +406,7 @@ def faculty_section_manage(request, section_id, updated=False):
             'updated': updated
         })
 
+
 EMPTY_VALUES = (None, '')
 
 
