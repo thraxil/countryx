@@ -21,7 +21,7 @@ Faker==0.7.17
 factory_boy==2.8.1
 
 boto==2.48.0
-python-dateutil==2.6.0
+python-dateutil==2.6.1
 six==1.10.0
 gunicorn==19.7.1
 astroid==1.5.3
