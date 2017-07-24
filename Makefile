@@ -7,4 +7,4 @@ include *.mk
 
 jenkins: $(SENTINAL) check jshint jscs flake8 test
 
-all: flake8 test
+all: flake8 test eslint
