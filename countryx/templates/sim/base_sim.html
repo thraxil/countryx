@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compress %}
+
 
 {% block css %}
    {{ block.super }}
@@ -10,12 +10,12 @@
 
 {% block js %}
     {{ block.super }}
-    {% compress js %}
+
    <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/MochiKit.js"></script>
    <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/Visual.js"></script>
    <script type="text/javascript" src="{{STATIC_URL}}js/json2.js"></script>
    <script type="text/javascript" src="{{STATIC_URL}}js/SortableTable.js"></script>
-   {% endcompress %}
+
 {% endblock %}
 
 {% block content %}
