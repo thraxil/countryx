@@ -39,7 +39,7 @@ module.exports = {
             "unix"
         ],
         "no-unused-vars": [
-            "error",
+            "off",
             {"vars": "all", "args": "none"}
         ],
         "quotes": [

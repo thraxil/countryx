@@ -26,7 +26,7 @@
                 function(elt) {
                     elt.id = 'trans-' + elt.getAttribute('data-index');
                 });
-            var selector = new GridSelector(myCopy, 9);
+            new GridSelector(myCopy, 9);
         }
 
         function RoleSelector() {
