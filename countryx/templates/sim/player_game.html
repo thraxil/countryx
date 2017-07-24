@@ -1,9 +1,11 @@
+{% load compress %}
 {% extends "sim/base_player.html" %}
 
 {% block js %} 
-   {{ block.super }}
+    {{ block.super }}
+    {% compress js %}
    <script type="text/javascript" src="{{STATIC_URL}}js/game.js"></script>
-
+{% endcompress %}
 
 {% endblock %}
 
