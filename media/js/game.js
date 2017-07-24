@@ -134,7 +134,7 @@ function saveChoice(control, finalsubmit) {
 
         var parts = location.href.split('/');
         var groupid = parts[parts.length - 2];
-        var url = window.location.protocol + '//' + location.hostname + ':' +
+        var url = location.protocol + '//' + location.hostname + ':' +
             location.port + '/sim/player/choose/';
 
         var q = queryString(
