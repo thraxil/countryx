@@ -1,23 +1,14 @@
 {% extends "sim/base_sim.html" %}
 
-{% block css %}
-{{ block.super }}
-<style type='text/css'>
-  @import "{{STATIC_URL}}css/game.css";
-</style>
-{% endblock %}
-
-<div id="nav">
    {% block nav %}
-      <a class="nav" href="/sim"/>Home</a> |
+
+
+       <a class="nav" href="/sim"/>Home</a> |
       <a class="nav" href="/sim/logout/">Logout ({{ user.username }})</a> |
    {% endblock %}
-</div>
 
+   
 {% block masthead %}
-<div id="simlogo">
-<a href="/sim/"><img src="{{STATIC_URL}}images/countryx_logo.png" alt="Country X" /></a>
-</div>
 
  <!--  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>
            <div id="masthead_desc">Descriptive Tag Line Goes Here</div>-->

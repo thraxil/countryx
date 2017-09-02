@@ -1,11 +1,5 @@
 {% extends "base.html" %}
-{% block css %}
-{{ block.super }}
-<style type='text/css'>
-     @import "{{STATIC_URL}}css/style.css";
-  @import "{{STATIC_URL}}css/game.css";
-</style>
-{% endblock %}
+
 {% block js %}
    {{ block.super }}
    <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/MochiKit.js"></script>
@@ -15,25 +9,10 @@
 {% endblock %}
 
 
-{% block masthead %}
-<div id="simlogo">
-<a href="/sim/"><img src="{{STATIC_URL}}images/countryx_logo.png" alt="Country X" /></a>
-</div>
-
- <!--  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>
-           <div id="masthead_desc">Descriptive Tag Line Goes Here</div>-->
-         
-         
-         <div id="login_credentials">
-            <a href="/about/">About</a> | <a href="/help/">Help</a> | <a href="/contact/">Contact</a>
-            <br />
-            <br />
-            
-         </div><!-- div  id="login_credentials" -->
-{% endblock %}
 
 {% block content %}
-
+    <div class="jumbotron">
+    <div class="container">
 <br />
 <div id="loginbox">
 
@@ -50,12 +29,13 @@
 <tr><td><label for="id_username">Username:</label></td><td>{{ form.username }}</td></tr>
 <tr><td><label for="id_password">Password:</label></td><td>{{ form.password }}</td></tr>
 </table>
-<input type="submit" value="Log in" />
+<input type="submit" value="Log in" class="btn btn-primary" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 
 </div><!-- id=loginbox -->
-
+    </div>
+    </div>
 
 {% endblock %}

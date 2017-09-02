@@ -1,11 +1,5 @@
 {% extends "base.html" %}
-{% block css %}
-{{ block.super }}
-<style type='text/css'>
-     @import "{{STATIC_URL}}css/style.css";
-  @import "{{STATIC_URL}}css/game.css";
-</style>
-{% endblock %}
+
 {% block js %}
    {{ block.super }}
    <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/MochiKit.js"></script>
@@ -15,25 +9,10 @@
 {% endblock %}
 
 
-{% block masthead %}
-<div id="simlogo">
-<a href="/sim/"><img src="{{STATIC_URL}}images/countryx_logo.png" alt="Country X" /></a>
-</div>
-
- <!--  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>
-           <div id="masthead_desc">Descriptive Tag Line Goes Here</div>-->
-         
-         
-         <div id="login_credentials">
-            <a href="/about/">About</a> | <a href="/help/">Help</a> | <a href="/contact/">Contact</a>
-            <br />
-            <br />
-            
-         </div><!-- div  id="login_credentials" -->
-{% endblock %}
-
 {% block content %}
 
+    <div class="jumbotron">
+        <div class="container">
 <br />
 <div id="loginbox">
 
@@ -43,13 +22,15 @@
 <h2>Logged Out...</h2>
 <hr />
 
-<input class="center" type="submit" value="Log in Again" />
+<input class="center" type="submit" value="Log in Again" class="btn btn-primary" />
 
 
 </form>
 
 
 </div>
+        </div>
+    </div>
 
 
 {% endblock %}

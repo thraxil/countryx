@@ -9,8 +9,7 @@
 {% endblock %}
 
 {% block content %}
-   <div id="gameinfo">
-   
+    <div class="container">
    {{ block.super }}
         
    {% if not groups %}
@@ -39,10 +38,13 @@
 	    	<br />
 	    	<hr />
 	    	 	<br />
-	      <form method="post" action="/sim/player/game/{{group.id}}/">  <input class="center" type="submit" value="Play The Game" /></form>
+	        <form method="post" action="/sim/player/game/{{group.id}}/">
+              <input class="center btn btn-primary" type="submit" value="Play The Game" />
+          </form>
 	    
 	    	
 	    	</div>
 	    {% endfor %}
-	 {% endif %}      
+	 {% endif %}
+   </div>
 {% endblock %}

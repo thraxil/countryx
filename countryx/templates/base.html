@@ -1,11 +1,10 @@
 {% load compress %}
 <html>
-<head><title>countryx: {% block title %}{% endblock %}</title>
+    <head><title>countryx: {% block title %}{% endblock %}</title>
 
-{% compress css %}
-<link href="{{STATIC_URL}}css/site.css" rel="stylesheet" type="text/css" />
-<link href="{{STATIC_URL}}css/ie_fixes.css" rel="stylesheet" type="text/css" />
-{% endcompress %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
 
 {% block css %}{% endblock %}
 
@@ -20,14 +19,41 @@
 </head>
 <body class="{% block bodyclass %}{% endblock %}">
 
-<div id="wrapper">
-<div id="masthead">{% block masthead %}{% endblock %}</div>
-<div id="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div>
-<div id="nav">
-</div>
-<div id="main">
-{% block content %}{% endblock %}
-</div></div>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/sim/">Country X</a>
+        </div>
+
+
+        {% if user.username %}
+        <div id="navbar" class="navbar-collapse collapse">
+            <p class="navbar-text">Logged in as {{user.username}}</p> 
+            <ul class="nav navbar-nav">
+                <li><a href="/sim/logout/">Logout</a></li>                
+                <li><a href="/about/">About</a></li>
+                <li><a href="/help/">Help</a></li>                
+                <li><a href="/contact/">Contact</a></li>
+            </ul>
+        </div>
+        {% endif %}
+      </div>
+</nav>
+
+
+{% block masthead %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+
 {% block footer %}{% endblock %}
 
 {% if request.user.is_impersonate %}
