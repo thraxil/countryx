@@ -18,9 +18,9 @@ function toggleCharacterProfile(control, characterName) {
     toggle(img, 'slide');
 
     if ('none' == getStyle(desc, 'display')) {
-        control.innerHTML = 'Hide Profile';
+        control.innerHTML = '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Hide Profile';
     } else {
-        control.innerHTML = 'Show Profile';
+        control.innerHTML = '<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Show Profile';
     }
 }
 
