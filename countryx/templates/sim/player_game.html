@@ -24,7 +24,7 @@
 <div class="col-md-4">
 	<h1>REPRESENTATIVE PROFILES</h1>
 	<!--  You -->
-  <div class="panel panel-default">
+  <div class="panel panel-primary">
       <div class="panel-heading">{{ you.model.role.display_name }} (You)</div>
 		  <div id="{{you.model.role.name}}_description" class="your_description panel-body">{{ you.model.role.description }}</div>
   </div>
@@ -32,7 +32,7 @@
 		<!--  Everyone Else -->
         {% for player in players %}
 
-            <div class="panel panel-default">
+            <div class="panel panel-info">
 		            <div class="panel-heading">{{ player.model.role.display_name }}</div>
 		   <div class="character_choice toggle btn btn-default" onclick="toggleCharacterProfile(this, '{{player.model.role.name}}')"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Hide Profile</div>
                         <!--<div class="character_choice" onclick="requestOfflineNegotiations(this)">Request<br />Offline<br />Negotiation</div>-->
