@@ -4,26 +4,6 @@ function debug(string) {
     log(string);
 }
 
-function toggleCharacterProfile(control, characterName) {
-    debug('toggle: ' + characterName);
-
-    var desc = $(characterName + '_description');
-    var img = $(characterName + '_image');
-
-    toggle(desc, 'blind');
-    // nit: have to add the overflow style back for text field.
-    // it stays set as 'hidden'
-    setStyle(desc, {'overflow': 'auto'});
-
-    toggle(img, 'slide');
-
-    if ('none' == getStyle(desc, 'display')) {
-        control.innerHTML = '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Hide Profile';
-    } else {
-        control.innerHTML = '<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Show Profile';
-    }
-}
-
 function clearChoice(control) {
     clearMessages();
     gCurrentChoice = 0;
