@@ -135,12 +135,14 @@
 			                          <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
 			                          {% ifequal 1 you.submit_status %}
 			                              <!--  not yet selected -->
+                                    <div class="list-group">
 			                              {% for c in you.choices %}
 			                                  
-			                                  <a href="#"> <div id="{{c.choice}}" class="player_choice_{{c.choice}} player_choice" onclick="choose(this, {{ c.choice }}); return true;">
+			                                  <a href="#" class="list-group-item"> <div id="{{c.choice}}" class="player_choice_{{c.choice}} player_choice" onclick="choose(this, {{ c.choice }}); return true;">
 			                                      <div class="choice_title">Choice {{c.choice}}</div> {{ c.desc }}</div>
                                         </a>
 			                              {% endfor %}
+                                    </div>
 			                              <div id="reasoning_form" style="display: none">
 				                                <div id="errorClient" class="error invisible"></div>
 				                                <textarea id="reasoning" class="reasoning form-control" placeholder="Enter your reasoning here"></textarea>
@@ -152,15 +154,17 @@
 			                          
 			                          {% ifequal 2 you.submit_status %}
 			                              <!--  in draft -->
+                                    <div class="list-group">
 			                              {% for c in you.choices %}
 			                                  {% ifequal c.choice you.saved_choice.choice %}
 			                                      
-			                                      <a href="#">   <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
+			                                      <a href="#" class="list-group-item active">   <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
 			                                  {% else %}
 			                                      
-			                                      <a href="#">   <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
+			                                      <a href="#" class="list-group-item">   <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
 			                                  {% endifequal %}
 			                              {% endfor %}
+                                    </div>
 			                              <div id="reasoning_form" style="display: block">
 			                                  <div id="errorClient" class="error invisible"></div>
 			                                  <textarea id="reasoning" class="reasoning form-control">{{ you.saved_turn.reasoning }}</textarea>
@@ -172,9 +176,11 @@
 			                          
 			                          {% ifequal 4 you.submit_status %}
 			                              <!--  submitted -->    
-			                              
-			                              <a href="#">
+
+			                              <div class="list-group">
+			                              <a href="#" class="list-group-item active">
                                         <div id="{{you.saved_choice.choice}}" class="player_choice"><div class="choice_title">Choice {{you.saved_choice.choice}}</div> {{ you.saved_choice.desc }}</div></a>
+                                    </div>
 				                            <div id="reasoning_form" style="display: block">
 				                                <div id="errorClient" class="error invisible"></div>
 				                                <textarea id="reasoning" class="reasoning form-control" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
