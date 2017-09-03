@@ -17,196 +17,181 @@
   
 
 <!--  Column 1: Representative Profiles -->
-
-
                    
     <div class="row">
-<div class="col-md-4">
-	<h1>REPRESENTATIVE PROFILES</h1>
+        <div class="col-md-4">
+	          <h1>REPRESENTATIVE PROFILES</h1>
 	<!--  You -->
-  <div class="panel panel-primary">
-      <div class="panel-heading">{{ you.model.role.display_name }} (You)</div>
-		  <div id="{{you.model.role.name}}_description" class="your_description panel-body">{{ you.model.role.description }}</div>
-  </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">{{ you.model.role.display_name }} (You)</div>
+		            <div id="{{you.model.role.name}}_description" class="your_description panel-body">{{ you.model.role.description }}</div>
+            </div>
 		
 		<!--  Everyone Else -->
-        {% for player in players %}
+            {% for player in players %}
 
-            <div class="panel panel-info">
-		            <div class="panel-heading">{{ player.model.role.display_name }}</div>
-		   <div class="character_choice toggle btn btn-default" onclick="toggleCharacterProfile(this, '{{player.model.role.name}}')"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Hide Profile</div>
-                        <!--<div class="character_choice" onclick="requestOfflineNegotiations(this)">Request<br />Offline<br />Negotiation</div>-->
-		<div id="{{player.model.role.name}}_choice" class="character_choice label label-default">
-	                        {% ifequal player.submit_status 1 %}
-	                           No ActionTaken
-	                        {% endifequal %}
-	                        {% ifequal player.submit_status 2 %}
-                                Decision Pending
-                             {% endifequal %}
-                             {% ifequal player.submit_status 4 %}
-                                Submitted
-                             {% endifequal %}
-        </div>
+                <div class="panel panel-info">
+		                <div class="panel-heading">{{ player.model.role.display_name }}</div>
+		                <div class="character_choice toggle btn btn-default" onclick="toggleCharacterProfile(this, '{{player.model.role.name}}')"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Hide Profile</div>
+		                <div id="{{player.model.role.name}}_choice" class="character_choice label label-default">
+	                      {% ifequal player.submit_status 1 %}
+	                          No ActionTaken
+	                      {% endifequal %}
+	                      {% ifequal player.submit_status 2 %}
+                            Decision Pending
+                        {% endifequal %}
+                        {% ifequal player.submit_status 4 %}
+                            Submitted
+                        {% endifequal %}
+                    </div>
                         
-		<div class="invisible"></div>
+		                <div class="invisible"></div>
         
-        <div id="{{player.model.role.name}}_description" class="player_description panel-body">
-        <div id="{{player.model.role.name}}_image" class="player_image"><img src="{{STATIC_URL}}images/profiles/silhouette.jpg"></div>
-        {{ player.model.role.description }}
+                    <div id="{{player.model.role.name}}_description" class="player_description panel-body">
+                        <div id="{{player.model.role.name}}_image" class="player_image"><img src="{{STATIC_URL}}images/profiles/silhouette.jpg"></div>
+                        {{ player.model.role.description }}
+                    </div>
+                </div>
+		        {% endfor %}
         </div>
-            </div>
-		{% endfor %}
-</div>
 
-<div id="rightcolumns" class="col-md-8">
+        <div id="rightcolumns" class="col-md-8">
 
-   <!--  Turn Tabs -->
+            <!--  Turn Tabs -->
 
-    <ul class="nav nav-tabs">
-			  {% for t in tabs %}
-			      <li id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} active {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} disabled {% endif %}">
-			                       
+            <ul class="nav nav-tabs">
+			          {% for t in tabs %}
+			              <li id="turn{{t.id}}" class="{% if t.activetab and t.viewable %} active {% endif %} {% if not t.activetab and t.viewable %} viewableturn {% endif %} {% if not t.activetab and not t.viewable %} disabled {% endif %}">
+			          
 			          <!--  Elapsed Time Clock -->
                 
-					      {%if t.viewable %}
-					          <a href="/sim/player/game/{{group.id}}/{{t.id}}/">{{t.name}}</a>
-					      {% else %}
-					          <a href="#">{{ t.name }}</a>
-					      {% endif %}
+					              {%if t.viewable %}
+					                  <a href="/sim/player/game/{{group.id}}/{{t.id}}/">{{t.name}}</a>
+					              {% else %}
+					                  <a href="#">{{ t.name }}</a>
+					              {% endif %}
 					      
-				{% endfor %}</li>
-		</ul>
+				        {% endfor %}</li>
+		        </ul>
 
-
-<h1>SITUATION ANALYSIS</h1>
-<div id="column_2">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1>SITUATION ANALYSIS</h1>
+                    <div id="column_2">
 	
 	
-	 	<!--  Country Conditions Text  -->
-	 	<h2>Country Condition</h2>
-		<div class="country_conditions">
-		     <div class="country_conditions_textarea scrollable">
+	 	                    <h2>Country Condition</h2>
+		                    <div class="country_conditions">
+		                        <div class="country_conditions_textarea scrollable">
 		    
-		     {% autoescape off %}{{ country_condition }}{% endautoescape %}
-		     </div>
-		</div>
-	
-		<div class="country_conditions_graph">
-		</div>
-</div>
+		                            {% autoescape off %}{{ country_condition }}{% endautoescape %}
+		                        </div>
+		                    </div>
+	                      
+		                    <div class="country_conditions_graph">
+		                    </div>
+                    </div>
+                </div>
+        
 
+                <div class="col-md-4">
 
-<!--begin col3 for results screen faculty feedback  -->
+                    {% ifequal state.turn 4 %}
 
-{% ifequal state.turn 4 %}
+                        <div id="column_3">
+	                          <h2>Faculty Feedback</h2>
+	                          <div id="elapsed_time_clock">
+                                <br />
+                                <br/>
+	                          </div>
 
-<div id="column_3">
-	<h2>Faculty Feedback</h2>
-	<div id="elapsed_time_clock">
-<br />
+	                          <div id="errorMsg" class="error invisible"></div>
+	                          <div id="successMsg" class="success invisible"></div>
+			               			  
+	                          <div id="choices">
+	                              <div id="current_choice"></div> <!-- putting this stub in to avoid js error -->
+                                {% if feedback %}
+	                                  <textarea readonly="1" id="feedback" class="reasoning">
+	                                      {{feedback}}
+	                                  </textarea>
+                                {% else %}
+                                    No faculty feedback yet.
+                                {% endif %}
+	                          </div>
+                        </div>
 
-<br/>
-	</div>
+            {% else %} 
+                        <div id="column_3">
 
-	<div id="errorMsg" class="error invisible"></div>
-	<div id="successMsg" class="success invisible"></div>
-			               			               
-	<div id="choices">
-	  <div id="current_choice"></div> <!-- putting this stub in to avoid js error -->
-{% if feedback %}
-	  <textarea readonly="1" id="feedback" class="reasoning">
-	    {{feedback}}
-	  </textarea>
-{% else %}
-No faculty feedback yet.
-{% endif %}
-	</div>
+	                          <h2>Options</h2>
+	                          
+	                          <div id="elapsed_time_clock" class="text-danger">DEADLINE FOR DECISION<br />
+			                          {{group.section.current_turn_close_date}}
+			                      </div>
+	                          
 
-
-</div>
-
-<!--end results screen col3-->
-
-
-{% else %} 
-<div id="column_3">
-
-	<h2>Options</h2>
-	 
-	<div id="elapsed_time_clock" class="text-danger">DEADLINE FOR DECISION<br />
-			                {{group.section.current_turn_close_date}}
-			             </div>
-	
-
-  <!--  Player Choice & Entry Form -->
-			          
-			             
-			           
-			               
-			               <div id="errorMsg" class="error invisible"></div>
-			               <div id="successMsg" class="success invisible"></div>
-			               			               
-			               <!--  Choices -->
-			              
-			               
-			               <div id="choices">
-			                 <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
-			                  {% ifequal 1 you.submit_status %}
-			                     <!--  not yet selected -->
-			                     {% for c in you.choices %}
+			                      <div id="errorMsg" class="error invisible"></div>
+			                      <div id="successMsg" class="success invisible"></div>
+			               			  
+			                      <!--  Choices -->
 			                      
-			                       <a href="#"> <div id="{{c.choice}}" class="player_choice_{{c.choice}} player_choice" onclick="choose(this, {{ c.choice }}); return true;">
-			                     
-			                           <div class="choice_title">Choice {{c.choice}}</div> {{ c.desc }}
-			                        </div></a>
-			                     {% endfor %}
-			                     <div id="reasoning_form" style="display: none">
-				                     <div id="errorClient" class="error invisible"></div>
-				                     <textarea id="reasoning" class="reasoning form-control" placeholder="Enter your reasoning here"></textarea>
-				                     <input class="btn btn-default" id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
-				                     <input class="btn btn-primary" id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
-				                     <input class="btn btn-danger" id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
-				                  </div>
-			                  {% endifequal %}
-			               
-			                  {% ifequal 2 you.submit_status %}
-			                     <!--  in draft -->
-			                     {% for c in you.choices %}
-			                        {% ifequal c.choice you.saved_choice.choice %}
-			                       
-			                        <a href="#">   <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
-			                        {% else %}
-			                         
-			                        <a href="#">   <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
-			                        {% endifequal %}
-			                     {% endfor %}
-			                     <div id="reasoning_form" style="display: block">
-			                        <div id="errorClient" class="error invisible"></div>
-			                        <textarea id="reasoning" class="reasoning form-control">{{ you.saved_turn.reasoning }}</textarea>
-			                        <input class="btn btn-default" id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
-			                        <input class="btn btn-primary" id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
-			                        <input class="btn btn-danger" id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
-			                     </div>
-			                  {% endifequal %}
-			                  
-			                  {% ifequal 4 you.submit_status %}
-			                     <!--  submitted -->    
-			                    
-			               <a href="#">      <div id="{{you.saved_choice.choice}}" class="player_choice"><div class="choice_title">Choice {{you.saved_choice.choice}}</div> {{ you.saved_choice.desc }}</div></a>
-				                  <div id="reasoning_form" style="display: block">
-				                     <div id="errorClient" class="error invisible"></div>
-				                     <textarea id="reasoning" class="reasoning form-control" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
-				                  </div>
-			                  {% endifequal %}
-			               </div>
+			                      
+			                      <div id="choices">
+			                          <div id="current_choice" class="invisible">{{ you.saved_turn.choice }}</div>
+			                          {% ifequal 1 you.submit_status %}
+			                              <!--  not yet selected -->
+			                              {% for c in you.choices %}
+			                                  
+			                                  <a href="#"> <div id="{{c.choice}}" class="player_choice_{{c.choice}} player_choice" onclick="choose(this, {{ c.choice }}); return true;">
+			                                      <div class="choice_title">Choice {{c.choice}}</div> {{ c.desc }}</div>
+                                        </a>
+			                              {% endfor %}
+			                              <div id="reasoning_form" style="display: none">
+				                                <div id="errorClient" class="error invisible"></div>
+				                                <textarea id="reasoning" class="reasoning form-control" placeholder="Enter your reasoning here"></textarea>
+				                                <input class="btn btn-default" id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
+				                                <input class="btn btn-primary" id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
+				                                <input class="btn btn-danger" id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
+				                            </div>
+			                          {% endifequal %}
+			                          
+			                          {% ifequal 2 you.submit_status %}
+			                              <!--  in draft -->
+			                              {% for c in you.choices %}
+			                                  {% ifequal c.choice you.saved_choice.choice %}
+			                                      
+			                                      <a href="#">   <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
+			                                  {% else %}
+			                                      
+			                                      <a href="#">   <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
+			                                  {% endifequal %}
+			                              {% endfor %}
+			                              <div id="reasoning_form" style="display: block">
+			                                  <div id="errorClient" class="error invisible"></div>
+			                                  <textarea id="reasoning" class="reasoning form-control">{{ you.saved_turn.reasoning }}</textarea>
+			                                  <input class="btn btn-default" id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
+			                                  <input class="btn btn-primary" id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
+			                                  <input class="btn btn-danger" id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
+			                              </div>
+			                          {% endifequal %}
+			                          
+			                          {% ifequal 4 you.submit_status %}
+			                              <!--  submitted -->    
+			                              
+			                              <a href="#">
+                                        <div id="{{you.saved_choice.choice}}" class="player_choice"><div class="choice_title">Choice {{you.saved_choice.choice}}</div> {{ you.saved_choice.desc }}</div></a>
+				                            <div id="reasoning_form" style="display: block">
+				                                <div id="errorClient" class="error invisible"></div>
+				                                <textarea id="reasoning" class="reasoning form-control" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
+				                            </div>
+			                          {% endifequal %}
+			                      </div>
+                        </div>
+                    {% endifequal %}
 
-
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{% endifequal %}
-
-</div>
-
-
-
-</div>    
 {% endblock %}
