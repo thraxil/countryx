@@ -1,47 +1,17 @@
 {% extends "base.html" %}
-{% block css %}
-{{ block.super }}
-<style type='text/css'>
-     @import "{{STATIC_URL}}css/style.css";
-  @import "{{STATIC_URL}}css/game.css";
-</style>
-{% endblock %}
-{% block js %}
-   {{ block.super }}
-   <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/MochiKit.js"></script>
-   <script type="text/javascript" src="{{STATIC_URL}}js/mochikit/MochiKit/Visual.js"></script>
-   <script type="text/javascript" src="{{STATIC_URL}}js/json2.js"></script>
-   <script type="text/javascript" src="{{STATIC_URL}}js/SortableTable.js"></script>
-{% endblock %}
-
-
-{% block masthead %}
-<div id="simlogo">
-<a href="/sim/"><img src="{{STATIC_URL}}images/countryx_logo.png" alt="Country X" /></a>
-</div>
-
- <!--  <a href="http://ccnmtl.columbia.edu">CCMNMTL LOGO</a>
-           <div id="masthead_desc">Descriptive Tag Line Goes Here</div>-->
-         
-         
-         <div id="login_credentials">
-            <a href="/about/">About</a> | <a href="/help/">Help</a> | <a href="/contact/">Contact</a>
-            <br />
-            <br />
-            
-         </div><!-- div  id="login_credentials" -->
-{% endblock %}
 
 {% block content %}
 
-<div class="static_text">
+    <div class="container">
+        <div class="static_text">
 
-<h2>Contact Information</h2>
+            <h1>Contact Information</h1>
 
 
-If you have any questions or would like to submit feedback, please send an e-mail to
-<a href="mailto:ccnmtl-countryx@columbia.edu">ccnmtl-countryx@columbia.edu</a>.
-</div>
+                <p>If you have any questions or would like to submit feedback, please send an e-mail to
+                    <a href="mailto:ccnmtl-countryx@columbia.edu">ccnmtl-countryx@columbia.edu</a>.</p>
+        </div>
+    </div>
 
 {% endblock %}
 
