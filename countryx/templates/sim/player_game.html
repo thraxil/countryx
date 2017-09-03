@@ -31,7 +31,8 @@
             {% for player in players %}
 
                 <div class="panel panel-info">
-		                <div class="panel-heading">{{ player.model.role.display_name }}
+		                <div class="panel-heading">
+                        <a role="button" data-toggle="collapse" href="#{{player.model.role.name}}_description" aria-expanded="false" aria-controls="collapseExample">{{ player.model.role.display_name }}</a>
 		                    <span id="{{player.model.role.name}}_choice" class="character_choice label label-default pull-right">
 	                          {% ifequal player.submit_status 1 %}
 	                              No ActionTaken
@@ -45,11 +46,8 @@
                         </span>
 
                     </div>
-		                <div class="character_choice toggle btn btn-default" onclick="toggleCharacterProfile(this, '{{player.model.role.name}}')"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Hide Profile</div>
-                        
-		                <div class="invisible"></div>
         
-                    <div id="{{player.model.role.name}}_description" class="player_description panel-body">
+                    <div id="{{player.model.role.name}}_description" class="player_description panel-body collapse in">
                         <div id="{{player.model.role.name}}_image" class="player_image"><img src="{{STATIC_URL}}images/profiles/silhouette.jpg"></div>
                         {{ player.model.role.description }}
                     </div>
