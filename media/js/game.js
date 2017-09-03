@@ -8,20 +8,8 @@ function clearChoice(control) {
     clearMessages();
     gCurrentChoice = 0;
     var effect = 'blind';
-
-    // hide the other choices, leaving the one the user chose
-    var elements = getElementsByTagAndClassName(null, 'player_choice');
-    forEach(
-        elements,
-        function(elem) {
-            if (elem.id != gCurrentChoice &&
-                'none' == getStyle(elem, 'display')) {
-                toggle(elem, effect);
-            }
-        });
-
-    // hide the feedback form underneath
-    toggle($('reasoning_form'), effect);
+    jQuery('.player_choice').show();
+    jQuery('#reasoning_form').toggle(500);
 }
 
 function choose(control, choice) {
@@ -33,16 +21,9 @@ function choose(control, choice) {
 
         // hide the other choices, leaving the one the user chose
         var elements = getElementsByTagAndClassName(null, 'player_choice');
-        forEach(
-            elements,
-            function(elem) {
-                if (elem.id != choice) {
-                    toggle(elem, effect);
-                }
-            });
-
-        // show the feedback form underneath
-        toggle($('reasoning_form'), effect);
+        jQuery('.player_choice').hide();
+        jQuery('#' + choice).show();
+        jQuery('#reasoning_form').toggle(500);
     }
 }
 
