@@ -31,19 +31,21 @@
             {% for player in players %}
 
                 <div class="panel panel-info">
-		                <div class="panel-heading">{{ player.model.role.display_name }}</div>
-		                <div class="character_choice toggle btn btn-default" onclick="toggleCharacterProfile(this, '{{player.model.role.name}}')"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Hide Profile</div>
-		                <div id="{{player.model.role.name}}_choice" class="character_choice label label-default">
-	                      {% ifequal player.submit_status 1 %}
-	                          No ActionTaken
-	                      {% endifequal %}
-	                      {% ifequal player.submit_status 2 %}
-                            Decision Pending
-                        {% endifequal %}
-                        {% ifequal player.submit_status 4 %}
-                            Submitted
-                        {% endifequal %}
+		                <div class="panel-heading">{{ player.model.role.display_name }}
+		                    <span id="{{player.model.role.name}}_choice" class="character_choice label label-default pull-right">
+	                          {% ifequal player.submit_status 1 %}
+	                              No ActionTaken
+	                          {% endifequal %}
+	                          {% ifequal player.submit_status 2 %}
+                                Decision Pending
+                            {% endifequal %}
+                            {% ifequal player.submit_status 4 %}
+                                Submitted
+                            {% endifequal %}
+                        </span>
+
                     </div>
+		                <div class="character_choice toggle btn btn-default" onclick="toggleCharacterProfile(this, '{{player.model.role.name}}')"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Hide Profile</div>
                         
 		                <div class="invisible"></div>
         
