@@ -7,7 +7,7 @@ function debug(string) {
 function clearChoice(control) {
     clearMessages();
     gCurrentChoice = 0;
-    var effect = 'blind';
+
     jQuery('.player_choice').show();
     jQuery('#reasoning_form').toggle(500);
 }
@@ -17,13 +17,10 @@ function choose(control, choice) {
         gCurrentChoice === undefined ||
         gCurrentChoice === '') {
         gCurrentChoice = choice;
-        var effect = 'blind';
 
-        // hide the other choices, leaving the one the user chose
-        var elements = getElementsByTagAndClassName(null, 'player_choice');
         jQuery('.player_choice').hide();
         jQuery('#' + choice).show();
-        jQuery('#reasoning_form').toggle(500);
+        jQuery('#reasoning_form').toggle(500, 'linear');
     }
 }
 
