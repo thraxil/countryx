@@ -8,7 +8,10 @@ function clearChoice(control) {
     clearMessages();
     gCurrentChoice = 0;
 
-    jQuery('.player_choice').show();
+    jQuery('.player_choice')
+        .show()
+        .parent()
+        .removeClass('active');
     jQuery('#reasoning_form').toggle(500);
 }
 
@@ -18,8 +21,14 @@ function choose(control, choice) {
         gCurrentChoice === '') {
         gCurrentChoice = choice;
 
-        jQuery('.player_choice').hide();
-        jQuery('#' + choice).show();
+        jQuery('.player_choice')
+            .hide()
+            .parent()
+            .removeClass('active');
+        jQuery('#' + choice)
+            .show()
+            .parent()
+            .toggleClass('active');
         jQuery('#reasoning_form').toggle(500, 'linear');
     }
 }
