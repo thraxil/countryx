@@ -17,7 +17,9 @@
             {% for field in object.eventfield_set.all %}
                 <tr>
                     <th>{{field.name}}</th>
-                    <td>{{field.value}}</td>
+                    <td>
+                        <a href="{% url 'field-value-filter' %}?field={{ field.name | urlencode }};value={{ field.value | urlencode }}">{{field.value}}</a>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
