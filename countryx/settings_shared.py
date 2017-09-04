@@ -40,7 +40,7 @@ if 'test' in sys.argv or 'jenkins' in sys.argv:
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 TEST_OUTPUT_DIR = 'reports'
 
-PROJECT_APPS = ['countryx.sim', ]
+PROJECT_APPS = ['countryx.sim', 'countryx.events']
 
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrapform',
     'countryx.sim',
+    'countryx.events',
     'django_statsd',
     'waffle',
     'impersonate',
