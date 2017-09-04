@@ -8,13 +8,15 @@ class EventService(object):
         event = Event.objects.create(name=name, full_data=json.dumps(fields))
         for k, v in fields.iteritems():
             self._add_field(event, k, v)
+        self.event = event
+        return self
 
     def _process_request(self, request=None):
         if request is None:
             return dict()
 
         fields = dict()
-        fields['request_method'] = request.METHOD
+        fields['request_method'] = request.method
         fields['request_path'] = request.get_full_path()
         fields['request_remote_addr'] = request.META.get('REMOTE_ADDR')
         fields['request_user_agent'] = request.META.get('HTTP_USER_AGENT')

@@ -1,3 +1,4 @@
+from countryx.events.service import EventService
 from .models import (
     Role, Section, SectionGroupPlayer, SectionGroup,
     State, SectionGroupPlayerTurn, StateChange,
@@ -446,6 +447,8 @@ def tab_viewable(group, i):
 
 @login_required
 def player_game(request, group_id, turn_id=0):
+    EventService().add('player_game', request, group_id=group_id,
+                       turn_id=turn_id)
     group = get_object_or_404(SectionGroup, id=group_id)
 
     working_state = group.get_or_create_working_state(turn_id)
@@ -555,6 +558,14 @@ def player_choose(request):
     final = int(request.POST.get('final', False))
     reasoning = request.POST.get('reasoning', '')
 
+    EventService().add(
+        'player_choose',
+        request,
+        group_id=groupid,
+        choice_id=choiceid,
+        final=final,
+        reasoning=reasoning,
+    )
     group = get_object_or_404(SectionGroup, id=groupid)
     try:
         player = group.sectiongroupplayer_set.get(user__id=request.user.id,
@@ -566,7 +577,6 @@ def player_choose(request):
     # create or update the player's choice
     turn = SectionGroupPlayerTurn.objects.player_turn(player,
                                                       current_state.turn)
-
     if turn.submit_date is not None:
         # player has already submitted data
         response['result'] = 0

@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 import django.contrib.auth.views
 import django.views.static
 import countryx.sim.views
+import countryx.sim.urls
 
 import os.path
 admin.autodiscover()
@@ -21,7 +22,7 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^impersonate/', include('impersonate.urls')),
-    url(r'^sim/', include('countryx.sim.urls')),
+    url(r'^sim/', include(countryx.sim.urls)),
     url(r'^smoketest/', include('smoketest.urls')),
     url('^stats/', TemplateView.as_view(template_name='stats.html')),
     url(r'^site_media/(?P<path>.*)$',
