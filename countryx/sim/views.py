@@ -50,6 +50,9 @@ def root(request):
 def __faculty_index(request):
     sections = Section.objects.filter(sectionadministrator__user=request.user)
     roles = Role.objects.all()
+    EventService().add(
+        'faculty_index',
+        request)
     return render(request, "sim/faculty_index.html",
                   dict(sections=sections, user=request.user, roles=roles))
 
@@ -57,8 +60,14 @@ def __faculty_index(request):
 class CreateSectionView(FacilitatorOnlyMixin, View):
     def post(self, request):
         # first, make sure no usernames are duplicated
+        section_name = request.POST.get('section_name', 'unamed section')
+        EventService().add(
+            'create_section',
+            request,
+            section_name=section_name)
+
         s = Section.objects.create_section(
-            request.POST.get('section_name', 'unamed section'),
+            section_name,
             request.user)
         for i in range(num_turns() + 1):
             group_name = request.POST.get('group_name_%d' % i, '').strip()
@@ -167,6 +176,16 @@ class StateAddRoleChoice(StaffOnlyMixin, View):
         role = get_object_or_404(Role, id=request.POST.get('role'))
         choice = int(request.POST.get('choice', '1'))
         desc = request.POST.get('description', '')
+
+        EventService().add(
+            'add_role_choice',
+            request,
+            state_id=pk,
+            role_id=request.POST.get('role'),
+            choice=choice,
+            desc=desc,
+        )
+
         StateRoleChoice.objects.create(
             state=state,
             role=role,
@@ -191,6 +210,13 @@ class StateAddStateChange(StaffOnlyMixin, View):
         next_state = get_object_or_404(
             State, id=request.POST.get('next_state'))
 
+        EventService().add(
+            'add_state_change',
+            request,
+            state_id=pk,
+            next_state_id=request.POST.get('next_state'),
+        )
+
         roles = dict()
         for role in Role.objects.all():
             roles[role.name] = request.POST.get("role_%s" % role.name)
@@ -213,6 +239,11 @@ class StateRoleChoiceDelete(StaffOnlyMixin, DeleteView):
 
 @login_required
 def faculty_section_bygroup(request, section_id):
+    EventService().add(
+        'faculty_section_bygroup',
+        request,
+        section_id=section_id,
+    )
     return render(request, "sim/faculty_section_bygroup.html",
                   dict(user=request.user,
                        section=Section.objects.get(id=section_id)))
@@ -220,6 +251,11 @@ def faculty_section_bygroup(request, section_id):
 
 @login_required
 def faculty_section_byplayer(request, section_id):
+    EventService().add(
+        'faculty_section_byplayer',
+        request,
+        section_id=section_id,
+    )
     section = Section.objects.get(id=section_id)
     all_players = SectionGroupPlayer.objects.select_related().filter(
         group__section=section)
@@ -233,9 +269,18 @@ def faculty_section_byplayer(request, section_id):
 @login_required
 def faculty_section_reset(request, section_id):
     response = {}
-
+    EventService().add(
+        'faculty_section_reset',
+        request,
+        section_id=section_id,
+    )
     if not request.user.is_superuser:
         response['message'] = "Access denied"
+        EventService().add(
+            'faculty_section_reset_failure',
+            request,
+            section_id=section_id,
+        )
     else:
         section = get_object_or_404(Section, id=section_id)
         section.reset()
@@ -245,6 +290,12 @@ def faculty_section_reset(request, section_id):
 
 @login_required
 def faculty_group_detail(request, group_id):
+    EventService().add(
+        'faculty_group_detail',
+        request,
+        group_id=group_id,
+    )
+
     group = SectionGroup.objects.get(id=group_id)
 
     turns = []
@@ -297,6 +348,15 @@ def faculty_player_detail_byturn(request, group_id, player_id,
     turn = get_object_or_404(SectionGroupPlayerTurn,
                              player=player, turn=state.turn)
 
+    EventService().add(
+        'faculty_player_detail_byturn',
+        request,
+        group_id=group_id,
+        player_id=player_id,
+        state_id=state_id,
+        turn_id=turn.id,
+    )
+
     return render(
         request, 'sim/faculty_player_detail_byturn.html',
         dict(
@@ -321,6 +381,13 @@ def faculty_player_detail_byturn(request, group_id, player_id,
 def faculty_player_detail(request, player_id):
     player = get_object_or_404(SectionGroupPlayer, id=player_id)
     group = player.group
+
+    EventService().add(
+        'faculty_player_detail',
+        request,
+        group_id=group.id,
+        player_id=player_id,
+    )
 
     player_turns = []
     turns = SectionGroupPlayerTurn.objects.filter(
@@ -369,6 +436,16 @@ def faculty_feedback_submit(request):
     player = get_object_or_404(SectionGroupPlayer, id=player_id)
     group = player.group
 
+    EventService().add(
+        'faculty_feedback_submit',
+        request,
+        group_id=group.id,
+        player_id=player_id,
+        faculty_id=faculty_id,
+        turn_id=turn_id,
+        feedback=feedback,
+    )
+
     # Retrieve the associated player turn to update
     turn = get_object_or_404(SectionGroupPlayerTurn, player=player,
                              turn=turn_id)
@@ -389,6 +466,11 @@ class FeedbackForm(forms.Form):
 
 @login_required
 def faculty_end_turn(request, section_id):
+    EventService().add(
+        'faculty_end_turn',
+        request,
+        section_id=section_id,
+    )
     section = get_object_or_404(Section, id=section_id)
     section.end_turn()
     section.ensure_consistency()
