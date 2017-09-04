@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Event: {{object.timestamp}} {{object.name}}</h1>
+
+        <table class="table table-striped table-condensed">
+            <tr>
+                <th>Timestamp</th>
+                <td>{{object.timestamp}}</td>
+            </tr>
+            <tr>
+                <th>Event</th>
+                <td>{{object.name}}
+            </tr>
+            {% for field in object.eventfield_set.all %}
+                <tr>
+                    <th>{{field.name}}</th>
+                    <td>{{field.value}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+{% endblock %}

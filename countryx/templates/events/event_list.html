@@ -15,7 +15,9 @@
                 </thead>
                 {% for event in object_list %}
                     <tr>
-                        <td>{{event.timestamp}}</td>
+                        <td>
+                            <a href="{% url 'event-detail' event.id %}">{{event.timestamp}}</a>
+                        </td>
                         <td>{{event.name}}</td>
                     </tr>
                 {% endfor %}
