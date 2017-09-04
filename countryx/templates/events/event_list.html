@@ -21,6 +21,22 @@
                 {% endfor %}
             </table>
 
+            {% if is_paginated %}
+                <ul class="pager">
+                    {% if page_obj.has_previous %}
+                        <li class="previous"><a href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+                    {% endif %}
+                    <li>
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="next">
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+        </div>
+    {% endif %}
             
         {% else %}
             <p>No events yet</p>
