@@ -81,6 +81,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'waffle.middleware.WaffleMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'countryx.urls'
@@ -100,6 +101,7 @@ INSTALLED_APPS = [
     'impersonate',
     'django_markwhat',
     'compressor',
+    'debug_toolbar',
 ]
 
 INTERNAL_IPS = ('127.0.0.1', )

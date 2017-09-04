@@ -33,3 +33,9 @@ urlpatterns = [
     url(r'^contact',
         TemplateView.as_view(template_name='flatpages/contact.html')),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
