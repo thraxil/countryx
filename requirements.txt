@@ -16,7 +16,7 @@ pylint==1.7.2
 sqlparse==0.2.3
 ipaddress==1.0.18
 
-Faker==0.8.1
+Faker==0.8.3
 
 factory_boy==2.9.2
 
