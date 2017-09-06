@@ -15,7 +15,7 @@ class Role(models.Model):
     A role allows a player to assume a specific persona in the game.
     Roles are associated with State Changes and Role Choices
     """
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
 
     def __unicode__(self):
@@ -43,7 +43,7 @@ class State(models.Model):
 
     turn = models.IntegerField()
     state_no = models.IntegerField()
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 
     class Meta:
@@ -134,7 +134,7 @@ class StateChange(models.Model):
 
 class StateVariable(models.Model):
     state = models.ForeignKey(State)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=255)
     value = models.TextField()
 
     def __unicode__(self):
@@ -170,7 +170,7 @@ class SectionManager(models.Manager):
 
 
 class Section(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=255)
     created_date = models.DateTimeField('created_date')
     turn = models.IntegerField(default=1)
 
@@ -276,7 +276,7 @@ class SectionGroupManager(models.Manager):
 
 
 class SectionGroup(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=255)
     section = models.ForeignKey(Section)
 
     objects = SectionGroupManager()
