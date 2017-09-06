@@ -131,6 +131,10 @@ class TestSection(TestCase):
         StateFactory(turn=1, state_no=1)
         s.section.ensure_consistency()
 
+    def test_long_name(self):
+        s = SectionFactory(name='123456789012345678901234567890')
+        self.assertEqual(len(s.name), 30)
+
 
 class TestSectionGroup(TestCase):
     def test_unicode(self):
