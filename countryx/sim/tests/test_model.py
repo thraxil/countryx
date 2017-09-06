@@ -43,6 +43,10 @@ class StateTest(TestCase):
         s = sc.next_state
         self.assertEqual(len(s.full_from([])), 1)
 
+    def test_long_name(self):
+        sc = StateFactory(name='123456789012345678901234567890')
+        self.assertEqual(len(sc.name), 30)
+
 
 class TestStateChange(TestCase):
     def test_unicode(self):
