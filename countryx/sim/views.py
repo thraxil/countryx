@@ -566,7 +566,7 @@ def player_game(request, group_id, turn_id=0):
         endgame_results = zip(turns, tabs)
         try:
             feedback = SectionGroupPlayerTurn.objects.get(
-                player=your_player['model'], turn=num_turns()).feedback
+                player=your_player['model'], turn=3).feedback
         except SectionGroupPlayerTurn.DoesNotExist:
             feedback = None
 
