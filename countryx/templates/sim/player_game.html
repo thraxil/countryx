@@ -145,7 +145,7 @@
                                     </div>
 			                              <div id="reasoning_form" style="display: none">
 				                                <div id="errorClient" class="error invisible"></div>
-				                                <textarea id="reasoning" class="reasoning form-control" placeholder="Enter your reasoning here"></textarea>
+				                                <textarea id="reasoning" class="reasoning form-control" placeholder="Please describe the elements or factors that made this the most appealing decision at this time in this scenario."></textarea>
 				                                <input class="btn btn-default" id="savedraft" type="submit" value="save draft" onclick="saveChoice(this, 0); return true;"/>
 				                                <input class="btn btn-primary" id="submit" type="submit" value="submit" onclick="saveChoice(this, 1); return true;"/>
 				                                <input class="btn btn-danger" id="clear" type="submit" value="clear" onclick="clearChoice(this); return true;"/>
@@ -155,15 +155,15 @@
 			                          {% ifequal 2 you.submit_status %}
 			                              <!--  in draft -->
                                     <div class="list-group">
-			                              {% for c in you.choices %}
-			                                  {% ifequal c.choice you.saved_choice.choice %}
-			                                      
-			                                      <a href="#" class="list-group-item active">   <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
-			                                  {% else %}
-			                                      
-			                                      <a href="#" class="list-group-item">   <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
-			                                  {% endifequal %}
-			                              {% endfor %}
+			                                  {% for c in you.choices %}
+			                                      {% ifequal c.choice you.saved_choice.choice %}
+			                                          
+			                                          <a href="#" class="list-group-item active">   <div id="{{c.choice}}" class="player_choice" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
+			                                      {% else %}
+			                                          
+			                                          <a href="#" class="list-group-item">   <div id="{{c.choice}}" class="player_choice invisible" onclick="choose(this, {{ c.choice }}); return true;"> <div class="choice_title">Choice {{c.choice}}</div>{{ c.desc }}</div></a>
+			                                      {% endifequal %}
+			                                  {% endfor %}
                                     </div>
 			                              <div id="reasoning_form" style="display: block">
 			                                  <div id="errorClient" class="error invisible"></div>
@@ -178,11 +178,12 @@
 			                              <!--  submitted -->    
 
 			                              <div class="list-group">
-			                              <a href="#" class="list-group-item active">
-                                        <div id="{{you.saved_choice.choice}}" class="player_choice"><div class="choice_title">Choice {{you.saved_choice.choice}}</div> {{ you.saved_choice.desc }}</div></a>
+			                                  <a href="#" class="list-group-item active">
+                                            <div id="{{you.saved_choice.choice}}" class="player_choice"><div class="choice_title">Choice {{you.saved_choice.choice}}</div> {{ you.saved_choice.desc }}</div></a>
                                     </div>
 				                            <div id="reasoning_form" style="display: block">
 				                                <div id="errorClient" class="error invisible"></div>
+                                        
 				                                <textarea id="reasoning" class="reasoning form-control" readonly="true">{{ you.saved_turn.reasoning }}</textarea>
 				                            </div>
 			                          {% endifequal %}
