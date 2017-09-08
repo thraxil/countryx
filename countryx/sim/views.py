@@ -565,7 +565,7 @@ def player_game(request, group_id, turn_id=0):
             player=your_player['model']).order_by('turn')
         endgame_results = zip(turns, tabs)
         feedback = SectionGroupPlayerTurn.objects.get(
-            player=your_player['model'], turn=3).feedback
+            player=your_player['model'], turn=num_turns()).feedback
 
     # setup player list attributes
     players = [dict(model=p, submit_status=p.status(working_state))
