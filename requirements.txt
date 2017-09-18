@@ -23,7 +23,7 @@ factory_boy==2.9.2
 pytz==2017.2
 boto==2.48.0
 python-dateutil==2.6.1
-six==1.10.0
+six==1.11.0
 gunicorn==19.7.1
 astroid==1.5.3
 opbeat==3.5.2
