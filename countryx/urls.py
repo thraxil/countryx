@@ -8,6 +8,7 @@ import django.views.static
 import countryx.sim.views
 import countryx.sim.urls
 import countryx.events.urls
+import countryx.reports.urls
 
 import os.path
 admin.autodiscover()
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^contact',
         TemplateView.as_view(template_name='flatpages/contact.html')),
     url(r'^events/', include(countryx.events.urls)),
+    url(r'^reports/', include(countryx.reports.urls)),
 ]
 
 if settings.DEBUG:

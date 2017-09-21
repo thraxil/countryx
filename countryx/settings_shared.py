@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     'bootstrapform',
     'countryx.sim',
     'countryx.events',
+    'countryx.reports',
     'django_statsd',
     'waffle',
     'impersonate',
