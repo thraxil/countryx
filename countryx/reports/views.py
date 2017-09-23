@@ -1,7 +1,8 @@
+from django.contrib.auth.models import User
 from django.views.generic import TemplateView
 
 from countryx.events.models import EventField
-from countryx.sim.models import Section
+from countryx.sim.models import Section, SectionGroup
 
 
 class ReportIndex(TemplateView):
@@ -70,6 +71,10 @@ class DisplayEvent(object):
         except AttributeError:
             return None
 
+    def user(self):
+        return User.objects.get(username=self.event.eventfield_set.filter(
+            name='request_user').first().value)
+
 
 class UserDetail(TemplateView):
     template_name = "reports/user_detail.html"
@@ -82,4 +87,53 @@ class UserDetail(TemplateView):
             name='request_user', value=username)]
         context['events'] = sorted(events, key=lambda x: x.timestamp())
         context['username'] = username
+        return context
+
+
+class GroupList(TemplateView):
+    template_name = "reports/group_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupList, self).get_context_data(**kwargs)
+        group_ids = set(ef.value for ef in EventField.objects.filter(
+            name='group_id'))
+        groups = set()
+        for gid in group_ids:
+            try:
+                sg = SectionGroup.objects.get(id=gid)
+                groups.add(sg)
+            except SectionGroup.DoesNotExist:
+                pass
+        context['groups'] = sorted(groups, key=lambda x: x.name)
+        return context
+
+
+def remove_faculty_gets(events):
+    for e in events:
+        if e.user().is_staff and e.request_method() == "GET":
+            continue
+        yield e
+    return
+
+
+class GroupDetail(TemplateView):
+    template_name = "reports/group_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupDetail, self).get_context_data(**kwargs)
+        group_id = kwargs['group_id']
+
+        events = set([DisplayEvent(f.event) for f in EventField.objects.filter(
+            name='group_id', value=group_id)])
+        context['group_id'] = group_id
+        context['group'] = SectionGroup.objects.get(id=group_id)
+
+        section_events = set([DisplayEvent(f.event)
+                              for f in EventField.objects.filter(
+            name='section_id', value=context['group'].section.id
+        )])
+        events = events | section_events
+
+        context['events'] = sorted(remove_faculty_gets(list(events)),
+                                   key=lambda x: x.timestamp())
         return context

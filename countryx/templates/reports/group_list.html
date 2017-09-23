@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Reports: Groups</h1>
+
+        <table class="table table-condensed table-striped">
+            {% for group in groups %}
+                <tr>
+                    <td><a href="{% url 'reports-group-detail' group.id %}">{{group.section.name}}: {{group.name}}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

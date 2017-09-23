@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Reports: {{group.section.name}}: {{group.name}}</h1>
+
+        <table class="table table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Player</th>
+                    <th>Action</th>
+                    <th>Request</th>
+                </tr>
+            </thead>
+            {% for event in events %}
+                {% ifchanged event.timestamp.date %}
+                    <tr>
+                        <th colspan="4">
+                            {{event.timestamp.date}}
+                        </th>
+                    </tr>
+                {% endifchanged %}
+                <tr {% if event.user.is_staff %}class="info"{% endif %}>
+                    <td><a href="{% url 'event-detail' event.id %}">
+                        {{event.timestamp|date:"P"}}
+                    </a></td>
+                    <td>{{event.user}}</td>
+                    <td><a href="{% url 'event-detail' event.id %}">{{event.name}}</a></td>
+                    <td><code>{{event.request_method}} {{event.request_path}}</code>
+                    </td>
+                </tr>
+                {% if event.request_method == "POST" %}
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            {% if event.choice %}
+                                <h3>Choice: {{event.choice}}</h3>
+
+                            {% endif %}
+                            
+                            {% if event.reasoning %}
+                                <h3>Reasoning</h3>
+                                {{event.reasoning|markdown}}
+                            {% endif %}
+
+                            {% if event.section %}
+                                <h3>Section: {{event.section}}</h3>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
