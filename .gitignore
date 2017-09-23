@@ -6,6 +6,8 @@ local_settings.py
 .coverage
 cover/
 reports/
+!countryx/reports/
+!countryx/templates/reports/
 node_modules/
 pip-log.txt
 wheelhouse
