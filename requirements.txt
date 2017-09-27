@@ -13,7 +13,7 @@ flake8==3.4.1
 logilab-common==1.4.1
 logilab-astng==0.24.3
 pylint==1.7.2
-sqlparse==0.2.3
+sqlparse==0.2.4
 ipaddress==1.0.18
 
 Faker==0.8.4
