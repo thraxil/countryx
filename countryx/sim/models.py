@@ -18,7 +18,7 @@ class Role(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def display_name(self):
@@ -49,7 +49,7 @@ class State(models.Model):
     class Meta:
         ordering = ['turn', 'state_no']
 
-    def __unicode__(self):
+    def __str__(self):
         return "Turn %s: %s" % (self.turn, self.name)
 
     def get_absolute_url(self):
@@ -116,7 +116,7 @@ class StateChange(models.Model):
     # Role -> integer choice
     roles = models.TextField(blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         rolesstr = " ".join(
             "%s=%d" % (k[0], int(v)) for k, v in json.loads(self.roles).items()
         )
@@ -137,7 +137,7 @@ class StateVariable(models.Model):
     name = models.CharField(max_length=255)
     value = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return "[%s] %s: %s" % (self.state, self.name, self.value)
 
 
@@ -150,7 +150,7 @@ class StateRoleChoice(models.Model):
     class Meta:
         ordering = ['state', 'role', 'choice']
 
-    def __unicode__(self):
+    def __str__(self):
         return "[%s] %s: %s. %s" % (self.state, self.role,
                                     self.choice, self.desc)
 
@@ -176,7 +176,7 @@ class Section(models.Model):
 
     objects = SectionManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def current_turn(self):
@@ -247,7 +247,7 @@ class SectionAdministrator(models.Model):
     user = models.ForeignKey(User)
     section = models.ForeignKey(Section)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.user)
 
 
@@ -281,7 +281,7 @@ class SectionGroup(models.Model):
 
     objects = SectionGroupManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s: Group %s" % (self.section, self.name)
 
     def status(self):
@@ -386,7 +386,7 @@ class SectionGroupState(models.Model):
     class Meta:
         get_latest_by = 'date_updated'
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s" % (self.state, self.date_updated)
 
     def status(self):
@@ -421,7 +421,7 @@ class SectionGroupPlayer(models.Model):
 
     objects = SectionGroupPlayerManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s: [%s, %s]" % (self.user, self.role.name, self.group)
 
     def current_status(self):
@@ -491,7 +491,7 @@ class SectionGroupPlayerTurn(models.Model):
     class Meta:
         get_latest_by = 'submit_date'
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s: Turn: %s Selected: %s" % (self.player,
                                               self.turn, self.choice)
 
@@ -504,5 +504,5 @@ class Facilitator(models.Model):
     but not edit content """
     user = models.OneToOneField(User)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.user)

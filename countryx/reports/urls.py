@@ -1,14 +1,14 @@
 from django.conf.urls import url
 
-import views
+from .views import ReportIndex, UserList, UserDetail, GroupList, GroupDetail
 
 urlpatterns = [
-    url(r'^$', views.ReportIndex.as_view(), name='reports-index'),
-    url(r'^user/$', views.UserList.as_view(), name='reports-user-list'),
-    url(r'^user/(?P<username>\w+)/$', views.UserDetail.as_view(),
+    url(r'^$', ReportIndex.as_view(), name='reports-index'),
+    url(r'^user/$', UserList.as_view(), name='reports-user-list'),
+    url(r'^user/(?P<username>\w+)/$', UserDetail.as_view(),
         name='reports-user-detail'),
 
-    url(r'^group/$', views.GroupList.as_view(), name='reports-group-list'),
-    url(r'^group/(?P<group_id>\d+)/$', views.GroupDetail.as_view(),
+    url(r'^group/$', GroupList.as_view(), name='reports-group-list'),
+    url(r'^group/(?P<group_id>\d+)/$', GroupDetail.as_view(),
         name='reports-group-detail'),
 ]
