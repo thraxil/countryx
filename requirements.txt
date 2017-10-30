@@ -20,7 +20,7 @@ Faker==0.8.6
 
 factory_boy==2.9.2
 
-pytz==2017.2
+pytz==2017.3
 boto==2.48.0
 python-dateutil==2.6.1
 six==1.11.0
