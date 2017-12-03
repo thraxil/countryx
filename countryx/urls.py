@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^accounts/logout/$',
         django.contrib.auth.views.logout, {'next_page': '/'}),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^impersonate/', include('impersonate.urls')),
     url(r'^sim/', include(countryx.sim.urls)),
     url(r'^smoketest/', include('smoketest.urls')),

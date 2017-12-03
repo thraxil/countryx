@@ -42,6 +42,7 @@ TEST_OUTPUT_DIR = 'reports'
 
 PROJECT_APPS = ['countryx.sim', 'countryx.events']
 
+USE_TZ = True
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
@@ -71,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,7 +81,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'waffle.middleware.WaffleMiddleware',
-    'impersonate.middleware.ImpersonateMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 

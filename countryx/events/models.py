@@ -9,6 +9,6 @@ class Event(models.Model):
 
 
 class EventField(models.Model):
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, db_index=True)
     value = models.TextField(blank=True, default=u"")
