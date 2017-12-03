@@ -1,5 +1,5 @@
-from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory, Client
+from django.urls import reverse
 
 from .factories import UserFactory, RoleFactory, StateFactory
 from countryx.sim.models import Section

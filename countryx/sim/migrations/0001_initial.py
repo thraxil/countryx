@@ -41,8 +41,8 @@ class Migration(migrations.Migration):
             name='SectionAdministrator',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('section', models.ForeignKey(to='sim.Section')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('section', models.ForeignKey(to='sim.Section', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=20)),
-                ('section', models.ForeignKey(to='sim.Section')),
+                ('section', models.ForeignKey(to='sim.Section', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -63,9 +63,9 @@ class Migration(migrations.Migration):
             name='SectionGroupPlayer',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('group', models.ForeignKey(to='sim.SectionGroup')),
-                ('role', models.ForeignKey(to='sim.Role')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('group', models.ForeignKey(to='sim.SectionGroup', on_delete=models.CASCADE)),
+                ('role', models.ForeignKey(to='sim.Role', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -82,8 +82,8 @@ class Migration(migrations.Migration):
                 ('submit_date', models.DateTimeField(null=True, verbose_name=b'final date submitted')),
                 ('feedback', models.TextField(null=True)),
                 ('feedback_date', models.DateTimeField(null=True, verbose_name=b'feedback submitted')),
-                ('faculty', models.ForeignKey(related_name='sectiongroupplayerturn_related_faculty', to='sim.SectionAdministrator', null=True)),
-                ('player', models.ForeignKey(related_name='sectiongroupplayerturn_related_player', to='sim.SectionGroupPlayer')),
+                ('faculty', models.ForeignKey(related_name='sectiongroupplayerturn_related_faculty', to='sim.SectionAdministrator', null=True, on_delete=models.CASCADE)),
+                ('player', models.ForeignKey(related_name='sectiongroupplayerturn_related_player', to='sim.SectionGroupPlayer', on_delete=models.CASCADE)),
             ],
             options={
                 'get_latest_by': 'submit_date',
@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('date_updated', models.DateTimeField(verbose_name=b'date updated')),
-                ('group', models.ForeignKey(to='sim.SectionGroup')),
+                ('group', models.ForeignKey(to='sim.SectionGroup', on_delete=models.CASCADE)),
             ],
             options={
                 'get_latest_by': 'date_updated',
@@ -109,7 +109,7 @@ class Migration(migrations.Migration):
                 ('turn1', models.DateTimeField(verbose_name=b'turn1')),
                 ('turn2', models.DateTimeField(null=True, verbose_name=b'turn2')),
                 ('turn3', models.DateTimeField(null=True, verbose_name=b'turn3')),
-                ('section', models.ForeignKey(to='sim.Section')),
+                ('section', models.ForeignKey(to='sim.Section', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -135,8 +135,8 @@ class Migration(migrations.Migration):
                 ('envoy', models.IntegerField()),
                 ('regional', models.IntegerField()),
                 ('opposition', models.IntegerField()),
-                ('next_state', models.ForeignKey(related_name='statechange_related_next', to='sim.State')),
-                ('state', models.ForeignKey(related_name='statechange_related_current', to='sim.State')),
+                ('next_state', models.ForeignKey(related_name='statechange_related_next', to='sim.State', on_delete=models.CASCADE)),
+                ('state', models.ForeignKey(related_name='statechange_related_current', to='sim.State', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -148,8 +148,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('choice', models.IntegerField()),
                 ('desc', models.CharField(max_length=250)),
-                ('role', models.ForeignKey(to='sim.Role')),
-                ('state', models.ForeignKey(to='sim.State')),
+                ('role', models.ForeignKey(to='sim.Role', on_delete=models.CASCADE)),
+                ('state', models.ForeignKey(to='sim.State', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -161,7 +161,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=20)),
                 ('value', models.TextField()),
-                ('state', models.ForeignKey(to='sim.State')),
+                ('state', models.ForeignKey(to='sim.State', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -170,7 +170,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='sectiongroupstate',
             name='state',
-            field=models.ForeignKey(to='sim.State'),
+            field=models.ForeignKey(to='sim.State', on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

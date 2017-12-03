@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 import datetime
 import json
 import random
@@ -108,9 +108,11 @@ def num_turns():
 
 
 class StateChange(models.Model):
-    state = models.ForeignKey(State, related_name="%(class)s_related_current")
+    state = models.ForeignKey(State, related_name="%(class)s_related_current",
+                              on_delete=models.CASCADE)
     next_state = models.ForeignKey(State,
-                                   related_name="%(class)s_related_next")
+                                   related_name="%(class)s_related_next",
+                                   on_delete=models.CASCADE)
     # in here, we store some json. it will look something like:
     # {'President': 1, 'Envoy': 2, ...}
     # Role -> integer choice
@@ -133,7 +135,7 @@ class StateChange(models.Model):
 
 
 class StateVariable(models.Model):
-    state = models.ForeignKey(State)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     value = models.TextField()
 
@@ -142,8 +144,8 @@ class StateVariable(models.Model):
 
 
 class StateRoleChoice(models.Model):
-    state = models.ForeignKey(State)
-    role = models.ForeignKey(Role)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
     choice = models.IntegerField()
     desc = models.TextField(default="")
 
@@ -244,8 +246,8 @@ class Section(models.Model):
 
 
 class SectionAdministrator(models.Model):
-    user = models.ForeignKey(User)
-    section = models.ForeignKey(Section)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s" % (self.user)
@@ -277,7 +279,7 @@ class SectionGroupManager(models.Manager):
 
 class SectionGroup(models.Model):
     name = models.CharField(max_length=255)
-    section = models.ForeignKey(Section)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
     objects = SectionGroupManager()
 
@@ -379,8 +381,8 @@ class SectionGroup(models.Model):
 
 
 class SectionGroupState(models.Model):
-    state = models.ForeignKey(State)
-    group = models.ForeignKey(SectionGroup)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    group = models.ForeignKey(SectionGroup, on_delete=models.CASCADE)
     date_updated = models.DateTimeField('date updated')
 
     class Meta:
@@ -415,9 +417,9 @@ class SectionGroupPlayerManager(models.Manager):
 
 
 class SectionGroupPlayer(models.Model):
-    user = models.ForeignKey(User)
-    group = models.ForeignKey(SectionGroup)
-    role = models.ForeignKey(Role)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    group = models.ForeignKey(SectionGroup, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
     objects = SectionGroupPlayerManager()
 
@@ -459,6 +461,7 @@ class TurnManager(models.Manager):
 
 class SectionGroupPlayerTurn(models.Model):
     player = models.ForeignKey(SectionGroupPlayer,
+                               on_delete=models.CASCADE,
                                related_name="%(class)s_related_player")
     turn = models.IntegerField()
     choice = models.IntegerField(null=True)
@@ -467,6 +470,7 @@ class SectionGroupPlayerTurn(models.Model):
     submit_date = models.DateTimeField('final date submitted', null=True)
     feedback = models.TextField(null=True)
     faculty = models.ForeignKey(SectionAdministrator,
+                                on_delete=models.CASCADE,
                                 related_name="%(class)s_related_faculty",
                                 null=True)
     feedback_date = models.DateTimeField('feedback submitted', null=True)
@@ -502,7 +506,7 @@ class SectionGroupPlayerTurn(models.Model):
 class Facilitator(models.Model):
     """ associated user can manage sections and run games
     but not edit content """
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.user)
