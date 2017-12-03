@@ -88,4 +88,4 @@ if OPBEAT_ORGANIZATION_ID:
         'APP_ID': OPBEAT_APP_ID,
         'SECRET_TOKEN': OPBEAT_SECRET_TOKEN,
     }
-    MIDDLEWARE_CLASSES.insert(0, 'opbeat.contrib.django.middleware.OpbeatAPMMiddleware')
+    MIDDLEWARE.insert(0, 'opbeat.contrib.django.middleware.OpbeatAPMMiddleware')
