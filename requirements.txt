@@ -28,7 +28,7 @@ python-dateutil==2.6.1
 six==1.11.0
 gunicorn==19.7.1
 astroid==1.5.3
-opbeat==3.5.3
+opbeat==3.6.0
 rjsmin==1.0.12
 rcssmin==1.0.6
 
