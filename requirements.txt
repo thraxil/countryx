@@ -27,7 +27,7 @@ boto==2.48.0
 python-dateutil==2.7.0
 six==1.11.0
 gunicorn==19.7.1
-astroid==1.6.1
+astroid==1.6.2
 opbeat==3.6.1
 rjsmin==1.0.12
 rcssmin==1.0.6
