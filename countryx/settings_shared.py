@@ -104,6 +104,7 @@ INSTALLED_APPS = [
     'django_markwhat',
     'compressor',
     'debug_toolbar',
+    'raven.contrib.django.raven_compat',
 ]
 
 INTERNAL_IPS = ('127.0.0.1', )

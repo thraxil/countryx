@@ -29,6 +29,7 @@ six==1.11.0
 gunicorn==19.7.1
 astroid==1.6.2
 opbeat==3.6.1
+raven==6.6.0
 rjsmin==1.0.12
 rcssmin==1.0.6
 

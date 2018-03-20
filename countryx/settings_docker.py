@@ -89,3 +89,10 @@ if OPBEAT_ORGANIZATION_ID:
         'SECRET_TOKEN': OPBEAT_SECRET_TOKEN,
     }
     MIDDLEWARE.insert(0, 'opbeat.contrib.django.middleware.OpbeatAPMMiddleware')
+
+RAVEN_DSN = os.environ.get('RAVEN_DSN', None)
+
+if RAVEN_DSN:
+    RAVEN_CONFIG = {
+        'dsn': RAVEN_DSN,
+    }
