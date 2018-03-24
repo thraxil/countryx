@@ -10,12 +10,7 @@ import countryx.sim.urls
 import countryx.events.urls
 import countryx.reports.urls
 
-import os.path
 admin.autodiscover()
-
-site_media_root = os.path.join(
-    os.path.dirname(__file__),
-    "../media")
 
 urlpatterns = [
     url(r'^$', countryx.sim.views.root),
@@ -28,7 +23,7 @@ urlpatterns = [
     url(r'^smoketest/', include('smoketest.urls')),
     url('^stats/', TemplateView.as_view(template_name='stats.html')),
     url(r'^site_media/(?P<path>.*)$',
-        django.views.static.serve, {'document_root': site_media_root}),
+        django.views.static.serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^uploads/(?P<path>.*)$',
         django.views.static.serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^about', TemplateView.as_view(template_name='flatpages/about.html')),
