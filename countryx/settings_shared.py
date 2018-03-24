@@ -1,6 +1,12 @@
 # Django settings for countryx project.
 import os.path
 import sys
+from thraxilsettings.shared import common
+
+app = 'countryx'
+base = os.path.dirname(__file__)
+
+locals().update(common(app=app, base=base))
 
 DEBUG = True
 
