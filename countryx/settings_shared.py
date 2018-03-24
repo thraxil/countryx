@@ -7,38 +7,6 @@ base = os.path.dirname(__file__)
 
 locals().update(common(app=app, base=base))
 
-# PROJECT_APPS = ['countryx.sim', 'countryx.events']
-
-USE_TZ = True
-TIME_ZONE = 'America/New_York'
-LANGUAGE_CODE = 'en-us'
-SITE_ID = 1
-USE_I18N = False
-MEDIA_ROOT = "/var/www/countryx/uploads/"
-MEDIA_URL = '/uploads/'
-STATIC_URL = '/media/'
-SECRET_KEY = 'dummy-)ng#)ef_u@_^zvvu@dxm7ql-yb^_!a6%v3v^j3b(mp+)l+5%@h'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(os.path.dirname(__file__), "templates"),
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.contrib.auth.context_processors.auth',
-                'django.template.context_processors.debug',
-                'django.template.context_processors.media',
-                'django.template.context_processors.static',
-                'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
 MIDDLEWARE = [
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware',
