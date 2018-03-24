@@ -1,50 +1,11 @@
 # Django settings for countryx project.
 import os.path
-import sys
 from thraxilsettings.shared import common
 
 app = 'countryx'
 base = os.path.dirname(__file__)
 
 locals().update(common(app=app, base=base))
-
-DEBUG = True
-
-ADMINS = (
-    ('CCNMTL', 'ccnmtl-sysadmin@columbia.edu'),
-)
-
-MANAGERS = ADMINS
-
-ALLOWED_HOSTS = [".ccnmtl.columbia.edu", "localhost"]
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'countryx',
-        'HOST': '',
-        'PORT': 5432,
-        'USER': '',
-        'PASSWORD': '',
-        'ATOMIC_REQUESTS': True,
-    }
-}
-
-if 'test' in sys.argv or 'jenkins' in sys.argv:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
-            'HOST': '',
-            'PORT': '',
-            'USER': '',
-            'PASSWORD': '',
-            'ATOMIC_REQUESTS': True,
-        }
-    }
-
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-TEST_OUTPUT_DIR = 'reports'
 
 # PROJECT_APPS = ['countryx.sim', 'countryx.events']
 
