@@ -7,20 +7,6 @@ base = os.path.dirname(__file__)
 
 locals().update(common(app=app, base=base))
 
-MIDDLEWARE = [
-    'django_statsd.middleware.GraphiteRequestTimingMiddleware',
-    'django_statsd.middleware.GraphiteMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'waffle.middleware.WaffleMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
-
-ROOT_URLCONF = 'countryx.urls'
-
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,40 +28,6 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
 ]
 
-INTERNAL_IPS = ('127.0.0.1', )
-DEBUG_TOOLBAR_PANELS = (
-    'debug_toolbar.panels.version.VersionDebugPanel',
-    'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.headers.HeaderDebugPanel',
-    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-    'debug_toolbar.panels.template.TemplateDebugPanel',
-    'debug_toolbar.panels.sql.SQLDebugPanel',
-    'debug_toolbar.panels.signals.SignalDebugPanel',
-)
-
-STATSD_CLIENT = 'statsd.client'
-STATSD_PREFIX = 'countryx'
-STATSD_HOST = 'localhost'
-STATSD_PORT = 8125
-
-MEDIA_URL = "/uploads/"
-MEDIA_ROOT = 'uploads'
-STATIC_URL = "/media/"
-STATIC_ROOT = "/tmp/countryx/static"
-STATICFILES_DIRS = ('media/',)
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
-)
-COMPRESS_URL = "/media/"
-COMPRESS_ROOT = "media/"
-AWS_QUERYSTRING_AUTH = False
-
-THUMBNAIL_SUBDIR = "thumbs"
-EMAIL_SUBJECT_PREFIX = "[countryx] "
-EMAIL_HOST = 'localhost'
-SERVER_EMAIL = "countryx@ccnmtl.columbia.edu"
 
 STATE_COLORS = [
     'ffd478', '009192', 'ff9400', 'd25700', '935200', 'd4fb79',
@@ -85,11 +37,3 @@ STATE_COLORS = [
     'fffc00', '76d6ff', '00f900', '929292', '929000']
 
 LOGIN_REDIRECT_URL = "/"
-SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
-SESSION_COOKIE_HTTPONLY = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-}
