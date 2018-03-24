@@ -1,11 +1,11 @@
 from django.utils.encoding import force_text
-from .models import Event, EventField
 from six import iteritems
 import json
 
 
 class EventService(object):
     def add(self, name, request=None, **fields):
+        from .models import Event
         fields.update(self._process_request(request))
         event = Event.objects.create(name=name, full_data=json.dumps(fields))
         for k, v in iteritems(fields):
@@ -36,7 +36,7 @@ class EventService(object):
         # ignore lists, dicts, etc.
         if isinstance(value, list) or isinstance(value, dict):
             return
-
+        from .models import EventField
         # otherwise, stringify it and call it good
         value = force_text(value)
         EventField.objects.create(
