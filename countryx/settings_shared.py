@@ -7,7 +7,7 @@ base = os.path.dirname(__file__)
 
 locals().update(common(app=app, base=base))
 
-PROJECT_APPS = ['countryx.sim', 'countryx.events']
+# PROJECT_APPS = ['countryx.sim', 'countryx.events']
 
 INSTALLED_APPS += [  # noqa
     'bootstrapform',

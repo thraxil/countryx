@@ -1,4 +1,4 @@
-from ..events.service import EventService
+from countryx.events.service import EventService
 from .models import (
     Role, Section, SectionGroupPlayer, SectionGroup,
     State, SectionGroupPlayerTurn, StateChange,
