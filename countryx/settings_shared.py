@@ -7,25 +7,12 @@ base = os.path.dirname(__file__)
 
 locals().update(common(app=app, base=base))
 
-INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.flatpages',
-    'django.contrib.admin',
-    'django.contrib.staticfiles',
+INSTALLED_APPS += [  # noqa
     'bootstrapform',
     'countryx.sim',
     'countryx.events',
     'countryx.reports',
-    'django_statsd',
-    'waffle',
     'impersonate',
-    'django_markwhat',
-    'compressor',
-    'debug_toolbar',
-    'raven.contrib.django.raven_compat',
 ]
 
 
