@@ -1,5 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 from django.conf import settings
 from django.views.generic import TemplateView
 
@@ -14,8 +15,7 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', countryx.sim.views.root),
-    url(r'^accounts/logout/$',
-        django.contrib.auth.views.logout, {'next_page': '/'}),
+    url(r'^accounts/logout/$', LogoutView.as_view(next_page='/')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^impersonate/', include('impersonate.urls')),

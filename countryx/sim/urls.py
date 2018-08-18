@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.contrib.auth.views import LogoutView
 import django.views.static
 import os.path
 from .views import (
@@ -22,8 +23,8 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', django.views.static.serve,
         {'document_root': media_root}),
     url(r'^$', root),
-    url(r'^logout/$', django.contrib.auth.views.logout,
-        {'template_name': 'sim/logged_out.html'}),
+    url(r'^logout/$', LogoutView.as_view(
+        template_name='sim/logged_out.html')),
 
     # player pages
     url(r'^player/game/(?P<group_id>\d+)/$', player_game),
