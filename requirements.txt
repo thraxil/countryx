@@ -14,7 +14,7 @@ logilab-common==1.4.2
 logilab-astng==0.24.3
 pylint==2.1.1
 sqlparse==0.2.4
-ipaddress==1.0.21
+ipaddress==1.0.22
 
 text-unidecode==1.2
 
