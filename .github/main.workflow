@@ -15,5 +15,5 @@ action "branch cleanup" {
 
 action "test" {
   uses = "./"
-	args = ["manage", test"]
+	args = ["manage", "test"]
 }
