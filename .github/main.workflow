@@ -1,11 +1,11 @@
 workflow "run tests" {
   on = "push"
-	resolves = ["docker push"]
+  resolves = ["Build docker image"]
 }
 
 workflow "on pull request merge, delete the branch" {
   on = "pull_request"
-  resolves = ["branch cleanup"]
+  resolves = ["branch cleanup", "docker push"]
 }
 
 action "branch cleanup" {
@@ -20,11 +20,11 @@ action "docker login" {
 
 action "Build docker image" {
   uses = "actions/docker/cli@master"
-	args = "build -t thraxil/countryx ."
+  args = "build -t thraxil/countryx ."
 }
 
 action "docker push" {
   needs = ["docker login", "Build docker image"]
   uses = "actions/docker/cli@master"
-	args = ["push", "thraxil/countryx"]
+  args = ["push", "thraxil/countryx"]
 }
