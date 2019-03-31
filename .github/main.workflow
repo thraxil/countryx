@@ -1,6 +1,6 @@
 workflow "run tests" {
   on = "push"
-	resolves = ["test"]
+	resolves = ["docker push"]
 }
 
 workflow "on pull request merge, delete the branch" {
@@ -13,7 +13,18 @@ action "branch cleanup" {
   secrets = ["GITHUB_TOKEN"]
 }
 
-action "test" {
+action "docker login" {
+  uses = "actions/docker/login@master"
+  secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
+}
+
+action "Build docker image" {
   uses = "actions/docker/cli@master"
 	args = "build -t thraxil/countryx ."
+}
+
+action "docker push" {
+  needs = ["docker login", "Build docker image"]
+  uses = "actions/docker/cli@master"
+	args = ["push", "thraxil/countryx"]
 }
