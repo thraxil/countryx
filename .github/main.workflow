@@ -13,11 +13,6 @@ action "branch cleanup" {
   secrets = ["GITHUB_TOKEN"]
 }
 
-action "docker login" {
-  uses = "actions/docker/login@master"
-  secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
-}
-
 action "Build docker image" {
   uses = "actions/docker/cli@master"
   args = "build -t thraxil/countryx ."
@@ -29,8 +24,14 @@ action "Deploy branch filter" {
   args = "branch master"
 }
 
+action "docker login" {
+  needs = "Deploy branch filter"
+  uses = "actions/docker/login@master"
+  secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
+}
+
 action "docker push" {
-  needs = ["docker login", "Deploy branch filter"]
+  needs = ["docker login"]
   uses = "actions/docker/cli@master"
   args = ["push", "thraxil/countryx"]
 }
