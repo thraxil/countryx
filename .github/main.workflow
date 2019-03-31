@@ -24,12 +24,13 @@ action "Build docker image" {
 }
 
 action "Deploy branch filter" {
+  needs = "Build docker image"
   uses = "actions/bin/filter@master"
   args = "branch master"
 }
 
 action "docker push" {
-  needs = ["docker login", "Build docker image", "Deploy branch filter"]
+  needs = ["docker login", "Deploy branch filter"]
   uses = "actions/docker/cli@master"
   args = ["push", "thraxil/countryx"]
 }
