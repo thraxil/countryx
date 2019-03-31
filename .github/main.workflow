@@ -14,9 +14,6 @@ action "branch cleanup" {
 }
 
 action "test" {
-  uses = "./"
-	env = {
-    SETTINGS = "settings"
-  }
-	args = ["manage", "test"]
+  uses = "actions/docker/cli@master"
+	args = "build -t thraxil/countryx ."
 }
