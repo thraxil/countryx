@@ -14,6 +14,6 @@ action "branch cleanup" {
 }
 
 action "test" {
-  uses = "./Dockerfile"
+  uses = "./"
 	args = ["manage", test"]
 }
