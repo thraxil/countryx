@@ -15,5 +15,8 @@ action "branch cleanup" {
 
 action "test" {
   uses = "./"
+	env = {
+    SETTINGS = "settings"
+  }
 	args = ["manage", "test"]
 }
