@@ -1,4 +1,4 @@
-Django==2.2.1
+Django==2.2.3
 Markdown==3.0.1 # pyup: <3.1
 psycopg2-binary==2.8.2
 statsd==3.3.0
