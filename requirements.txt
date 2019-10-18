@@ -22,7 +22,7 @@ pylint==2.4.2
 
 sqlparse==0.3.0
 
-ipaddress==1.0.22
+ipaddress==1.0.23
 
 text-unidecode==1.3
 
