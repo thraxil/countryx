@@ -43,7 +43,7 @@ rcssmin==1.0.6
 django-statsd-mozilla==0.4.0
 django-smoketest==1.1.0
 django-debug-toolbar==1.11
-django-waffle==0.18.0
+django-waffle==0.19.0
 django-impersonate==1.4.1
 django-markwhat==1.6.2
 django-appconf==1.0.3
