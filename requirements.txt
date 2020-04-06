@@ -1,6 +1,6 @@
 Django==3.0.5
 Markdown==3.0.1 # pyup: <3.1
-psycopg2-binary==2.8.4
+psycopg2-binary==2.8.5
 statsd==3.3.0
 
 coverage==5.0.4
