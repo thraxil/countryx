@@ -30,7 +30,7 @@ Faker==4.0.3
 factory_boy==2.12.0
 
 pytz==2020.1
-boto3==1.12.46
+boto3==1.13.0
 python-dateutil==2.8.1
 six==1.14.0
 gunicorn==20.0.4
